@@ -18,10 +18,10 @@ app.use(express.json());
 
 const startApolloServer = async () => {
   // Define our Appolo-Server
-                                const server = new ApolloServer({
-                                  typeDefs,
-                                  resolvers,
-                                  uploads: true,
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    uploads: true,
   });
 
   await server.start(); // Start the Apollo Server

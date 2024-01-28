@@ -3,7 +3,7 @@ const ProjectUssq = require("../models/projectUssqModel");
 const User = require("../models/userModel");
 
 const asyncHandler = require("express-async-handler");
-const { utcToZonedTime, format } = require("date-fns-tz");
+// const { utcToZonedTime, format } = require("date-fns-tz");
 
 //******************************LABO PROJECT************************************************/
 const CreateProjectLabo = asyncHandler(async (req, res) => {
@@ -108,15 +108,16 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
   // Some modifications of the USSCQ PROJECT inputs
   benificaire = benificaire.map((name) => name.toUpperCase());
   const timezone = "Africa/Tunis";
-  const periodeProjectInTimezone = periodeProject.map((date) =>
-    format(utcToZonedTime(new Date(date), timezone), "yyyy-MM-dd'T'HH:mm:ss")
-  );
+  // const periodeProjectInTimezone = periodeProject.map((date) =>
+  //   format((new Date(date), timezone), "yyyy-MM-dd'T'HH:mm:ss")
+  // );
   if (
     !name ||
     !admin ||
     !source ||
     !benificaire ||
-    !periodeProjectInTimezone ||
+    // !periodeProjectInTimezone ||
+    !periodeProject ||
     !integration ||
     !encryptionType ||
     !lengthKey ||
@@ -159,7 +160,8 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
       admin,
       source,
       benificaire,
-      periodeProject: periodeProjectInTimezone,
+      // periodeProject: periodeProjectInTimezone,
+      periodeProject,
       integration,
       encryptionType,
       lengthKey,
