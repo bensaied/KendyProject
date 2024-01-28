@@ -1,0 +1,48 @@
+/******************LOGIN-LOGOUT***************/
+export const USER_LOGIN_REQUEST = "USER_LOGIN_REQUEST";
+export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
+export const USER_LOGIN_FAIL = "USER_LOGIN_FAIL";
+export const USER_LOGOUT = "USER_LOGOUT";
+export const USER_REFRESH_FAIL = "USER_REFRESH_FAIL";
+export const USER_REFRESH_REQUEST = "USER_REFRESH_REQUEST";
+export const USER_REFRESH_SUCCESS = "USER_REFRESH_SUCCESS";
+
+/******************ADD USER***************/
+export const USER_REGISTER_REQUEST = "USER_REGISTER_REQUEST";
+export const USER_REGISTER_SUCCESS = "USER_REGISTER_SUCCESS";
+export const USER_REGISTER_FAIL = "USER_REGISTER_FAIL";
+
+/******************UPDATE OWN PROFILE*******************/
+export const USER_UPDATE_REQUEST = "USER_UPDATE_REQUEST";
+export const USER_UPDATE_SUCCESS = "USER_UPDATE_SUCCESS";
+export const USER_UPDATE_FAIL = "USER_UPDATE_FAIL";
+
+/******************LIST USERS***************/
+export const USERS_LIST_REQUEST = "USERS_LIST_REQUEST";
+export const USERS_LIST_SUCCESS = "USERS_LIST_SUCCESS";
+export const USERS_LIST_FAIL = "USERS_LIST_FAIL";
+
+/******************DELETE USER***************/
+export const USERS_DELETE_REQUEST = "USERS_DELETE_REQUEST";
+export const USERS_DELETE_SUCCESS = "USERS_DELETE_SUCCESS";
+export const USERS_DELETE_FAIL = "USERS_DELETE_FAIL";
+
+/******************UPDATE USER**************/
+export const USERS_UPDATE_REQUEST = "USERS_UPDATE_REQUEST";
+export const USERS_UPDATE_SUCCESS = "USERS_UPDATE_SUCCESS";
+export const USERS_UPDATE_FAIL = "USERS_UPDATE_FAIL";
+
+/*******************FIRSCONNECT****************************/
+export const USER_FIRSTCONNECT_REQUEST = "USER_FIRSTCONNECT_REQUEST";
+export const USER_FIRSTCONNECT_SUCCESS = "USER_FIRSTCONNECT_SUCCESS";
+export const USER_FIRSTCONNECT_FAIL = "USER_FIRSTCONNECT_FAIL";
+
+/******************CHANGE PASSWORD**************************/
+export const USER_CHANGEPWD_REQUEST = "USER_CHANGEPWD_REQUEST";
+export const USER_CHANGEPWD_SUCCESS = "USER_CHANGEPWD_SUCCESS";
+export const USER_CHANGEPWD_FAIL = "USER_CHANGEPWD_FAIL";
+
+/****************************CURRENTTYPE*******************************/
+export const SET_CURRENT_TYPE = "SET_CURRENT_TYPE";
+export const SET_CURRENT_TYPE_DEL = "SET_CURRENT_TYPE_DEL";
+export const SET_CURRENT_TYPE_FAIL = "SET_CURRENT_TYPE_FAIL";

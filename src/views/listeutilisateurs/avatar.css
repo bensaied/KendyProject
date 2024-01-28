@@ -1,0 +1,22 @@
+.avatar {
+  color: white;
+}
+.gradient__red_yellow {
+  background: #ff5f6d;
+  background: -webkit-linear-gradient(to right, #ffc371, #ff5f6d);
+  background: linear-gradient(to right, #ffc371, #ff5f6d);
+  box-shadow: 0px 0px 20px #ff5f6d;
+}
+
+.gradient__violet {
+  background: #4776e6;
+  background: -webkit-linear-gradient(to right, #8e54e9, #4776e6);
+  background: linear-gradient(to right, #8e54e9, #4776e6);
+}
+
+.gradient__purple_teal {
+  background: #fc00ff;
+  background: -webkit-linear-gradient(to right, #00dbde, #fc00ff);
+  background: linear-gradient(to right, #00dbde, #fc00ff);
+  box-shadow: 0px 0px 20px #fc00ff;
+}

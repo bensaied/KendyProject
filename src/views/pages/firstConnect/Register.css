@@ -1,0 +1,20 @@
+.sub-main {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: 5px;
+  border-radius: 20px;
+  padding-bottom: 5%;
+  background-color: rgba(224, 237, 247, 0.842);
+}
+
+.main {
+  background-image: url("./bg-sign-in-basic.jpeg");
+  background-size: cover;
+  justify-content: center;
+  display: flex;
+  padding-top: 14%;
+  padding-bottom: 14%;
+}

@@ -1,0 +1,27 @@
+{
+  "_id": {
+    "$oid": "6400adc8b024e12374218a12"
+  },
+  "name": "BAYNAOUI",
+  "firstname": "Raouf",
+  "login": "admin.qt",
+  "password": "$2a$10$OU4qs73aNQTFWyO8qTQ/wOBe2f01AOrm.1NZ5tc4sGRFKdTby8Jma",
+  "userType": [
+    "Visiteur",
+    "SuperAdminQt",
+    "AdminQt"
+  ],
+  "direction": "USSCQ",
+  "grade": "Lt",
+  "firstConnect": false,
+  "dateLogin": {
+    "$date": "2023-05-21T16:23:33.691Z"
+  },
+  "createdAt": {
+    "$date": "2023-03-02T14:08:08.754Z"
+  },
+  "updatedAt": {
+    "$date": "2023-05-21T16:23:33.692Z"
+  },
+  "__v": 1
+}
