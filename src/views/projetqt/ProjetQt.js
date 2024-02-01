@@ -1325,7 +1325,7 @@ const ProjetQt = () => {
         // style={{ maxWidth: "800px" }}
         size="lg"
         visible={visible00}
-        onClose={() => setVisible00(false)}
+        onHide={() => setVisible00(false)}
       >
         <div
           style={{ border: "1px #ccc", padding: "13px" }}
@@ -1634,7 +1634,7 @@ const ProjetQt = () => {
         // style={{ maxWidth: "800px" }}
         size="lg"
         visible={visible000}
-        onClose={() => setVisible000(false)}
+        onHide={() => setVisible000(false)}
       >
         <div
           style={{ border: "1px #ccc", padding: "13px" }}
