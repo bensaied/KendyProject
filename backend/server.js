@@ -8,7 +8,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { graphqlUploadExpress } = require("graphql-upload");
 const path = require("path");
 
-const typeDefs = require("./graphql/typeDefs");
+const typeDefs = require("./graphql/typeDefs.gql");
 const resolvers = require("./graphql/resolvers");
 
 const app = express();
