@@ -2004,7 +2004,7 @@ const ProjetQt = () => {
 
       {/******************************** FIN MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
       {/******************************** MODAL POUR AJOUTER UNE RESSOURCE ********************************/}
-      <CModal visible={visible0} onClose={() => setVisible0(false)}>
+      <CModal visible={visible0} onHide={() => setVisible0(false)}>
         <CModalHeader>
           <CModalTitle>Ajouter une ressource</CModalTitle>
         </CModalHeader>
