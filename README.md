@@ -1,3 +1,5 @@
+<!-- prettier-ignore-start -->
+
 ###### KendyProject v1.0
 
 ---
@@ -81,3 +83,4 @@ This might help you to write your comments:
 ---
 
 \*\*/
+<!-- prettier-ignore-end -->

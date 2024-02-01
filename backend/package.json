@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "jest"
   },
   "author": "ARSD",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "fs": "^0.0.1-security",
     "graphql": "^16.8.1",
     "graphql-upload": "^13.0.0",
+    "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
     "mongoose": "^6.8.1",
@@ -31,6 +33,7 @@
     "passport-jwt": "^4.0.1",
     "password-regexp": "^1.0.5",
     "path": "^0.12.7",
+    "supertest": "^6.3.4",
     "uuid": "^9.0.1",
     "validation": "^0.0.1",
     "validator": "^13.9.0"
