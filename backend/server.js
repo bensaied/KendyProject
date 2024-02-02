@@ -30,15 +30,16 @@ const startApolloServer = async () => {
   app.use(graphqlUploadExpress());
   // Apply the Apollo Server GraphQL middleware to Express
   server.applyMiddleware({ app });
+
   // Serve files from the 'uploads' directory
   app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+  // Define custom route for handling file requests
   app.get("/get-file/:filename", (req, res) => {
-    const { filename } = req.params;
-    const filePath = path.join(__dirname, "uploads", filename);
-
+    const filename = req.params.filename;
     // Serve the file
-    res.sendFile(filePath);
+    res.sendFile(filename);
   });
+
   // Define Routes
   app.get("/", (req, res) => {
     res.send("API is running..");

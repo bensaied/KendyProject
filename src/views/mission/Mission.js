@@ -5,8 +5,8 @@ import Select from "react-select";
 import DocViewer from "@cyntler/react-doc-viewer";
 // import Select from "@material-ui/core/Select";
 import DatePicker from "react-date-picker";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBullseye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBullseye } from "@fortawesome/free-solid-svg-icons";
 
 import {
   CButton,
@@ -30,7 +30,7 @@ import {
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
-import { cilPen,cilClipboard } from "@coreui/icons";
+import { cilPen, cilClipboard } from "@coreui/icons";
 
 const Mission = () => {
   const currentTypeState = useSelector((state) => state.currentType);
@@ -77,10 +77,8 @@ const Mission = () => {
     },
     // { uri: require("./example-files/pdf.pdf") }, // Local File
   ];
-
   return (
     <>
-
       {/* <p><strong>Maktarus</strong></p> */}
       {/******************************************************  Test d'affichage  ********************************************************/}
       {currentTypeState.currentType === "Visiteur" ||
@@ -92,19 +90,26 @@ const Mission = () => {
       ) : (
         ""
       )}
-    <CCard className="mb-4">
+      <CCard className="mb-4">
         <CCardBody>
           <CRow>
             {currentTypeState.currentType === "SuperAdminLabo" ||
             currentTypeState.currentType === "AdminLabo" ||
             currentTypeState.currentType === "Formateur" ? (
-            <>
-             <CCardHeader component="h2" style={{ display: 'flex', alignItems: 'center' }}>
-              <FontAwesomeIcon icon={faBullseye}  size="xs" style={{ marginRight: '0.5rem' }} />
-              Mali
-            </CCardHeader>
-            </>
-          ) : null}
+              <>
+                <CCardHeader
+                  component="h2"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faBullseye}
+                    size="xs"
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  Mali
+                </CCardHeader>
+              </>
+            ) : null}
             {/* <h4 id="traffic" className="card-title mb-0">
                                                 Cartes des projets
                                                 </h4> */}
@@ -115,7 +120,8 @@ const Mission = () => {
                 <br></br>
                 <CAccordionItem itemKey={1}>
                   <CAccordionHeader component="h6">
-                  <CIcon icon={cilClipboard} />&nbsp;  Fiche du mission
+                    <CIcon icon={cilClipboard} />
+                    &nbsp; Fiche du mission
                   </CAccordionHeader>
                   <CAccordionBody>
                     <CCol sm="{10}" className="d-none d-md-block">
@@ -398,7 +404,8 @@ const Mission = () => {
                 <br></br>
                 <CAccordionItem itemKey={1}>
                   <CAccordionHeader component="h6">
-                  <CIcon icon={cilClipboard} />&nbsp;  Fiche du mission
+                    <CIcon icon={cilClipboard} />
+                    &nbsp; Fiche du mission
                   </CAccordionHeader>
                   <CAccordionBody>
                     <CCol sm="{10}" className="d-none d-md-block">
@@ -692,7 +699,8 @@ const Mission = () => {
                 <br></br>
                 <CAccordionItem itemKey={1}>
                   <CAccordionHeader component="h6">
-                  <CIcon icon={cilClipboard} />&nbsp;  Fiche du mission
+                    <CIcon icon={cilClipboard} />
+                    &nbsp; Fiche du mission
                   </CAccordionHeader>
                   <CAccordionBody>
                     <CCol sm="{10}" className="d-none d-md-block">

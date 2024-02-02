@@ -29,7 +29,8 @@ import {
   CFormCheck,
   CCard,
   CCardBody,
-  CCardTitle,
+  CCardSubtitle,
+  //  CCardTitle,
   CModal,
   CModalBody,
   CModalHeader,
@@ -1150,23 +1151,30 @@ const ProjetQt = () => {
   const formattedDate = date.toISOString().substring(0, 10);
 
   /////////////////////////////////////////////// Table of RESSOURCES & Functions
-  // Function to handle opening the modal and setting the selected resource
 
-  // DOC VIEWER
-  // const docs = [
-  //   {
-  //     uri: require("./test.pdf"),
-  //   },
-  //   // { uri: require("./example-files/pdf.pdf") }, // Local File
-  // ];
-
-  const handleResourceClick = (resource) => {
+  // Handle Ressource Function (Get the file from the upload folder)
+  const handleResourceClick = async (resource) => {
     setSelectedResource(resource);
-    setDocs([{ uri: `/get-file/${resource.pdfFile}` }]);
-    setVisible01(true);
+    // DOC VIEWER
+    // Construct the URL to fetch the file from the server
+    const fileUrl = `http://localhost:5000/get-file/${encodeURIComponent(
+      resource.pdfFile
+    )}`;
+    try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch file !");
+      }
+      // Set the documents to be displayed by DocViewer
+      setDocs([{ uri: fileUrl }]);
+      // Open The Ressource Modal
+      setVisible01(true);
+    } catch (error) {
+      // Handle error
+      console.error("Error fetching file:", error);
+    }
   };
-  console.log("selectedRcs: ", selectedResource);
-
+  // Ressources Table
   const columnsRessources = [
     {
       field: "ref",
@@ -2287,30 +2295,31 @@ const ProjetQt = () => {
           size="lg"
           onClose={() => setVisible01(false)}
         >
-          <CModalHeader>
-            <CModalTitle>Title</CModalTitle>
-          </CModalHeader>
+          {/* To close the Modal by X button  */}
+          <CModalHeader>{/* <CModalTitle>Title</CModalTitle> */}</CModalHeader>
+          {/* Rest of the Modal Logic  */}
           <CModalBody>
             <CCard className="text-center">
               <CCardHeader>Réf: {selectedResource.ref}</CCardHeader>
-              <CCardBody>
-                {/* <CCardTitle>Special title treatment</CCardTitle>
-                <CCardText>Sujet:....</CCardText>
+              <br></br>
+              <CCardSubtitle className="mb-2 text-medium-emphasis">
+                {" "}
                 <footer className="blockquote-footer">
-                  Recommandations: <cite title="Source Title">Recom.</cite>
+                  Source du document:{" "}
+                  <cite title="Source Title"> {selectedResource.source}</cite>
                 </footer>
-                <footer className="blockquote-footer ">
-                  Compte rendu: <cite title="Source Title">compteRendu.</cite>
-                </footer> */}
-                {/* {pdfUrl && (
-                  <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
-                    {Array.from(new Array(numPages), (el, index) => (
-                      <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-                    ))}
-                  </Document>
-                )} */}
+              </CCardSubtitle>
 
-                <DocViewer documents={docs} />
+              <CCardBody>
+                <DocViewer
+                  documents={docs}
+                  config={{
+                    header: {
+                      disableHeader: true,
+                      //  disableFileName: true
+                    },
+                  }}
+                />
               </CCardBody>
               <CCardFooter className="text-medium-emphasis">
                 Date: {selectedResource.date}
