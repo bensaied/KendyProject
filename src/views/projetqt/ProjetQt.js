@@ -1156,10 +1156,8 @@ const ProjetQt = () => {
   const handleResourceClick = async (resource) => {
     setSelectedResource(resource);
     // DOC VIEWER
-    // Construct the URL to fetch the file from the server
-    const fileUrl = `http://localhost:5000/get-file/${encodeURIComponent(
-      resource.pdfFile
-    )}`;
+    // Construct the relative URL to fetch the file from the server
+    const fileUrl = `/get-file/${encodeURIComponent(resource.pdfFile)}`;
     try {
       const response = await fetch(fileUrl);
       if (!response.ok) {
