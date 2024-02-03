@@ -163,6 +163,7 @@ const ProjetQt = () => {
 
   const [visible0, setVisible0] = useState(false);
   const [visible01, setVisible01] = useState(false);
+  const [visibleDelRcs, setVisibleDelRcs] = useState(false);
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
@@ -1153,6 +1154,7 @@ const ProjetQt = () => {
   /////////////////////////////////////////////// Table of RESSOURCES & Functions
 
   // Handle Ressource Function (Get the file from the upload folder)
+  // Open Ressource Function
   const handleResourceClick = async (resource) => {
     setSelectedResource(resource);
     // DOC VIEWER
@@ -1172,6 +1174,13 @@ const ProjetQt = () => {
       console.error("Error fetching file:", error);
     }
   };
+  //  Handle Delete Ressource Function
+  const handleDeleteClick = (id) => {
+    setSelectedResource(id);
+    setVisibleDelRcs(true);
+  };
+  // Confirm Delte Ressource Function
+
   // Ressources Table
   const columnsRessources = [
     {
@@ -1190,7 +1199,6 @@ const ProjetQt = () => {
               color="link"
               shape="rounded-0"
               size="sm"
-              // onClick={() => setVisible01(!visible01)}
               onClick={() => handleResourceClick(params.row)}
             >
               {value}
@@ -1284,11 +1292,10 @@ const ProjetQt = () => {
       field: "actions",
       type: "actions",
       renderHeader: () => <strong>{"Actions"}</strong>,
-
       headerName: "Actions",
       width: 90,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: (params) => {
         return [
           <GridActionsCellItem
             icon={<EditIcon style={{ color: "blue" }} />}
@@ -1300,7 +1307,7 @@ const ProjetQt = () => {
           <GridActionsCellItem
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
-            //  onClick={handleDeleteClick(id)}
+            onClick={() => handleDeleteClick(params.row.ref)}
             color="inherit"
           />,
         ];
@@ -2330,6 +2337,26 @@ const ProjetQt = () => {
       )}
 
       {/******************************** FIN MODAL POUR OUVRIR UNE RESSOURCE ********************************/}
+      {/********************************  MODAL POUR SUPPRIMER UNE RESSOURCE ********************************/}
+      <CModal visible={visibleDelRcs} onClose={() => setVisibleDelRcs(false)}>
+        <CModalHeader onClose={() => setVisibleDelRcs(false)}>
+          <CModalTitle>Confirmation de la suppression</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          Êtes-vous sûr de vouloir supprimer la ressource {selectedResource} ?
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setVisibleDelRcs(false)}>
+            Non
+          </CButton>
+          <CButton color="danger" onClick={confirmDelete}>
+            Oui
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/******************************** FIN MODAL POUR SUPPRIMER UNE RESSOURCE ********************************/}
+
       {/********************************  MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
       {activity ? (
         <CModal
