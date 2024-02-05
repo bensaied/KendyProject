@@ -73,7 +73,7 @@ import { Button } from "react-bootstrap";
 import { useReactToPrint } from "react-to-print";
 import { addDays } from "date-fns";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWallet } from "@fortawesome/free-solid-svg-icons";
+// import { faWallet } from "@fortawesome/free-solid-svg-icons";
 import { faHandshake } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
