@@ -82,6 +82,9 @@ describe("getProjects Query", () => {
     expect(response).toBeDefined();
     expect(response.data.getProjects).toBeDefined();
     expect(typeof response.data).toBe("object");
+    expect(
+      response.data.getProjects.some((project) => project.name === "ELISSA")
+    ).toBe(true);
 
     // Add more specific assertions as needed
   });
