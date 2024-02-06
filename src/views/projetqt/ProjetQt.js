@@ -92,6 +92,7 @@ import {
   DELETE_ACTIVITE_MUTATION,
   MODIFY_ACTIVITE_MUTATION,
   MODIFY_PROJECT_MUTATION,
+  DELETE_RESSOURCE_MUTATION,
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
@@ -168,7 +169,7 @@ const ProjetQt = () => {
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
   //Resource State
-  const [selectedResource, setSelectedResource] = useState(null);
+  const [selectedResource, setSelectedResource] = useState([]);
   const [docs, setDocs] = useState([]);
 
   //Reunion & Réponse Field
@@ -436,6 +437,28 @@ const ProjetQt = () => {
   // - MODIFY Project
   const [modifyProject, { loading3, error3 }] = useMutation(
     MODIFY_PROJECT_MUTATION
+  );
+
+  //  Handle Delete Ressource Function
+  const handleDeleteClick = (ref, id) => {
+    setSelectedResource([ref, id]);
+    // console.log("selectedRsc", selectedResource[1]);
+    setVisibleDelRcs(true);
+  };
+  // Confirm Delte Ressource Function
+  const confirmDeleteRessource = async () => {
+    try {
+      await deleteRessource({
+        variables: { projectId: id, ressourceId: selectedResource[1] },
+      });
+      // Reload the page after delete the Activity
+      window.location.reload();
+    } catch (error) {}
+    setVisible3(false);
+  };
+
+  const [deleteRessource, { loadingRsc, errorRsc }] = useMutation(
+    DELETE_RESSOURCE_MUTATION
   );
 
   // QUERIES PROJECTUSSCQ
@@ -1174,12 +1197,6 @@ const ProjetQt = () => {
       console.error("Error fetching file:", error);
     }
   };
-  //  Handle Delete Ressource Function
-  const handleDeleteClick = (id) => {
-    setSelectedResource(id);
-    setVisibleDelRcs(true);
-  };
-  // Confirm Delte Ressource Function
 
   // Ressources Table
   const columnsRessources = [
@@ -1307,7 +1324,7 @@ const ProjetQt = () => {
           <GridActionsCellItem
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
-            onClick={() => handleDeleteClick(params.row.ref)}
+            onClick={() => handleDeleteClick(params.row.ref, params.row.id)}
             color="inherit"
           />,
         ];
@@ -2343,13 +2360,14 @@ const ProjetQt = () => {
           <CModalTitle>Confirmation de la suppression</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          Êtes-vous sûr de vouloir supprimer la ressource {selectedResource} ?
+          Êtes-vous sûr de vouloir supprimer la ressource {selectedResource[0]}{" "}
+          ?
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setVisibleDelRcs(false)}>
             Non
           </CButton>
-          <CButton color="danger" onClick={confirmDelete}>
+          <CButton color="danger" onClick={confirmDeleteRessource}>
             Oui
           </CButton>
         </CModalFooter>

@@ -76,3 +76,11 @@ export const DELETE_ACTIVITE_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_RESSOURCE_MUTATION = gql`
+  mutation deleteRessource($projectId: ID!, $ressourceId: ID!) {
+    deleteRessource(projectId: $projectId, ressourceId: $ressourceId) {
+      id
+    }
+  }
+`;
