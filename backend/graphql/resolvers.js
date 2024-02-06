@@ -416,6 +416,36 @@ module.exports = {
         throw new Error(error.message);
       }
     },
+    //******************* DELETE USSCQ Ressource BY (PROJECT_ID & Ressource_ID) *******************//
+    deleteRessource: async (_, { projectId, ressourceId }) => {
+      try {
+        // Find the project by ID
+        const project = await ProjetUSSCQ.findById(projectId);
+
+        if (!project) {
+          throw new Error("Project not found");
+        }
+
+        // Find the index of the ressource with the given ressourceId
+        const ressourceIndex = project.resource.findIndex(
+          (ressource) => ressource.id === ressourceId
+        );
+
+        if (ressourceIndex === -1) {
+          throw new Error("Ressource not found in the project");
+        }
+
+        // Remove the ressource from the project's ressource array
+        const removedRessource = project.resource.splice(ressourceIndex, 1)[0];
+
+        // Save the updated project
+        await project.save();
+
+        return removedRessource;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
     //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
     //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
     createVersion: async (parent, { input }, context) => {
