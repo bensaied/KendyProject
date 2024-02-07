@@ -324,7 +324,7 @@ const Partage = () => {
                             <h4>
                               <p>
                                 <small className="text-muted">
-                                  Il n'y a pas de projet partagé.
+                                  Il n'y a pas de dossier partagé.
                                 </small>
                               </p>
                             </h4>

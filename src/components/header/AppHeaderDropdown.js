@@ -185,11 +185,14 @@ const AppHeaderDropdown = () => {
             <CModalBody>
               <strong>SuperAdminQT :</strong>
               <br />
-              - Créer, modifier et visualiser des projets.
+              - Créer, modifier et visualiser des dossiers.
               <br />
-              - Créer, modifier et visualiser les actualités du projets.
+              - Créer, modifier et visualiser les ressources du dossiers.
               <br />
-              - Partager des informations cencernant les projets aux
+              - Créer, modifier et visualiser les actualités du dossiers (
+              réunions / réponses ).
+              <br />
+              - Partager des informations cencernant les dossiers aux
               utilisateurs du KendyProject.
               <br />
               - Créer et lister tous les utilisateurs du 'DC'.
@@ -199,11 +202,14 @@ const AppHeaderDropdown = () => {
               <br />
               <strong>AdminQt :</strong>
               <br />
-              - Préparer, modifier et visualiser ses projets.
+              - Préparer, modifier et visualiser ses dossiers.
               <br />
-              - Créer, modifier et visualiser les actualités du projets.
+              - Créer, modifier et visualiser les ressources du dossiers.
               <br />
-              - Visualiser des informations concernant des projets dans la
+              - Créer, modifier et visualiser les actualités du dossiers (
+              réunions / réponses ).
+              <br />
+              - Visualiser des informations concernant des dossiers dans la
               section Partage.
               <br />
               - Lister les utilisateurs du 'DC'.
@@ -211,7 +217,7 @@ const AppHeaderDropdown = () => {
               <br />
               <strong>Visiteur :</strong>
               <br />
-              - Visualiser des informations concernant des projets dans la
+              - Visualiser des informations concernant des dossiers dans la
               section Partage.
               <br />
               - Lister les utilisateurs du 'DC'.

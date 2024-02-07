@@ -2548,15 +2548,15 @@ const ProjetQt = () => {
                   size="xs"
                   style={{ marginRight: "0.5rem" }}
                 /> */}
-                <CIcon
+                {/* <CIcon
                   icon={cilBook}
                   size="xl"
                   style={{ marginRight: "0.5rem" }}
-                />{" "}
+                />{" "} */}
                 <span
                   style={{
                     backgroundImage:
-                      "linear-gradient(to right, #e91e63, #9c27b0)",
+                      "linear-gradient(to right, #00bcd4, #009688)",
                     WebkitBackgroundClip: "text",
                     color: "transparent",
                     marginRight: "5px",

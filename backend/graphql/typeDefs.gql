@@ -80,7 +80,16 @@ module.exports = gql`
     recommendation: String!
     remarques: String
   }
-
+  input ModifyRessourceInput {
+    projectId: ID!
+    ressourceId: ID!
+    # pdfFile: String!
+    ref: String!
+    source: String!
+    date: String!
+    description: String
+    # tache: String!
+  }
   type ProjetUSSCQ {
     id: ID!
     name: String!
@@ -179,6 +188,7 @@ module.exports = gql`
     message: String
   }
   type Mutation {
+    # ProjectUSSCQ
     # Modify ProjectUSSCQ
     modifyProject(input: ModifyProjectInput!): ProjetUSSCQ!
     # Create Activity Project USSCQ
@@ -191,6 +201,9 @@ module.exports = gql`
     createResource(input: CreateResourceInput!): ResourceCreationResult
     # Delete Ressource Project USSCQ
     deleteRessource(projectId: ID!, ressourceId: ID!): ResourceDetails!
+    #  Modify Ressource Project USSCQ
+    modifyRessource(input: ModifyRessourceInput!): ResourceDetails!
+    # ProjectLABO
     # Create Version Project LABO
     createVersion(input: CreateVersionInput!): Version!
 

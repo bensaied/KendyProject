@@ -193,3 +193,29 @@ describe("deleteRessource Mutation", () => {
     // Add more specific assertions as needed
   });
 });
+
+// Test for modify Ressource
+describe("modify Ressource Mutation", () => {
+  let projectId = "65b650cc594a884f587015ce";
+  let resourceId = "65c2ab907aa45502fd8113f9";
+
+  test("Should modify a resource from a project", async () => {
+    // Define the GraphQL mutation
+    const mutation = `
+      mutation {
+        modifyRessource(input:{projectId: "${projectId}", ressourceId: "${resourceId}", ref : "2000", source: "EMAA", date: "2024-06-18",description:"" }) {
+        ref
+        }
+      }
+    `;
+
+    // Execute the GraphQL mutation
+    const response = await graphql(schema, mutation);
+
+    // Assert the response
+    expect(response).toBeDefined();
+    console.log("response", response);
+    expect(response.data.modifyRessource).toEqual({ ref: "2000" });
+    // Add more specific assertions as needed
+  });
+});
