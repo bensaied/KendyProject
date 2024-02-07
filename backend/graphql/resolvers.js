@@ -340,7 +340,51 @@ module.exports = {
       // Return the created activity
       return newActivite;
     },
+    //******************* MODIFY USSCQ RESSOURCE BY (PROJECT_ID, RESSOURCE_ID and ressource infos) *******************//
+    modifyRessource: async (parent, { input }, context) => {
+      // Extract the input values
+      const {
+        projectId,
+        ressourceId,
+        //  pdfFile,
+        ref,
+        source,
+        date,
+        description,
+        // tache,
+      } = input;
 
+      try {
+        const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+        if (!project) {
+          throw new Error("Project not found");
+        }
+
+        const ressources = project.resource;
+
+        for (let i = 0; i < ressources.length; i++) {
+          if (ressources[i].id == ressourceId) {
+            // Modify the Ressource
+            project.resource[i].ref = ref;
+            // project.resource[i].pdfFile = pdfFile;
+            project.resource[i].source = source;
+            project.resource[i].date = date;
+            project.resource[i].description = description;
+            // project.resource[i].tache = tache;
+
+            // console.log(project.resource[i]);
+
+            // Save modified Ressource
+            await project.save();
+
+            // Return the modified resource
+            return project.resource[i];
+          }
+        }
+      } catch (error) {
+        throw new Error("Failed to fetch ressource");
+      }
+    },
     //******************* MODIFY USSCQ ACTIVITY BY (PROJECT_ID, ACTIVITY_ID and activity infos) *******************//
     modifyActivite: async (parent, { input }, context) => {
       // Extract the input values
