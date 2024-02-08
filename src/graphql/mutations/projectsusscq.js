@@ -42,6 +42,25 @@ export const CREATE_RESOURCE_MUTATION = gql`
   }
 `;
 
+export const MODIFY_RESOURCE_MUTATION = gql`
+  mutation ModifyResource($input: ModifyRessourceInput!) {
+    modifyRessource(input: $input) {
+      ref
+      source
+      date
+      description
+    }
+  }
+`;
+
+export const DELETE_RESSOURCE_MUTATION = gql`
+  mutation deleteRessource($projectId: ID!, $ressourceId: ID!) {
+    deleteRessource(projectId: $projectId, ressourceId: $ressourceId) {
+      id
+    }
+  }
+`;
+
 export const CREATE_ACTIVITE_MUTATION = gql`
   mutation CreateActivite($input: CreateActiviteInput!) {
     createActivite(input: $input) {
@@ -72,14 +91,6 @@ export const MODIFY_ACTIVITE_MUTATION = gql`
 export const DELETE_ACTIVITE_MUTATION = gql`
   mutation deleteActivite($projectId: ID!, $activiteId: ID!) {
     deleteActivite(projectId: $projectId, activiteId: $activiteId) {
-      id
-    }
-  }
-`;
-
-export const DELETE_RESSOURCE_MUTATION = gql`
-  mutation deleteRessource($projectId: ID!, $ressourceId: ID!) {
-    deleteRessource(projectId: $projectId, ressourceId: $ressourceId) {
       id
     }
   }
