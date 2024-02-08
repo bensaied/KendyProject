@@ -88,11 +88,12 @@ import { GET_ACTIVITY } from "../../graphql/queries/projectsusscq";
 import { useMutation } from "@apollo/client";
 import {
   CREATE_RESOURCE_MUTATION,
+  MODIFY_RESOURCE_MUTATION,
+  DELETE_RESSOURCE_MUTATION,
   CREATE_ACTIVITE_MUTATION,
   DELETE_ACTIVITE_MUTATION,
   MODIFY_ACTIVITE_MUTATION,
   MODIFY_PROJECT_MUTATION,
-  DELETE_RESSOURCE_MUTATION,
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
@@ -164,13 +165,21 @@ const ProjetQt = () => {
 
   const [visible0, setVisible0] = useState(false);
   const [visible01, setVisible01] = useState(false);
+  const [visible001, setVisible001] = useState(false);
+
   const [visibleDelRcs, setVisibleDelRcs] = useState(false);
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
-  //Resource State
+  // STATES FOR RESSOURCE
   const [selectedResource, setSelectedResource] = useState([]);
   const [docs, setDocs] = useState([]);
+  const [referenceRsc, setReferenceRsc] = useState("");
+  const [sourceRsc, setSourceRsc] = useState("");
+  const [dateRsc, setDateRsc] = useState("");
+  const [descriptionRsc, setDescriptionRsc] = useState("");
+
+  const [fileName, setFileName] = useState("");
 
   //Reunion & Réponse Field
   const [eventType, setEventType] = useState("Suivi"); // Default value
@@ -277,12 +286,13 @@ const ProjetQt = () => {
   const [createActivite, { loading1, error1 }] = useMutation(
     CREATE_ACTIVITE_MUTATION
   );
+  // Function to handle File Change (Add Ressource File)
 
-  // Function to handle creating a ressource
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setPdfFile(file);
   };
+  // Function to handle creating a ressource
 
   const handleCreateResource = async () => {
     try {
@@ -299,7 +309,7 @@ const ProjetQt = () => {
       const { data } = await createResource({
         variables: { input },
       });
-      console.log("Resource created:", data.createResource.success);
+      // console.log("Resource created:", data.createResource.success);
       if (data.createResource.success == true) {
         // Reset the form fields
         setPdfFile("");
@@ -315,7 +325,7 @@ const ProjetQt = () => {
         window.location.reload();
       } else {
         // Handle error cases
-        console.log(data.createResource.message);
+        // console.log(data.createResource.message);
         setErrorModal(data.createResource.message);
       }
     } catch (error) {
@@ -406,7 +416,7 @@ const ProjetQt = () => {
       window.location.reload();
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
-      console.error("Error creating activite:", error);
+      console.error("Error modifying activite:", error);
     }
   };
 
@@ -419,6 +429,7 @@ const ProjetQt = () => {
     variables: { projectId: id, activityId: actId }, // Use 'id' as the projectId variable
   });
   const activityDeleted = actDelete?.getActivity;
+  // Confirm Deleting Activity
   const confirmDelete = async () => {
     try {
       await deleteActivite({
@@ -438,8 +449,45 @@ const ProjetQt = () => {
   const [modifyProject, { loading3, error3 }] = useMutation(
     MODIFY_PROJECT_MUTATION
   );
+  // - Modify Ressource
+  const [modifyRessource, { loadingRscModif, errorRscModif }] = useMutation(
+    MODIFY_RESOURCE_MUTATION
+  );
+  // Function to handle modify a ressource
+  const handleModifyRessource = async () => {
+    try {
+      const input = {
+        projectId: project.id,
+        ressourceId: selectedResource.id,
+        ref: referenceRsc,
+        source: sourceRsc,
+        date: dateRsc,
+        description: descriptionRsc,
+      };
 
-  //  Handle Delete Ressource Function
+      if (referenceRsc === "" || sourceRsc === "" || dateRsc === "") {
+        return alert("Merci de remplir tous les champs");
+      }
+
+      const { data } = await modifyRessource({
+        variables: { input },
+      });
+      // Close the modal after modify
+      setVisible001(false);
+      // Reload the page after modify the Activity
+      window.location.reload();
+    } catch (error) {
+      // Handle error, e.g., display an error message or log the error
+      console.error("Error modifying a ressource:", error);
+    }
+  };
+
+  // - Delete Ressource
+  const [deleteRessource, { loadingRsc, errorRsc }] = useMutation(
+    DELETE_RESSOURCE_MUTATION
+  );
+
+  // - Handle Delete Ressource Function
   const handleDeleteClick = (ref, id) => {
     setSelectedResource([ref, id]);
     // console.log("selectedRsc", selectedResource[1]);
@@ -457,16 +505,14 @@ const ProjetQt = () => {
     setVisible3(false);
   };
 
-  const [deleteRessource, { loadingRsc, errorRsc }] = useMutation(
-    DELETE_RESSOURCE_MUTATION
-  );
-
   // QUERIES PROJECTUSSCQ
-  // 1 - When we open activity
+  // 1 - When we open activity (Reunion)
   const getIdOnEnter = (actId) => {
     setVisible1(!visible1);
-    setactId(actId);
+    // setactId(actId);
+    console.log("idinEnter", actId);
   };
+
   const {
     load,
     err,
@@ -486,8 +532,9 @@ const ProjetQt = () => {
 
   // 2 - When we modify activity
   const getIdOnModify = (actId) => {
-    setVisible2(!visible2);
-    setactId(actId);
+    setVisible2(true);
+    console.log("actIDModified", actId);
+    // setactId(actId);
   };
 
   const { data: actmodified } = useQuery(GET_ACTIVITY, {
@@ -552,7 +599,12 @@ const ProjetQt = () => {
 
         return (
           <div>
-            <CButton color="link" shape="rounded-0" size="sm">
+            <CButton
+              color="link"
+              shape="rounded-0"
+              size="sm"
+              onClick={() => getIdOnEnter(params.row)}
+            >
               {value}
             </CButton>
 
@@ -572,7 +624,12 @@ const ProjetQt = () => {
 
         return (
           <div>
-            <CButton color="link" shape="rounded-0" size="sm">
+            <CButton
+              color="link"
+              shape="rounded-0"
+              size="sm"
+              // onClick={() => getIdOnEnter(params.row)}
+            >
               {value}
             </CButton>
 
@@ -632,13 +689,13 @@ const ProjetQt = () => {
             icon={<EditIcon style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
-            //  onClick={handleEditClick(id)}
+            onClick={() => getIdOnModify(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
-            //  onClick={handleDeleteClick(id)}
+            // onClick={handleDeleteActualityClick(id)}
             color="inherit"
           />,
         ];
@@ -1197,7 +1254,34 @@ const ProjetQt = () => {
       console.error("Error fetching file:", error);
     }
   };
+  // Modify Ressource Function
+  const handleResourceModifyClick = async (resource) => {
+    setSelectedResource(resource);
+    setReferenceRsc(resource.ref);
+    setSourceRsc(resource.source);
+    setDateRsc(resource.date);
+    setDescriptionRsc(resource.description);
 
+    // console.log("rscSelectedInfos", resource);
+    try {
+      setVisible001(true);
+    } catch (error) {
+      // Handle error
+      console.error("Error modifying ressource:", error);
+    }
+  };
+  // Define a function to get the text color based on the task value
+  const getTextColor = (value) => {
+    let textColor = "black";
+    if (value === "Suivi") {
+      textColor = "#87CEEB";
+    } else if (value === "Réunion") {
+      textColor = "#28a745";
+    } else if (value === "Réponse") {
+      textColor = "#00008B";
+    }
+    return textColor;
+  };
   // Ressources Table
   const columnsRessources = [
     {
@@ -1318,7 +1402,7 @@ const ProjetQt = () => {
             icon={<EditIcon style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
-            //  onClick={handleEditClick(id)}
+            onClick={() => handleResourceModifyClick(params.row)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -1968,73 +2052,8 @@ const ProjetQt = () => {
       </CModal>
       {/******************************** FIN MODAL POUR Modifier Le Dossier AdminQT ********************************/}
 
-      {/******************************** MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
-      <CModal visible={visible} onClose={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Ajouter une actualité</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CForm>
-            <CFormGroup>
-              <CLabel htmlFor="reference">Référence</CLabel>
-              <CFormInput
-                id="reference"
-                aria-label=""
-                value={reference}
-                onChange={(e) => setReference(e.target.value)}
-              />
-            </CFormGroup>
-            <CFormGroup></CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="date">Date</CLabel>
-              <input
-                type="date"
-                id="dateActivite"
-                value={dateActivite}
-                onChange={(e) => setDateActivite(e.target.value)}
-                className="form-control"
-              />
-            </CFormGroup>
-
-            <CFormGroup>
-              <CLabel htmlFor="sujet">Sujet</CLabel>
-              <CFormTextarea
-                id="sujet"
-                rows={3}
-                value={sujet}
-                onChange={(e) => setSujet(e.target.value)}
-              />
-            </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="recommendations">Recommendations</CLabel>
-              <CFormTextarea
-                id="recommendations"
-                rows={3}
-                value={recommendations}
-                onChange={(e) => setRecommendations(e.target.value)}
-              />
-            </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="remarques">Compte rendu</CLabel>
-              <CFormTextarea
-                id="remarques"
-                rows={3}
-                value={remarques}
-                onChange={(e) => setRemarques(e.target.value)}
-              />
-            </CFormGroup>
-          </CForm>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="success" onClick={handleCreateActivite}>
-            Ajouter
-          </CButton>
-        </CModalFooter>
-      </CModal>
-
-      {/******************************** FIN MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
       {/******************************** MODAL POUR AJOUTER UNE RESSOURCE ********************************/}
-      <CModal visible={visible0} onHide={() => setVisible0(false)}>
+      <CModal visible={visible0} on={() => setVisible0(false)}>
         <CModalHeader>
           <CModalTitle>Ajouter une ressource</CModalTitle>
         </CModalHeader>
@@ -2131,7 +2150,7 @@ const ProjetQt = () => {
 
                 <CFormCheck
                   type="radio"
-                  button={{ color: "primary", variant: "outline" }}
+                  button={{ color: "info", variant: "outline" }}
                   name="btnradio"
                   id="btnradio1"
                   autoComplete="off"
@@ -2142,7 +2161,7 @@ const ProjetQt = () => {
                 />
                 <CFormCheck
                   type="radio"
-                  button={{ color: "primary", variant: "outline" }}
+                  button={{ color: "success", variant: "outline" }}
                   name="btnradio"
                   id="réunion"
                   autoComplete="off"
@@ -2220,14 +2239,6 @@ const ProjetQt = () => {
             {eventType === "Suivi" && <></>}
             {eventType === "Réponse" && (
               <>
-                {/* <CFormInput
-                  required
-                  id="RéponseField1"
-                  aria-label=""
-                  value={réponseField1}
-                  onChange={(e) => setRéponseField1(e.target.value)}
-                  placeholder="Réponse Field 1"
-                /> */}
                 <CContainer
                   style={{ border: "1px solid #ccc", padding: "20px" }}
                 >
@@ -2322,7 +2333,13 @@ const ProjetQt = () => {
           {/* Rest of the Modal Logic  */}
           <CModalBody>
             <CCard className="text-center">
-              <CCardHeader>Réf: {selectedResource.ref}</CCardHeader>
+              <CCardHeader>
+                Référence: {selectedResource.ref}
+                <span style={{ color: getTextColor(selectedResource.tache) }}>
+                  {" "}
+                  ({selectedResource.tache})
+                </span>
+              </CCardHeader>
               <br></br>
               <CCardSubtitle className="mb-2 text-medium-emphasis">
                 {" "}
@@ -2344,7 +2361,7 @@ const ProjetQt = () => {
                 />
               </CCardBody>
               <CCardFooter className="text-medium-emphasis">
-                Date: {selectedResource.date}
+                Date du document: {selectedResource.date}
               </CCardFooter>
             </CCard>
           </CModalBody>
@@ -2354,6 +2371,125 @@ const ProjetQt = () => {
       )}
 
       {/******************************** FIN MODAL POUR OUVRIR UNE RESSOURCE ********************************/}
+      {/********************************  MODAL POUR MODIFIER UNE RESSOURCE ********************************/}
+      {selectedResource ? (
+        <CModal
+          alignment="center"
+          visible={visible001}
+          onClose={() => setVisible001(false)}
+        >
+          {/* To close the Modal by X button  */}
+          <CModalHeader>
+            <CModalTitle>
+              Modifier la ressource {selectedResource.ref}
+              {/* (
+              <span style={{ color: getTextColor(selectedResource.tache) }}>
+                {selectedResource.tache}
+              </span>
+              ) */}
+            </CModalTitle>{" "}
+          </CModalHeader>
+          {/* Rest of the Modal Logic  */}
+          <CModalBody>
+            <CCard>
+              <CCardBody>
+                <CContainer>
+                  <div className="mb-3 row justify-content-md-center">
+                    <CContainer>
+                      <CCol className="justify-content-md-center">
+                        {/* <div className=" row justify-content-md-center"> */}
+                        <CForm className="row g-3">
+                          <CCol md={12}>
+                            <CFormInput
+                              style={{
+                                color: getTextColor(selectedResource.tache),
+                              }}
+                              value={selectedResource.tache}
+                              disabled
+                              required
+                              type="text"
+                              id="tache"
+                              label="Tâche"
+                            />
+                          </CCol>
+                          {/* <div className="mb-3">
+                            <CFormInput
+                              type="file"
+                              onChange={handleFileChange}
+                              id="formFile"
+                              label="PDF"
+                              accept=".pdf"
+                            />{" "}
+                            <span>
+                              {fileName.substring(
+                                fileName.lastIndexOf("\\") + 1
+                              )}
+                            </span>
+                          </div> */}
+                          <CCol md={12}>
+                            <CFormInput
+                              value={referenceRsc}
+                              onChange={(e) => setReferenceRsc(e.target.value)}
+                              required
+                              type="text"
+                              id="inputRef"
+                              label="Référence"
+                            />
+                          </CCol>
+
+                          <CCol xs={12}>
+                            <CFormTextarea
+                              // defaultValue={activity.sujet}
+                              value={sourceRsc}
+                              onChange={(e) => setSourceRsc(e.target.value)}
+                              label="Source"
+                            ></CFormTextarea>
+                          </CCol>
+                          <CFormGroup>
+                            <CLabel htmlFor="date">Date</CLabel>
+                            <input
+                              type="date"
+                              id="dateRessource"
+                              value={dateRsc}
+                              onChange={(e) => setDateRsc(e.target.value)}
+                              className="form-control"
+                            />
+                          </CFormGroup>
+                          <CCol xs={12}>
+                            <CFormTextarea
+                              value={descriptionRsc}
+                              onChange={(e) =>
+                                setDescriptionRsc(e.target.value)
+                              }
+                              label="Description"
+                            ></CFormTextarea>
+                          </CCol>
+                        </CForm>
+                        {/* </div> */}
+                      </CCol>
+                    </CContainer>
+
+                    <br></br>
+                    <br></br>
+                  </div>
+                </CContainer>
+              </CCardBody>
+            </CCard>
+          </CModalBody>
+          <CModalFooter>
+            {/* <CButton color="secondary" onClick={() => setVisible2(false)}>
+          Close
+        </CButton> */}
+            <CButton onClick={handleModifyRessource} color="primary">
+              Mettre à jour
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      ) : (
+        ""
+      )}
+      {/******************************** FIN MODAL POUR MODIFIER UNE RESSOURCE ********************************/}
+
       {/********************************  MODAL POUR SUPPRIMER UNE RESSOURCE ********************************/}
       <CModal visible={visibleDelRcs} onClose={() => setVisibleDelRcs(false)}>
         <CModalHeader onClose={() => setVisibleDelRcs(false)}>
@@ -2374,132 +2510,205 @@ const ProjetQt = () => {
       </CModal>
 
       {/******************************** FIN MODAL POUR SUPPRIMER UNE RESSOURCE ********************************/}
+      {/******************************** MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
+      <CModal visible={visible} onClose={() => setVisible(false)}>
+        <CModalHeader>
+          <CModalTitle>Ajouter une actualité</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <CFormGroup>
+              <CLabel htmlFor="reference">Référence</CLabel>
+              <CFormInput
+                id="reference"
+                aria-label=""
+                value={reference}
+                onChange={(e) => setReference(e.target.value)}
+              />
+            </CFormGroup>
+            <CFormGroup></CFormGroup>
+            <CFormGroup>
+              <CLabel htmlFor="date">Date</CLabel>
+              <input
+                type="date"
+                id="dateActivite"
+                value={dateActivite}
+                onChange={(e) => setDateActivite(e.target.value)}
+                className="form-control"
+              />
+            </CFormGroup>
 
+            <CFormGroup>
+              <CLabel htmlFor="sujet">Sujet</CLabel>
+              <CFormTextarea
+                id="sujet"
+                rows={3}
+                value={sujet}
+                onChange={(e) => setSujet(e.target.value)}
+              />
+            </CFormGroup>
+            <CFormGroup>
+              <CLabel htmlFor="recommendations">Recommendations</CLabel>
+              <CFormTextarea
+                id="recommendations"
+                rows={3}
+                value={recommendations}
+                onChange={(e) => setRecommendations(e.target.value)}
+              />
+            </CFormGroup>
+            <CFormGroup>
+              <CLabel htmlFor="remarques">Compte rendu</CLabel>
+              <CFormTextarea
+                id="remarques"
+                rows={3}
+                value={remarques}
+                onChange={(e) => setRemarques(e.target.value)}
+              />
+            </CFormGroup>
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="success" onClick={handleCreateActivite}>
+            Ajouter
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/******************************** FIN MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
       {/********************************  MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
-      {activity ? (
-        <CModal
-          alignment="center"
-          visible={visible1}
-          onClose={() => setVisible1(false)}
-        >
-          <CModalHeader>
-            <CModalTitle>{activity.name}</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <CCard className="text-center">
-              <CCardHeader>Réf: {activity.ref}</CCardHeader>
-              <CCardBody>
-                {/* <CCardTitle>Special title treatment</CCardTitle> */}
-                <CCardText>Sujet: {activity.sujet}.</CCardText>
-                <footer className="blockquote-footer">
-                  Recommandations:{" "}
-                  <cite title="Source Title">{activity.recommendation}.</cite>
-                </footer>
-                <footer className="blockquote-footer ">
-                  Compte rendu:{" "}
-                  <cite title="Source Title">{activity.remarques}.</cite>
-                </footer>
-              </CCardBody>
-              <CCardFooter className="text-medium-emphasis">
-                Date: {activity.date}
-              </CCardFooter>
-            </CCard>
-          </CModalBody>
-        </CModal>
-      ) : (
+      {/* {activity ? ( */}
+      <CModal
+        alignment="center"
+        visible={visible1}
+        onClose={() => setVisible1(false)}
+      >
+        <CModalHeader>
+          <CModalTitle>{/* {activity.name} */}</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CCard className="text-center">
+            <CCardHeader>
+              Réf:
+              {/* {activity.ref} */}
+            </CCardHeader>
+            <CCardBody>
+              {/* <CCardTitle>Special title treatment</CCardTitle> */}
+              <CCardText>
+                Sujet:
+                {/* {activity.sujet}. */}
+              </CCardText>
+              <footer className="blockquote-footer">
+                Recommandations:{" "}
+                <cite title="Source Title">
+                  {/* {activity.recommendation}. */}
+                </cite>
+              </footer>
+              <footer className="blockquote-footer ">
+                Compte rendu:{" "}
+                <cite title="Source Title">{/* {activity.remarques}. */}</cite>
+              </footer>
+            </CCardBody>
+            <CCardFooter className="text-medium-emphasis">
+              Date:
+              {/* {activity.date} */}
+            </CCardFooter>
+          </CCard>
+        </CModalBody>
+      </CModal>
+      {/* ) : (
         ""
-      )}
+      )} */}
       {/******************************** FIN MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
 
       {/******************************** MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
-      {activityModified ? (
-        <CModal
-          alignment="center"
-          visible={visible2}
-          onClose={() => setVisible2(false)}
-        >
-          <CModalHeader>
-            <CModalTitle>{activityModified.name}</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <CCard>
-              <CCardBody>
-                <CContainer>
-                  <div className="mb-3 row justify-content-md-center">
-                    <CContainer>
-                      <CCol className="justify-content-md-center">
-                        {/* <div className=" row justify-content-md-center"> */}
-                        <CForm className="row g-3">
-                          <CCol md={12}>
-                            <CFormInput
-                              value={reference1}
-                              onChange={(e) => setReference1(e.target.value)}
-                              required
-                              type="text"
-                              id="inputRef"
-                              label="Référence"
-                            />
-                          </CCol>
-                          <CFormGroup>
-                            <CLabel htmlFor="date">Date</CLabel>
-                            <input
-                              type="date"
-                              id="dateActivite"
-                              value={dateActivite1}
-                              onChange={(e) => setDateActivite1(e.target.value)}
-                              className="form-control"
-                            />
-                          </CFormGroup>
-                          <CCol xs={12}>
-                            <CFormTextarea
-                              // defaultValue={activity.sujet}
-                              value={sujet1}
-                              onChange={(e) => setSujet1(e.target.value)}
-                              label="Sujet"
-                            ></CFormTextarea>
-                          </CCol>
+      {/* {activityModified ? ( */}
+      <CModal
+        alignment="center"
+        visible={visible2}
+        onClose={() => setVisible2(false)}
+      >
+        <CModalHeader>
+          <CModalTitle>{/* {activityModified.name} */}</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CCard>
+            <CCardBody>
+              <CContainer>
+                <div className="mb-3 row justify-content-md-center">
+                  <CContainer>
+                    <CCol className="justify-content-md-center">
+                      {/* <div className=" row justify-content-md-center"> */}
+                      <CForm className="row g-3">
+                        <CCol md={12}>
+                          <CFormInput
+                            value={reference1}
+                            onChange={(e) => setReference1(e.target.value)}
+                            required
+                            type="text"
+                            id="inputRef"
+                            label="Référence"
+                          />
+                        </CCol>
+                        <CFormGroup>
+                          <CLabel htmlFor="date">Date</CLabel>
+                          <input
+                            type="date"
+                            id="dateActivite"
+                            value={dateActivite1}
+                            onChange={(e) => setDateActivite1(e.target.value)}
+                            className="form-control"
+                          />
+                        </CFormGroup>
+                        <CCol xs={12}>
+                          <CFormTextarea
+                            // defaultValue={activity.sujet}
+                            value={sujet1}
+                            onChange={(e) => setSujet1(e.target.value)}
+                            label="Sujet"
+                          ></CFormTextarea>
+                        </CCol>
 
-                          <CCol xs={12}>
-                            <CFormTextarea
-                              // defaultValue={activity.recommendation}
-                              value={recommendations1}
-                              onChange={(e) =>
-                                setRecommendations1(e.target.value)
-                              }
-                              label="Recommandations"
-                            ></CFormTextarea>
-                          </CCol>
-                          <CCol xs={12}>
-                            <CFormTextarea
-                              // defaultValue={activity.recommendation}
-                              value={remarques1}
-                              onChange={(e) => setRemarques1(e.target.value)}
-                              label="Compte rendu"
-                            ></CFormTextarea>
-                          </CCol>
-                        </CForm>
-                        {/* </div> */}
-                      </CCol>
-                    </CContainer>
-                    <br></br>
-                    <br></br>
-                  </div>
-                </CContainer>
-              </CCardBody>
-            </CCard>
-          </CModalBody>
-          <CModalFooter>
-            {/* <CButton color="secondary" onClick={() => setVisible2(false)}>
+                        <CCol xs={12}>
+                          <CFormTextarea
+                            // defaultValue={activity.recommendation}
+                            value={recommendations1}
+                            onChange={(e) =>
+                              setRecommendations1(e.target.value)
+                            }
+                            label="Recommandations"
+                          ></CFormTextarea>
+                        </CCol>
+                        <CCol xs={12}>
+                          <CFormTextarea
+                            // defaultValue={activity.recommendation}
+                            value={remarques1}
+                            onChange={(e) => setRemarques1(e.target.value)}
+                            label="Compte rendu"
+                          ></CFormTextarea>
+                        </CCol>
+                      </CForm>
+                      {/* </div> */}
+                    </CCol>
+                  </CContainer>
+                  <br></br>
+                  <br></br>
+                </div>
+              </CContainer>
+            </CCardBody>
+          </CCard>
+        </CModalBody>
+        <CModalFooter>
+          {/* <CButton color="secondary" onClick={() => setVisible2(false)}>
           Close
         </CButton> */}
-            <CButton onClick={handleModifyActivite} color="primary">
-              Mettre à jour
-            </CButton>
-          </CModalFooter>
-        </CModal>
-      ) : (
+          <CButton onClick={handleModifyActivite} color="primary">
+            Mettre à jour
+          </CButton>
+        </CModalFooter>
+      </CModal>
+      {/* ) : (
         ""
-      )}
+      )} */}
 
       {/******************************** MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
       {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}

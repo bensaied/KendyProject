@@ -206,9 +206,6 @@ module.exports = {
               NewAdmin.userType.push("AdminQt");
             }
             await NewAdmin.save();
-          } else {
-            // User not found
-            console.log("User not found");
           }
         }
         await project.save();
@@ -367,7 +364,7 @@ module.exports = {
             // Modify the Ressource
             project.resource[i].ref = ref;
             // project.resource[i].pdfFile = pdfFile;
-            project.resource[i].source = source;
+            project.resource[i].source = source.toUpperCase();
             project.resource[i].date = date;
             project.resource[i].description = description;
             // project.resource[i].tache = tache;
