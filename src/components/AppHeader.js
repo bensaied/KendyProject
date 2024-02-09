@@ -21,6 +21,9 @@ import { logo } from "src/assets/brand/logo";
 import AppswichDropDown from "./header/AppswichDropDown";
 
 const AppHeader = () => {
+  const dispatch = useDispatch();
+  const sidebarShow = useSelector((state) => state.changeState.sidebarShow);
+
   const [showComponent, setShowComponent] = useState(false);
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -38,10 +41,7 @@ const AppHeader = () => {
       <CContainer fluid>
         <CHeaderToggler
           className="ps-1"
-          // onClick={() =>
-          //   dispatch({ type: "setSiderbar", sidebarShow: !sidebarShow }) &&
-          //   console.log("sBs", sidebarShow)
-          // }
+          onClick={() => dispatch({ type: "set", sidebarShow: !sidebarShow })}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>

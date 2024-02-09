@@ -18,10 +18,10 @@ import {
   cilHome,
   cilBookmark,
   cilBook,
-  cilFolderOpen,
+  // cilFolderOpen,
   cilGroup,
   cilUserPlus,
-  cilStar,
+  // cilStar,
   // cilLinkBroken,
   cilShareBoxed,
   cilLibraryAdd,
@@ -45,7 +45,7 @@ import { GET_PROJECTS_LABO } from "../graphql/queries/projectslabo";
 const AppSidebar = () => {
   const dispatch = useDispatch();
   const unfoldable = useSelector((state) => state.sidebarUnfoldable);
-  const sidebarShow = useSelector((state) => state.sidebarShow);
+  const sidebarShow = useSelector((state) => state.changeState.sidebarShow);
   //CURRENT_PROJECT
   const currentTypeState = useSelector((state) => state.currentType);
   // UPDATED PROJECTS LIST
