@@ -44,8 +44,9 @@ const currentTypeFromStorage = localStorage.getItem("currentType")
 const refreshInfoFromStorage = localStorage.getItem("refreshInfo")
   ? JSON.parse(localStorage.getItem("refreshInfo"))
   : null;
+
 const initialState = {
-  // sidebarShow: true,
+  sidebarShow: true,
   userLogin: { userInfo: userInfoFromStorage },
   currentType: { currentType: currentTypeFromStorage },
   refreshInfo: { refreshInfo: refreshInfoFromStorage },

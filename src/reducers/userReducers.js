@@ -32,9 +32,9 @@ import {
   USER_UPDATE_SUCCESS,
 } from "src/constants/userConstant";
 
-const initialState = { content: "" };
+const initialState2 = { content: "" };
 
-export const reducer = (state = initialState, action) => {
+export const reducer = (state = initialState2, action) => {
   switch (action.type) {
     case "UPDATE_CONTENT":
       return { ...state, content: action.payload.content };
@@ -201,21 +201,12 @@ export const userChangePwdReducer = (state = {}, action) => {
 
 /******************************************************************* SETSIDEBAR REDUCER *******************************************************************/
 
-// const userInfoFromStorage = localStorage.getItem("userInfo")
-//   ? JSON.parse(localStorage.getItem("userInfo"))
-//   : null;
-
-const initialStateSiderBar = {
+const initialState = {
   sidebarShow: true,
-  // userLogin: { userInfo: userInfoFromStorage },
 };
-
-export const changeStateReducer = (
-  state = initialStateSiderBar,
-  { type, ...rest }
-) => {
+export const changeStateReducer = (state = initialState, { type, ...rest }) => {
   switch (type) {
-    case "setSiderbar":
+    case "set":
       return { ...state, ...rest };
     default:
       return state;
