@@ -24,8 +24,8 @@ import {
   cilLoopCircular,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import { FaUserCog, FaUserEdit } from "react-icons/fa";
-import { HiUser } from "react-icons/hi";
+// import { FaUserCog, FaUserEdit } from "react-icons/fa";
+// import { HiUser } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { currentType } from "src/views/actions/userActions";
 
@@ -34,6 +34,7 @@ const AppswichDropDown = () => {
     border: "1px solid #ccc",
     padding: "7px",
     backgroundColor: "#f5f5f5",
+    borderRadius: "7px",
   };
   const currentTypeState = useSelector((state) => state.currentType);
   const [selectedUserType, setSelectedUserType] = useState(

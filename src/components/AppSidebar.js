@@ -23,7 +23,7 @@ import {
   cilUserPlus,
   // cilStar,
   // cilLinkBroken,
-  cilShareBoxed,
+  // cilShareBoxed,
   cilLibraryAdd,
   cilWallet,
   cilFolder,
