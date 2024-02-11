@@ -4,11 +4,11 @@ module.exports = gql`
   type Activite {
     id: ID!
     name: String!
-    ref: String!
+    resource: [ResourceDetails]!
     date: String!
     sujet: String!
     recommendation: String!
-    remarques: String
+    remarques: String                                                                                                                             
   }
 
   scalar Upload
@@ -54,7 +54,7 @@ module.exports = gql`
   }
   input CreateActiviteInput {
     projectId: ID!
-    ref: String!
+    resourceRef: ID!
     date: String!
     sujet: String!
     recommendation: String!
@@ -74,7 +74,7 @@ module.exports = gql`
     projectId: ID!
     activityId: ID!
     name: String!
-    ref: String!
+    # resource: ResourceDetails!
     date: String!
     sujet: String!
     recommendation: String!

@@ -319,8 +319,7 @@ const ProjetQt = () => {
         setDescriptionRes("");
         setTacheRes("");
         // Close the modal
-        // Reload the page after create new Activity
-
+        // Reload the page after create new Ressource
         setVisible0(false);
         window.location.reload();
       } else {

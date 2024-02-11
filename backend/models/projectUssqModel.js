@@ -53,8 +53,17 @@ const projectUssqSchema = mongoose.Schema(
             type: String,
             required: true,
           },
-          ref: {
-            type: String,
+          resource: {
+            type: [
+              {
+                pdfFile: { type: String, required: true },
+                ref: { type: String, required: true },
+                source: { type: String, required: true },
+                date: { type: String, required: true },
+                description: { type: String },
+                tache: { type: String, required: true },
+              },
+            ],
             required: true,
           },
           date: {
@@ -69,13 +78,12 @@ const projectUssqSchema = mongoose.Schema(
             type: String,
             required: true,
           },
-          remarques: {
-            type: String,
-          },
+          remarques: String,
         },
       ],
       required: true,
     },
+
     resource: [
       {
         pdfFile: { type: String, required: true },

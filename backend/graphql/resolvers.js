@@ -6,6 +6,7 @@ const { ObjectId } = mongoose.Types;
 const { GraphQLUpload } = require("graphql-upload");
 const path = require("path");
 const fs = require("fs");
+const { gql } = require("@apollo/client");
 
 module.exports = {
   Upload: GraphQLUpload,
@@ -23,9 +24,15 @@ module.exports = {
     },
 
     //******************* GET USSCQ PROJECT BY ID *******************//
+
     project: async (_, { id }) => {
       // Retrieve the project based on the provided ID
-      const project = await ProjetUSSCQ.findById(id).populate("admin"); //  Retrieve project from MongoDB & populating the administrator
+      const project = await ProjetUSSCQ.findById(id).populate("admin").exec();
+      //  Retrieve project from MongoDB & populating the resource of the Activities
+      project.activite.forEach((activite) => {
+        // Log resource for each activite
+        // console.log("Resources for activite:", activite.resource);
+      });
       return project;
     },
 
@@ -262,7 +269,7 @@ module.exports = {
         // Once the file is saved, you can save the resource data to your database
 
         const newResource = {
-          id: new ObjectId(), // Generate a new ObjectId for the activite
+          id: new ObjectId(), // Generate a new ObjectId for the resource
           pdfFile: uploadPath,
           ref,
           source: source.toUpperCase(),
@@ -291,51 +298,6 @@ module.exports = {
           message: error.message,
         };
       }
-    },
-    //******************* CREATE USSCQ ACTIVITY BY ( PROJECT_ID and activity infos) *******************//
-    createActivite: async (parent, { input }, context) => {
-      // Extract the input values
-      const { projectId, ref, date, sujet, recommendation, remarques } = input;
-
-      const newActivite = {
-        id: new ObjectId(), // Generate a new ObjectId for the activite
-        name: "",
-        ref,
-        date,
-        sujet,
-        recommendation,
-        remarques,
-      };
-
-      // Update the project document with the new activite
-      const project = await ProjetUSSCQ.findById(projectId);
-      if (!project) {
-        throw new Error("Project not found");
-      }
-      // Activity name function
-      if (project.activite.length == 0) {
-        newActivite.name = "Réunion 1";
-      } else {
-        let lastActivityIndex = project.activite.length;
-        let lastActivityNum = lastActivityIndex + 1;
-        newActivite.name = "Réunion " + lastActivityNum.toString();
-        if (project.activite[lastActivityIndex - 1].name == newActivite.name) {
-          let lastActivityNum = lastActivityIndex + 2;
-          newActivite.name = "Réunion " + lastActivityNum.toString();
-        }
-      }
-      // console.log(remarques);
-      if (remarques == "") {
-        newActivite.remarques = "";
-      }
-      // Add the new activite to the project's activite array
-      project.activite.push(newActivite);
-
-      // Save the updated project document
-      await project.save();
-
-      // Return the created activity
-      return newActivite;
     },
     //******************* MODIFY USSCQ RESSOURCE BY (PROJECT_ID, RESSOURCE_ID and ressource infos) *******************//
     modifyRessource: async (parent, { input }, context) => {
@@ -382,6 +344,91 @@ module.exports = {
         throw new Error("Failed to fetch ressource");
       }
     },
+    //******************* DELETE USSCQ Ressource BY (PROJECT_ID & Ressource_ID) *******************//
+    deleteRessource: async (_, { projectId, ressourceId }) => {
+      try {
+        // Find the project by ID
+        const project = await ProjetUSSCQ.findById(projectId);
+
+        if (!project) {
+          throw new Error("Project not found");
+        }
+
+        // Find the index of the ressource with the given ressourceId
+        const ressourceIndex = project.resource.findIndex(
+          (ressource) => ressource.id === ressourceId
+        );
+
+        if (ressourceIndex === -1) {
+          throw new Error("Ressource not found in the project");
+        }
+
+        // Remove the ressource from the project's ressource array
+        const removedRessource = project.resource.splice(ressourceIndex, 1)[0];
+
+        // Save the updated project
+        await project.save();
+
+        return removedRessource;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+
+    //******************* CREATE USSCQ ACTIVITY BY ( PROJECT_ID and activity infos) *******************//
+    createActivite: async (parent, { input }, context) => {
+      // Extract the input values
+      const { projectId, resourceRef, date, sujet, recommendation, remarques } =
+        input;
+
+      // Update the project document with the new activite
+      const project = await ProjetUSSCQ.findById(projectId);
+      if (!project) {
+        throw new Error("Project not found");
+      }
+      // Find the resource within the project's resources array
+      const resource = project.resource.find((res) => res.id === resourceRef);
+      if (!resource) {
+        throw new Error("Resource not found within the project");
+      }
+
+      const newActivite = {
+        id: new ObjectId(), // Generate a new ObjectId for the activite
+        name: "",
+        resource,
+        date,
+        sujet,
+        recommendation,
+        remarques,
+      };
+
+      // Activity name function
+      if (project.activite.length == 0) {
+        newActivite.name = "Réunion 1";
+      } else {
+        let lastActivityIndex = project.activite.length;
+        let lastActivityNum = lastActivityIndex + 1;
+        newActivite.name = "Réunion " + lastActivityNum.toString();
+        if (project.activite[lastActivityIndex - 1].name == newActivite.name) {
+          let lastActivityNum = lastActivityIndex + 2;
+          newActivite.name = "Réunion " + lastActivityNum.toString();
+        }
+      }
+      // console.log(remarques);
+      if (remarques == "") {
+        newActivite.remarques = "";
+      }
+
+      // Add the new activite to the project's activite array
+      project.activite.push(newActivite);
+
+      // Save the updated project document
+      await project.save();
+
+      // Return the created activity
+      return newActivite;
+    },
+
     //******************* MODIFY USSCQ ACTIVITY BY (PROJECT_ID, ACTIVITY_ID and activity infos) *******************//
     modifyActivite: async (parent, { input }, context) => {
       // Extract the input values
@@ -457,36 +504,7 @@ module.exports = {
         throw new Error(error.message);
       }
     },
-    //******************* DELETE USSCQ Ressource BY (PROJECT_ID & Ressource_ID) *******************//
-    deleteRessource: async (_, { projectId, ressourceId }) => {
-      try {
-        // Find the project by ID
-        const project = await ProjetUSSCQ.findById(projectId);
 
-        if (!project) {
-          throw new Error("Project not found");
-        }
-
-        // Find the index of the ressource with the given ressourceId
-        const ressourceIndex = project.resource.findIndex(
-          (ressource) => ressource.id === ressourceId
-        );
-
-        if (ressourceIndex === -1) {
-          throw new Error("Ressource not found in the project");
-        }
-
-        // Remove the ressource from the project's ressource array
-        const removedRessource = project.resource.splice(ressourceIndex, 1)[0];
-
-        // Save the updated project
-        await project.save();
-
-        return removedRessource;
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
     //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
     //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
     createVersion: async (parent, { input }, context) => {
