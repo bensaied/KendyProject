@@ -8,7 +8,15 @@ export const MODIFY_PROJECT_MUTATION = gql`
       activite {
         id
         name
-        ref
+        resource {
+          id
+          pdfFile
+          ref
+          source
+          date
+          description
+          tache
+        }
         date
         sujet
         recommendation
@@ -66,7 +74,15 @@ export const CREATE_ACTIVITE_MUTATION = gql`
     createActivite(input: $input) {
       id
       name
-      ref
+      resource {
+        id
+        pdfFile
+        ref
+        source
+        date
+        description
+        tache
+      }
       date
       sujet
       recommendation
@@ -79,7 +95,15 @@ export const MODIFY_ACTIVITE_MUTATION = gql`
   mutation ModifyActivite($input: ModifyActiviteInput!) {
     modifyActivite(input: $input) {
       name
-      ref
+      resource {
+        id
+        pdfFile
+        ref
+        source
+        date
+        description
+        tache
+      }
       date
       sujet
       recommendation
