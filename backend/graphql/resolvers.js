@@ -269,7 +269,7 @@ module.exports = {
         // Once the file is saved, you can save the resource data to your database
 
         const newResource = {
-          id: new ObjectId(), // Generate a new ObjectId for the resource
+          _id: new ObjectId(), // Generate a new ObjectId for the resource
           pdfFile: uploadPath,
           ref,
           source: source.toUpperCase(),
@@ -282,10 +282,11 @@ module.exports = {
         project.resource.push(newResource);
         // Save the updated project document
         await project.save();
-        // Return success or additional information
+
         return {
           success: true,
           message: "File uploaded successfully",
+          resourceRef: newResource._id.toString(),
         };
       } catch (error) {
         // Handle errors
@@ -296,6 +297,7 @@ module.exports = {
         return {
           success: false,
           message: error.message,
+          resourceRef: null,
         };
       }
     },
@@ -386,8 +388,11 @@ module.exports = {
       if (!project) {
         throw new Error("Project not found");
       }
+
       // Find the resource within the project's resources array
-      const resource = project.resource.find((res) => res.id === resourceRef);
+      const resource = project.resource.find(
+        (res) => res.id.toString() === resourceRef
+      );
       if (!resource) {
         throw new Error("Resource not found within the project");
       }
@@ -424,7 +429,6 @@ module.exports = {
 
       // Save the updated project document
       await project.save();
-
       // Return the created activity
       return newActivite;
     },
