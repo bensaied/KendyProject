@@ -310,20 +310,11 @@ const ProjetQt = () => {
       const { data } = await createResource({
         variables: { input },
       });
-      console.log("dataTest : ", data);
-      // Create Activity or Response
-      console.log(
-        "testToEnter: ",
-        eventType,
-        "and ",
-        data.createResource.resourceRef
-      );
+
+      // Create Activity
+
       if (eventType == "Réunion" && data.createResource.resourceRef != null) {
         (async () => {
-          console.log(
-            "i am here !!and this is the rscRef :",
-            data.createResource.resourceRef
-          );
           let rscRef = data.createResource.resourceRef;
           try {
             const input = {
@@ -334,7 +325,6 @@ const ProjetQt = () => {
               recommendation: recommendations,
               remarques: remarques || "",
             };
-            console.log("inputReunion :", input);
 
             if (
               rscRef === "" ||
@@ -349,8 +339,6 @@ const ProjetQt = () => {
               variables: { input },
             });
             // Handle success, e.g., display a success message or update UI
-
-            console.log("New activite created:", data.createActivite);
 
             // Reset the form fields
             setReference("");
@@ -369,7 +357,7 @@ const ProjetQt = () => {
         })();
       }
 
-      // console.log("Resource created:", data.createResource.success);
+      // Create Simple Resource with "Suivi" task
       if (eventType == "Suivi" && data.createResource.success == true) {
         // Reset the form fields
         setPdfFile("");
@@ -390,50 +378,6 @@ const ProjetQt = () => {
     } catch (error) {
       console.error("Error creating resource:", error.message);
       setErrorModal("Erreur lors de la création de la ressource.");
-    }
-  };
-
-  // Function to handle creating an activite
-  const handleCreateActivite = async () => {
-    try {
-      const input = {
-        projectId: project.id,
-        resourceRef: reference,
-        date: dateActivite,
-        sujet: sujet,
-        recommendation: recommendations,
-        remarques: remarques || "",
-      };
-
-      if (
-        reference === "" ||
-        dateActivite === "" ||
-        sujet === "" ||
-        recommendations === ""
-      ) {
-        return alert("Merci de remplir tous les champs");
-      }
-
-      const { data } = await createActivite({
-        variables: { input },
-      });
-      // Handle success, e.g., display a success message or update UI
-
-      // console.log("New activite created:", data.createActivite);
-
-      // Reset the form fields
-      setReference("");
-      setDateActivite("");
-      setSujet("");
-      setRecommendations("");
-      setRemarques("");
-      // Close the modal
-      setVisible(false);
-      // Reload the page after create new Activity
-      window.location.reload();
-    } catch (error) {
-      // Handle error, e.g., display an error message or log the error
-      console.error("Error creating activite:", error);
     }
   };
 

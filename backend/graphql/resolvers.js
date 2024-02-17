@@ -390,17 +390,17 @@ module.exports = {
       }
 
       // Find the resource within the project's resources array
-      const resource = project.resource.find(
-        (res) => res.id.toString() === resourceRef
-      );
-      if (!resource) {
-        throw new Error("Resource not found within the project");
-      }
-
+      // const resource = project.resource.find(
+      //   (res) => res.id.toString() === resourceRef
+      // );
+      // if (!resource) {
+      //   throw new Error("Resource not found within the project");
+      // }
+      const resourceObjectId = new ObjectId(resourceRef);
       const newActivite = {
         id: new ObjectId(), // Generate a new ObjectId for the activite
         name: "",
-        resource,
+        resource: resourceObjectId,
         date,
         sujet,
         recommendation,
