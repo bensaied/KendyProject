@@ -152,11 +152,12 @@ const ProjetQt = () => {
   const [remarques1, setRemarques1] = useState("");
 
   // Activity States for add
-  const [reference, setReference] = useState("");
   const [dateActivite, setDateActivite] = useState("");
   const [sujet, setSujet] = useState("");
-  const [recommendations, setRecommendations] = useState("");
   const [remarques, setRemarques] = useState("");
+  const [recommendations, setRecommendations] = useState("");
+
+  const [reference, setReference] = useState("");
 
   // STATES FOR MODALS VISIBILITY
   const [visible, setVisible] = useState(false);
@@ -309,8 +310,67 @@ const ProjetQt = () => {
       const { data } = await createResource({
         variables: { input },
       });
+      console.log("dataTest : ", data);
+      // Create Activity or Response
+      console.log(
+        "testToEnter: ",
+        eventType,
+        "and ",
+        data.createResource.resourceRef
+      );
+      if (eventType == "Réunion" && data.createResource.resourceRef != null) {
+        (async () => {
+          console.log(
+            "i am here !!and this is the rscRef :",
+            data.createResource.resourceRef
+          );
+          let rscRef = data.createResource.resourceRef;
+          try {
+            const input = {
+              projectId: project.id,
+              resourceRef: rscRef,
+              date: dateActivite,
+              sujet: sujet,
+              recommendation: recommendations,
+              remarques: remarques || "",
+            };
+            console.log("inputReunion :", input);
+
+            if (
+              rscRef === "" ||
+              dateActivite === "" ||
+              sujet === "" ||
+              recommendations === ""
+            ) {
+              return alert("Merci de remplir tous les champs");
+            }
+
+            const { data } = await createActivite({
+              variables: { input },
+            });
+            // Handle success, e.g., display a success message or update UI
+
+            console.log("New activite created:", data.createActivite);
+
+            // Reset the form fields
+            setReference("");
+            setDateActivite("");
+            setSujet("");
+            setRecommendations("");
+            setRemarques("");
+            // Close the modal
+            setVisible(false);
+            // Reload the page after create new Activity
+            window.location.reload();
+          } catch (error) {
+            // Handle error, e.g., display an error message or log the error
+            console.error("Error creating activite:", error);
+          }
+        })();
+      }
+
       // console.log("Resource created:", data.createResource.success);
-      if (data.createResource.success == true) {
+      if (eventType == "Suivi" && data.createResource.success == true) {
         // Reset the form fields
         setPdfFile("");
         setRefRes("");
@@ -338,7 +398,7 @@ const ProjetQt = () => {
     try {
       const input = {
         projectId: project.id,
-        ref: reference,
+        resourceRef: reference,
         date: dateActivite,
         sujet: sujet,
         recommendation: recommendations,
@@ -2203,8 +2263,8 @@ const ProjetQt = () => {
                     <input
                       type="date"
                       id="dateActivite"
-                      value={dateActivite}
                       required
+                      value={dateActivite}
                       onChange={(e) => setDateActivite(e.target.value)}
                       className="form-control"
                     />
@@ -2216,17 +2276,31 @@ const ProjetQt = () => {
                       id="sujet"
                       rows={1}
                       value={sujet}
-                      required
                       onChange={(e) => setSujet(e.target.value)}
+                      required
                     />
                   </CFormGroup>
+
+                  <CFormGroup>
+                    <CLabel htmlFor="recommendations">
+                      Compte rendu pour la réunion
+                    </CLabel>
+                    <CFormTextarea
+                      id="remarques"
+                      rows={3}
+                      required
+                      value={remarques}
+                      onChange={(e) => setRemarques(e.target.value)}
+                    />
+                  </CFormGroup>
+
                   <CFormGroup>
                     <CLabel htmlFor="recommendations">
                       Recommendations pour la réunion
                     </CLabel>
                     <CFormTextarea
                       id="recommendations"
-                      rows={1}
+                      rows={2}
                       required
                       value={recommendations}
                       onChange={(e) => setRecommendations(e.target.value)}
@@ -2510,7 +2584,7 @@ const ProjetQt = () => {
 
       {/******************************** FIN MODAL POUR SUPPRIMER UNE RESSOURCE ********************************/}
       {/******************************** MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
-      <CModal visible={visible} onClose={() => setVisible(false)}>
+      {/* <CModal visible={visible} onClose={() => setVisible(false)}>
         <CModalHeader>
           <CModalTitle>Ajouter une actualité</CModalTitle>
         </CModalHeader>
@@ -2571,7 +2645,7 @@ const ProjetQt = () => {
             Ajouter
           </CButton>
         </CModalFooter>
-      </CModal>
+      </CModal> */}
 
       {/******************************** FIN MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
       {/********************************  MODAL POUR OUVRIR UNE ACTUALITE ********************************/}

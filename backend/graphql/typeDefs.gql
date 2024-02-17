@@ -54,7 +54,7 @@ module.exports = gql`
   }
   input CreateActiviteInput {
     projectId: ID!
-    resourceRef: ID!
+    resourceRef: String!
     date: String!
     sujet: String!
     recommendation: String!
@@ -186,6 +186,7 @@ module.exports = gql`
   type ResourceCreationResult {
     success: Boolean!
     message: String
+    resourceRef: String
   }
   type Mutation {
     # ProjectUSSCQ

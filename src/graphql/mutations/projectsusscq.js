@@ -46,6 +46,7 @@ export const CREATE_RESOURCE_MUTATION = gql`
     createResource(input: $input) {
       success
       message
+      resourceRef
     }
   }
 `;
@@ -74,19 +75,6 @@ export const CREATE_ACTIVITE_MUTATION = gql`
     createActivite(input: $input) {
       id
       name
-      resource {
-        id
-        pdfFile
-        ref
-        source
-        date
-        description
-        tache
-      }
-      date
-      sujet
-      recommendation
-      remarques
     }
   }
 `;
