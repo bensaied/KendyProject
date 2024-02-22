@@ -313,7 +313,11 @@ const ProjetQt = () => {
 
       // Create Activity
 
-      if (eventType == "Réunion" && data.createResource.resourceRef != null) {
+      if (
+        eventType == "Réunion" &&
+        data.createResource.resourceRef != null &&
+        data.createResource.success == true
+      ) {
         (async () => {
           let rscRef = data.createResource.resourceRef;
           try {
@@ -2061,33 +2065,42 @@ const ProjetQt = () => {
           <CModalTitle>Ajouter une ressource</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          {errorModal && (
-            <div className="error-message">
-              <CAlert color="danger">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span>{errorModal}</span>
-                  <button
-                    className="close-button"
-                    onClick={() => setErrorModal(null)}
+          {errorModal &&
+            errorModal !== "File uploaded successfully" &&
+            errorModal !== "File already exists" && (
+              <div className="error-message">
+                <CAlert color="danger">
+                  <div
                     style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      color: "#333", // Adjust the color as needed
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    X
-                  </button>
-                </div>
-              </CAlert>
-            </div>
-          )}
+                    <span>{errorModal}</span>
+                    <button
+                      className="close-button"
+                      onClick={() => setErrorModal(null)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "#333", // Adjust the color as needed
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                </CAlert>
+              </div>
+            )}
+
+          {errorModal === "File uploaded successfully" ||
+            (errorModal === "File already exists" && (
+              <div className="success-message">
+                <CAlert color="success">{errorModal}</CAlert>
+              </div>
+            ))}
 
           <CForm>
             <div className="mb-3">
