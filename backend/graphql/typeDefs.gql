@@ -4,7 +4,7 @@ module.exports = gql`
   type Activite {
     id: ID!
     name: String!
-    resource: [ResourceDetails]!
+    resource: ID!
     date: String!
     sujet: String!
     recommendation: String!

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const { mongoose, ObjectId } = require("mongoose");
 
 const projectUssqSchema = mongoose.Schema(
   {
@@ -54,16 +54,7 @@ const projectUssqSchema = mongoose.Schema(
             required: true,
           },
           resource: {
-            type: [
-              {
-                pdfFile: { type: String, required: true },
-                ref: { type: String, required: true },
-                source: { type: String, required: true },
-                date: { type: String, required: true },
-                description: { type: String },
-                tache: { type: String, required: true },
-              },
-            ],
+            type: [ObjectId],
             required: true,
           },
           date: {

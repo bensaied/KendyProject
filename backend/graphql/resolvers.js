@@ -240,14 +240,17 @@ module.exports = {
           throw new Error("Le document n'est pas saisi.");
         }
         //TEST IF THE DOCUMENT WITH THAT NAME EXISTS ALREADY
-        for (let i = 0; i < project.resource.length; i++) {
-          let pdfFilePath = project.resource[i].pdfFile;
-          let isFilenameIncluded = pdfFilePath.includes(filename);
-          if (isFilenameIncluded) {
-            throw new Error("Document déja existe.");
-          }
-        }
 
+        const existingResource = project.resource.find((resource) =>
+          resource.pdfFile.includes(filename)
+        );
+        if (existingResource) {
+          return {
+            success: true,
+            message: "File already exists",
+            resourceRef: existingResource._id.toString(),
+          };
+        }
         // Create a folder with the project name if it doesn't exist
         const projectFolderPath = path.join(
           __dirname,
@@ -390,17 +393,17 @@ module.exports = {
       }
 
       // Find the resource within the project's resources array
-      const resource = project.resource.find(
-        (res) => res.id.toString() === resourceRef
-      );
-      if (!resource) {
-        throw new Error("Resource not found within the project");
-      }
-
+      // const resource = project.resource.find(
+      //   (res) => res.id.toString() === resourceRef
+      // );
+      // if (!resource) {
+      //   throw new Error("Resource not found within the project");
+      // }
+      const resourceObjectId = new ObjectId(resourceRef);
       const newActivite = {
         id: new ObjectId(), // Generate a new ObjectId for the activite
         name: "",
-        resource,
+        resource: resourceObjectId,
         date,
         sujet,
         recommendation,
