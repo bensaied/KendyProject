@@ -611,7 +611,32 @@ const ProjetQt = () => {
       return "";
     }
   };
-
+  //Find the resource of a given activity and Open It
+  const handleResourceActivityClick = async (resourceId) => {
+    // Find the resource by ID within the project's resources array
+    const resource = project.resource.find(
+      (resource) => resource.id === resourceId.resource
+    );
+    // if (res)
+    setSelectedResource(resource);
+    // DOC VIEWER
+    // Construct the relative URL to fetch the file from the server
+    const fileUrl = `/get-file/${encodeURIComponent(resource.pdfFile)}`;
+    try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch file !");
+      }
+      // Set the documents to be displayed by DocViewer
+      setDocs([{ uri: fileUrl }]);
+      // Open The Ressource Modal
+      setVisible01(true);
+    } catch (error) {
+      // Handle error
+      console.error("Error fetching file:", error);
+    }
+  };
+  //
   const columnsReunion = [
     {
       field: "name",
@@ -626,6 +651,7 @@ const ProjetQt = () => {
         return (
           <div>
             <CButton
+              title="Ouvrir la Réunion"
               color="link"
               shape="rounded-0"
               size="sm"
@@ -653,10 +679,11 @@ const ProjetQt = () => {
         return (
           <div>
             <CButton
+              title="Ouvrir la Référence"
               color="link"
               shape="rounded-0"
               size="sm"
-              // onClick={() => getIdOnEnter(params.row)}
+              onClick={() => handleResourceActivityClick(params.row)}
             >
               {ref}
             </CButton>
@@ -714,6 +741,7 @@ const ProjetQt = () => {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
+            title="Modifier la Réunion"
             icon={<EditIcon style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
@@ -721,6 +749,7 @@ const ProjetQt = () => {
             color="inherit"
           />,
           <GridActionsCellItem
+            title="Supprimer la Réunion"
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
             // onClick={handleDeleteActualityClick(id)}
@@ -730,57 +759,6 @@ const ProjetQt = () => {
       },
     },
   ];
-
-  // const rowsReunion = [
-  //   {
-  //     id: "1",
-  //     name: "Réunion 1",
-  //     resource: "2838",
-  //     date: "2016-04-24",
-  //     sujet: "Installation du matriels",
-  //     recommendation: "rien.",
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Réunion 2",
-  //     resource: "34234",
-  //     date: "2016-10-31",
-  //     sujet: "fzefzefef huihiu",
-  //     recommendation: "  ",
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Réunion 3",
-  //     resource: "2424",
-  //     date: "2023-11-19",
-  //     sujet: "Inzezeezfzef fzefkz",
-  //     recommendation: "qeidjzie.",
-  //   },
-  //   {
-  //     id: "4",
-  //     name: "Réunion 4",
-  //     resource: "3424",
-  //     date: "2017-02-14",
-  //     sujet: "zfzfeféfze ef zef triels",
-  //     recommendation: "zefizje.",
-  //   },
-  //   {
-  //     id: "5",
-  //     name: "Réunion 5",
-  //     resource: "7633",
-  //     date: "2020-05-31",
-  //     sujet: "zfkzefzeffzefzefzefls",
-  //     recommendation: "zefr.",
-  //   },
-  //   {
-  //     id: "6",
-  //     name: "Réunion 6",
-  //     resource: "9342",
-  //     date: "2020-16-02",
-  //     sujet: "jksdiffz",
-  //     recommendation: "efzfzef.",
-  //   },
-  // ];
 
   /////////////////////////////////////////////// Table of Activities (Reponses)
 
@@ -1331,6 +1309,7 @@ const ProjetQt = () => {
         return (
           <div>
             <CButton
+              title="Ouvrir la Référence"
               color="link"
               shape="rounded-0"
               size="sm"
@@ -1384,7 +1363,7 @@ const ProjetQt = () => {
       field: "description",
       renderHeader: () => <strong>{"Description"}</strong>,
       headerName: "Description",
-      width: 440,
+      width: 430,
       filterable: true,
       resizable: true,
     },
@@ -1433,6 +1412,7 @@ const ProjetQt = () => {
       getActions: (params) => {
         return [
           <GridActionsCellItem
+            title="Modifier la Référence"
             icon={<EditIcon style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
@@ -1440,6 +1420,7 @@ const ProjetQt = () => {
             color="inherit"
           />,
           <GridActionsCellItem
+            title="Supprimer la Référence"
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
             onClick={() => handleDeleteClick(params.row.ref, params.row.id)}
@@ -2643,19 +2624,36 @@ const ProjetQt = () => {
             <CModalTitle> {activity.name} </CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <CCard className="text-center">
-              <CCardHeader>Réf: {refActivity}</CCardHeader>
+            <CCard
+              textColor={"success"}
+              className={`mb-3 border-top-${"success"} text-center`}
+            >
+              <CCardHeader>Référence: {refActivity}</CCardHeader>
               <CCardBody>
                 {/* <CCardTitle>Special title treatment</CCardTitle> */}
                 <CCardText>Sujet: {activity.sujet}.</CCardText>
-                <footer className="blockquote-footer">
-                  Recommandations:{" "}
-                  <cite title="Source Title">{activity.recommendation}.</cite>
-                </footer>
-                <footer className="blockquote-footer ">
+                <CCardSubtitle className="mb-4 text-medium-emphasis">
+                  Compte rendu:
+                  <CCardBody>
+                    <CCardText>{activity.remarques}.</CCardText>
+                  </CCardBody>
+                </CCardSubtitle>
+
+                {/* <footer className="blockquote-footer ">
                   Compte rendu:{" "}
                   <cite title="Source Title">{activity.remarques}.</cite>
-                </footer>
+                </footer> */}
+
+                {/* <footer className="blockquote-footer">
+                  Recommandations:{" "}
+                  <cite title="Source Title">{activity.recommendation}.</cite>
+                </footer> */}
+
+                <CCardText>
+                  <small className="text-medium-emphasis">
+                    Recommandations: {activity.recommendation}.
+                  </small>
+                </CCardText>
               </CCardBody>
               <CCardFooter className="text-medium-emphasis">
                 Date: {activity.date}
