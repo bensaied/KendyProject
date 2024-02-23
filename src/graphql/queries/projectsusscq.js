@@ -39,15 +39,7 @@ export const GET_PROJECT = gql`
       activite {
         id
         name
-        # resource {
-        #   id
-        #   pdfFile
-        #   ref
-        #   source
-        #   date
-        #   description
-        #   tache
-        # }
+        resource
         date
         sujet
         recommendation
@@ -75,15 +67,7 @@ export const GET_ACTIVITIES = gql`
     getActivities(projectId: $projectId) {
       id
       name
-      resource {
-        id
-        pdfFile
-        ref
-        source
-        date
-        description
-        tache
-      }
+      resource
       date
       sujet
       recommendation
@@ -94,17 +78,9 @@ export const GET_ACTIVITIES = gql`
 export const GET_ACTIVITY = gql`
   query GetActivity($projectId: ID!, $activityId: ID!) {
     getActivity(projectId: $projectId, activityId: $activityId) {
-      name
       id
-      resource {
-        id
-        pdfFile
-        ref
-        source
-        date
-        description
-        tache
-      }
+      name
+      resource
       date
       sujet
       recommendation

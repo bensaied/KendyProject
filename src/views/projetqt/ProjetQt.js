@@ -179,7 +179,11 @@ const ProjetQt = () => {
   const [sourceRsc, setSourceRsc] = useState("");
   const [dateRsc, setDateRsc] = useState("");
   const [descriptionRsc, setDescriptionRsc] = useState("");
+  // STATES FOR ACTIVITY (REUNION)
+  const [rowsReunion, setrowsReunion] = useState("");
+  const [refActivity, setRefActivity] = useState("");
 
+  setRefActivity;
   const [fileName, setFileName] = useState("");
 
   //Reunion & Réponse Field
@@ -516,19 +520,18 @@ const ProjetQt = () => {
   // 1 - When we open activity (Reunion)
   const getIdOnEnter = (actId) => {
     setVisible1(!visible1);
-    // setactId(actId);
-    console.log("idinEnter", actId);
+    setactId(actId);
+    let ref = findResourceRef(actId.resource);
+    setRefActivity(ref);
   };
-
   const {
     load,
     err,
     data: act,
   } = useQuery(GET_ACTIVITY, {
-    variables: { projectId: id, activityId: actId }, // Use 'id' as the projectId variable
+    variables: { projectId: id, activityId: actId.id }, // Use 'id' as the projectId variable
   });
   const activity = act?.getActivity;
-
   if (load) {
     return <div>Loading...</div>;
   }
@@ -540,7 +543,6 @@ const ProjetQt = () => {
   // 2 - When we modify activity
   const getIdOnModify = (actId) => {
     setVisible2(true);
-    console.log("actIDModified", actId);
     // setactId(actId);
   };
 
@@ -593,9 +595,26 @@ const ProjetQt = () => {
       }));
     };
   }
-  const columns1 = [
+  // Function to handle the Ref of the resource in the Activity (Reunion)
+  const findResourceRef = (resourceId) => {
+    // Check if the project exists
+    if (project) {
+      // Find the resource by ID within the project's resources array
+      const resource = project.resource.find(
+        (resource) => resource.id === resourceId
+      );
+
+      // If the resource exists, return its ref field, otherwise return an empty string
+      return resource ? resource.ref : "";
+    } else {
+      // Return an empty string if the project is not found
+      return "";
+    }
+  };
+
+  const columnsReunion = [
     {
-      field: "reunion",
+      field: "name",
       renderHeader: () => (
         <div style={{ paddingLeft: "5px" }}>
           <strong>{"Réunion"}</strong>{" "}
@@ -624,11 +643,13 @@ const ProjetQt = () => {
       filterable: true,
     },
     {
-      field: "ref",
+      field: "resource",
       renderHeader: () => <strong>{"Référence"}</strong>,
       renderCell: (params) => {
         const { value } = params;
 
+        // Find the reference of the resource
+        const ref = findResourceRef(value);
         return (
           <div>
             <CButton
@@ -637,7 +658,7 @@ const ProjetQt = () => {
               size="sm"
               // onClick={() => getIdOnEnter(params.row)}
             >
-              {value}
+              {ref}
             </CButton>
 
             {/* <small className="text-medium-emphasis">{value}</small> */}
@@ -675,7 +696,7 @@ const ProjetQt = () => {
       filterable: true,
     },
     {
-      field: "recommandations",
+      field: "recommendation",
       renderHeader: () => <strong>{"Recommandations"}</strong>,
 
       headerName: "Recommandations",
@@ -710,56 +731,56 @@ const ProjetQt = () => {
     },
   ];
 
-  const rows1 = [
-    {
-      id: "1",
-      reunion: "Réunion 1",
-      ref: "2838",
-      date: "2016-04-24",
-      sujet: "Installation du matriels",
-      recommandations: "rien.",
-    },
-    {
-      id: "2",
-      reunion: "Réunion 2",
-      ref: "34234",
-      date: "2016-10-31",
-      sujet: "fzefzefef huihiu",
-      recommandations: "  ",
-    },
-    {
-      id: "3",
-      reunion: "Réunion 3",
-      ref: "2424",
-      date: "2023-11-19",
-      sujet: "Inzezeezfzef fzefkz",
-      recommandations: "qeidjzie.",
-    },
-    {
-      id: "4",
-      reunion: "Réunion 4",
-      ref: "3424",
-      date: "2017-02-14",
-      sujet: "zfzfeféfze ef zef triels",
-      recommandations: "zefizje.",
-    },
-    {
-      id: "5",
-      reunion: "Réunion 5",
-      ref: "7633",
-      date: "2020-05-31",
-      sujet: "zfkzefzeffzefzefzefls",
-      recommandations: "zefr.",
-    },
-    {
-      id: "6",
-      reunion: "Réunion 6",
-      ref: "9342",
-      date: "2020-16-02",
-      sujet: "jksdiffz",
-      recommandations: "efzfzef.",
-    },
-  ];
+  // const rowsReunion = [
+  //   {
+  //     id: "1",
+  //     name: "Réunion 1",
+  //     resource: "2838",
+  //     date: "2016-04-24",
+  //     sujet: "Installation du matriels",
+  //     recommendation: "rien.",
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Réunion 2",
+  //     resource: "34234",
+  //     date: "2016-10-31",
+  //     sujet: "fzefzefef huihiu",
+  //     recommendation: "  ",
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Réunion 3",
+  //     resource: "2424",
+  //     date: "2023-11-19",
+  //     sujet: "Inzezeezfzef fzefkz",
+  //     recommendation: "qeidjzie.",
+  //   },
+  //   {
+  //     id: "4",
+  //     name: "Réunion 4",
+  //     resource: "3424",
+  //     date: "2017-02-14",
+  //     sujet: "zfzfeféfze ef zef triels",
+  //     recommendation: "zefizje.",
+  //   },
+  //   {
+  //     id: "5",
+  //     name: "Réunion 5",
+  //     resource: "7633",
+  //     date: "2020-05-31",
+  //     sujet: "zfkzefzeffzefzefzefls",
+  //     recommendation: "zefr.",
+  //   },
+  //   {
+  //     id: "6",
+  //     name: "Réunion 6",
+  //     resource: "9342",
+  //     date: "2020-16-02",
+  //     sujet: "jksdiffz",
+  //     recommendation: "efzfzef.",
+  //   },
+  // ];
 
   /////////////////////////////////////////////// Table of Activities (Reponses)
 
@@ -1029,6 +1050,12 @@ const ProjetQt = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.project;
+  // useEffect(() => {
+  //   if (project) {
+  //     setrowsReunion(project.activite);
+  //   }
+  // }, [project]);
+
   console.log("PROJECT :", project);
 
   // Consolidated update function
@@ -2606,48 +2633,39 @@ const ProjetQt = () => {
 
       {/******************************** FIN MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
       {/********************************  MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
-      {/* {activity ? ( */}
-      <CModal
-        alignment="center"
-        visible={visible1}
-        onClose={() => setVisible1(false)}
-      >
-        <CModalHeader>
-          <CModalTitle>{/* {activity.name} */}</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CCard className="text-center">
-            <CCardHeader>
-              Réf:
-              {/* {activity.ref} */}
-            </CCardHeader>
-            <CCardBody>
-              {/* <CCardTitle>Special title treatment</CCardTitle> */}
-              <CCardText>
-                Sujet:
-                {/* {activity.sujet}. */}
-              </CCardText>
-              <footer className="blockquote-footer">
-                Recommandations:{" "}
-                <cite title="Source Title">
-                  {/* {activity.recommendation}. */}
-                </cite>
-              </footer>
-              <footer className="blockquote-footer ">
-                Compte rendu:{" "}
-                <cite title="Source Title">{/* {activity.remarques}. */}</cite>
-              </footer>
-            </CCardBody>
-            <CCardFooter className="text-medium-emphasis">
-              Date:
-              {/* {activity.date} */}
-            </CCardFooter>
-          </CCard>
-        </CModalBody>
-      </CModal>
-      {/* ) : (
+      {activity ? (
+        <CModal
+          alignment="center"
+          visible={visible1}
+          onClose={() => setVisible1(false)}
+        >
+          <CModalHeader>
+            <CModalTitle> {activity.name} </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CCard className="text-center">
+              <CCardHeader>Réf: {refActivity}</CCardHeader>
+              <CCardBody>
+                {/* <CCardTitle>Special title treatment</CCardTitle> */}
+                <CCardText>Sujet: {activity.sujet}.</CCardText>
+                <footer className="blockquote-footer">
+                  Recommandations:{" "}
+                  <cite title="Source Title">{activity.recommendation}.</cite>
+                </footer>
+                <footer className="blockquote-footer ">
+                  Compte rendu:{" "}
+                  <cite title="Source Title">{activity.remarques}.</cite>
+                </footer>
+              </CCardBody>
+              <CCardFooter className="text-medium-emphasis">
+                Date: {activity.date}
+              </CCardFooter>
+            </CCard>
+          </CModalBody>
+        </CModal>
+      ) : (
         ""
-      )} */}
+      )}
       {/******************************** FIN MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
 
       {/******************************** MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
@@ -3187,7 +3205,10 @@ const ProjetQt = () => {
                 <CAccordion activeItemKey={0} flush>
                   <br></br>
                   <CAccordionItem itemKey={1}>
-                    <CAccordionHeader component="h6">
+                    <CAccordionHeader
+                      component="h6"
+                      onClick={() => setrowsReunion(project.activite)}
+                    >
                       <CIcon
                         icon={cilNewspaper}
                         size="lg"
@@ -3271,8 +3292,8 @@ const ProjetQt = () => {
                                   >
                                     <div style={{ height: 350, width: "100%" }}>
                                       <DataGrid
-                                        columns={columns1}
-                                        rows={rows1}
+                                        columns={columnsReunion}
+                                        rows={rowsReunion}
                                         // rowHeight={25}
                                         density="compact"
                                         // editMode="row"
