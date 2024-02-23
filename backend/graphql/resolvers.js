@@ -43,6 +43,12 @@ module.exports = {
         if (!project) {
           throw new Error("Project not found");
         }
+        //  Retrieve project from MongoDB & populating the resource of the Activities
+        project.activite.forEach((activite) => {
+          // Log resource for each activite
+          // console.log("Resources for activite:", activite.resource);
+        });
+
         return project.activite; // Return the activities array from the project
       } catch (error) {
         throw new Error("Failed to fetch activities");

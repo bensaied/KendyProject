@@ -54,7 +54,7 @@ const projectUssqSchema = mongoose.Schema(
             required: true,
           },
           resource: {
-            type: [ObjectId],
+            type: ObjectId,
             required: true,
           },
           date: {
