@@ -755,7 +755,7 @@ const ProjetQt = () => {
             title="Supprimer la Réunion"
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
-            // onClick={handleDeleteActualityClick(id)}
+            onClick={() => getIdOnDelete(id)}
             color="inherit"
           />,
         ];
@@ -2551,71 +2551,6 @@ const ProjetQt = () => {
       </CModal>
 
       {/******************************** FIN MODAL POUR SUPPRIMER UNE RESSOURCE ********************************/}
-      {/******************************** MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
-      {/* <CModal visible={visible} onClose={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>Ajouter une actualité</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CForm>
-            <CFormGroup>
-              <CLabel htmlFor="reference">Référence</CLabel>
-              <CFormInput
-                id="reference"
-                aria-label=""
-                value={reference}
-                onChange={(e) => setReference(e.target.value)}
-              />
-            </CFormGroup>
-            <CFormGroup></CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="date">Date</CLabel>
-              <input
-                type="date"
-                id="dateActivite"
-                value={dateActivite}
-                onChange={(e) => setDateActivite(e.target.value)}
-                className="form-control"
-              />
-            </CFormGroup>
-
-            <CFormGroup>
-              <CLabel htmlFor="sujet">Sujet</CLabel>
-              <CFormTextarea
-                id="sujet"
-                rows={3}
-                value={sujet}
-                onChange={(e) => setSujet(e.target.value)}
-              />
-            </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="recommendations">Recommendations</CLabel>
-              <CFormTextarea
-                id="recommendations"
-                rows={3}
-                value={recommendations}
-                onChange={(e) => setRecommendations(e.target.value)}
-              />
-            </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="remarques">Compte rendu</CLabel>
-              <CFormTextarea
-                id="remarques"
-                rows={3}
-                value={remarques}
-                onChange={(e) => setRemarques(e.target.value)}
-              />
-            </CFormGroup>
-          </CForm>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="success" onClick={handleCreateActivite}>
-            Ajouter
-          </CButton>
-        </CModalFooter>
-      </CModal> */}
-
-      {/******************************** FIN MODAL POUR AJOUTER UNE ACTUALITE ********************************/}
       {/********************************  MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
       {activity ? (
         <CModal
@@ -2764,10 +2699,7 @@ const ProjetQt = () => {
             <CModalTitle>Confirmation de la suppression</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            Êtes-vous sûr de vouloir supprimer{" "}
-            {/* {userToDelete && userToDelete.name}{" "}
-                        {userToDelete && userToDelete.firstname} */}
-            {activityDeleted.name} ?
+            Êtes-vous sûr de vouloir supprimer la {activityDeleted.name} ?
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setVisible3(false)}>
