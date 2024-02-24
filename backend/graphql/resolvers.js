@@ -245,8 +245,20 @@ module.exports = {
         if (!filename) {
           throw new Error("Le document n'est pas saisi.");
         }
-        //TEST IF THE DOCUMENT WITH THAT NAME EXISTS ALREADY
+        if (!ref) {
+          throw new Error("La reférence du ressource n'est pas saisie.");
+        }
+        if (!source) {
+          throw new Error("La source du ressource n'est pas saisie.");
+        }
+        if (!date) {
+          throw new Error("La date du ressource n'est pas saisie.");
+        }
+        if (!description) {
+          throw new Error("La description du ressource n'est pas saisie.");
+        }
 
+        //TEST IF THE DOCUMENT WITH THAT NAME EXISTS ALREADY
         const existingResource = project.resource.find((resource) =>
           resource.pdfFile.includes(filename)
         );
@@ -412,8 +424,8 @@ module.exports = {
         resource: resourceObjectId,
         date,
         sujet,
-        recommendation,
         remarques,
+        recommendation,
       };
 
       // Activity name function
@@ -449,11 +461,10 @@ module.exports = {
         projectId,
         activityId,
         name,
-        ref,
         date,
         sujet,
-        recommendation,
         remarques,
+        recommendation,
       } = input;
 
       try {
@@ -468,11 +479,14 @@ module.exports = {
           if (activities[i].id == activityId) {
             // Modify the Activity
             project.activite[i].name = name;
-            project.activite[i].ref = ref;
             project.activite[i].sujet = sujet;
             project.activite[i].date = date;
-            project.activite[i].recommendation = recommendation;
             project.activite[i].remarques = remarques;
+            if (recommendation) {
+              project.activite[i].recommendation = recommendation;
+            } else {
+              project.activite[i].recommendation = " ";
+            }
             // console.log(project.activite[i]);
 
             // Save modified activity

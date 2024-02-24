@@ -330,15 +330,15 @@ const ProjetQt = () => {
               resourceRef: rscRef,
               date: dateActivite,
               sujet: sujet,
-              recommendation: recommendations,
-              remarques: remarques || "",
+              remarques: remarques,
+              recommendation: recommendations || " ",
             };
 
             if (
               rscRef === "" ||
               dateActivite === "" ||
               sujet === "" ||
-              recommendations === ""
+              remarques === ""
             ) {
               return alert("Merci de remplir tous les champs");
             }
@@ -400,19 +400,17 @@ const ProjetQt = () => {
         projectId: project.id,
         activityId: activityModified.id,
         name: activityModified.name,
-        ref: reference1,
+        // ref: reference1,
         date: dateActivite1,
         sujet: sujet1,
         recommendation: recommendations1,
         remarques: remarques1,
       };
-
+      // console.log("inputActivityModified", input);
       if (
         // nameAcitivite === "" ||
-        reference1 === "" ||
         dateActivite1 === "" ||
         sujet1 === "" ||
-        recommendations1 === "" ||
         remarques1 === ""
       ) {
         return alert("Merci de remplir tous les champs");
@@ -476,7 +474,12 @@ const ProjetQt = () => {
         description: descriptionRsc,
       };
 
-      if (referenceRsc === "" || sourceRsc === "" || dateRsc === "") {
+      if (
+        referenceRsc === "" ||
+        sourceRsc === "" ||
+        dateRsc === "" ||
+        descriptionRsc === ""
+      ) {
         return alert("Merci de remplir tous les champs");
       }
 
@@ -543,7 +546,7 @@ const ProjetQt = () => {
   // 2 - When we modify activity
   const getIdOnModify = (actId) => {
     setVisible2(true);
-    // setactId(actId);
+    setactId(actId);
   };
 
   const { data: actmodified } = useQuery(GET_ACTIVITY, {
@@ -2667,94 +2670,91 @@ const ProjetQt = () => {
       {/******************************** FIN MODAL POUR OUVRIR UNE ACTUALITE ********************************/}
 
       {/******************************** MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
-      {/* {activityModified ? ( */}
-      <CModal
-        alignment="center"
-        visible={visible2}
-        onClose={() => setVisible2(false)}
-      >
-        <CModalHeader>
-          <CModalTitle>{/* {activityModified.name} */}</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CCard>
-            <CCardBody>
-              <CContainer>
-                <div className="mb-3 row justify-content-md-center">
-                  <CContainer>
-                    <CCol className="justify-content-md-center">
-                      {/* <div className=" row justify-content-md-center"> */}
-                      <CForm className="row g-3">
-                        <CCol md={12}>
-                          <CFormInput
-                            value={reference1}
-                            onChange={(e) => setReference1(e.target.value)}
-                            required
-                            type="text"
-                            id="inputRef"
-                            label="Référence"
-                          />
-                        </CCol>
-                        <CFormGroup>
-                          <CLabel htmlFor="date">Date</CLabel>
-                          <input
-                            type="date"
-                            id="dateActivite"
-                            value={dateActivite1}
-                            onChange={(e) => setDateActivite1(e.target.value)}
-                            className="form-control"
-                          />
-                        </CFormGroup>
-                        <CCol xs={12}>
-                          <CFormTextarea
-                            // defaultValue={activity.sujet}
-                            value={sujet1}
-                            onChange={(e) => setSujet1(e.target.value)}
-                            label="Sujet"
-                          ></CFormTextarea>
-                        </CCol>
-
-                        <CCol xs={12}>
-                          <CFormTextarea
-                            // defaultValue={activity.recommendation}
-                            value={recommendations1}
-                            onChange={(e) =>
-                              setRecommendations1(e.target.value)
-                            }
-                            label="Recommandations"
-                          ></CFormTextarea>
-                        </CCol>
-                        <CCol xs={12}>
-                          <CFormTextarea
-                            // defaultValue={activity.recommendation}
-                            value={remarques1}
-                            onChange={(e) => setRemarques1(e.target.value)}
-                            label="Compte rendu"
-                          ></CFormTextarea>
-                        </CCol>
-                      </CForm>
-                      {/* </div> */}
-                    </CCol>
-                  </CContainer>
-                  <br></br>
-                  <br></br>
-                </div>
-              </CContainer>
-            </CCardBody>
-          </CCard>
-        </CModalBody>
-        <CModalFooter>
-          {/* <CButton color="secondary" onClick={() => setVisible2(false)}>
-          Close
-        </CButton> */}
-          <CButton onClick={handleModifyActivite} color="primary">
-            Mettre à jour
-          </CButton>
-        </CModalFooter>
-      </CModal>
-      {/* ) : (
+      {activityModified ? (
+        <CModal
+          alignment="center"
+          visible={visible2}
+          onClose={() => setVisible2(false)}
+        >
+          <CModalHeader>
+            <CModalTitle>{activityModified.name}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CCard>
+              <CCardBody>
+                <CContainer>
+                  <div className="mb-3 row justify-content-md-center">
+                    <CContainer>
+                      <CCol className="justify-content-md-center">
+                        {/* <div className=" row justify-content-md-center"> */}
+                        <CForm className="row g-3">
+                          {/* <CCol md={12}>
+                             <CFormInput
+                              value={reference1}
+                              onChange={(e) => setReference1(e.target.value)}
+                              required
+                              type="text"
+                              id="inputRef"
+                              label="Référence"
+                            />
+                          </CCol> */}
+                          <CFormGroup>
+                            <CLabel htmlFor="date">Date</CLabel>
+                            <input
+                              type="date"
+                              id="dateActivite"
+                              value={dateActivite1}
+                              onChange={(e) => setDateActivite1(e.target.value)}
+                              className="form-control"
+                            />
+                          </CFormGroup>
+                          <CCol xs={12}>
+                            <CFormTextarea
+                              value={sujet1}
+                              onChange={(e) => setSujet1(e.target.value)}
+                              label="Sujet"
+                            ></CFormTextarea>
+                          </CCol>
+                          <CCol xs={12}>
+                            <CFormTextarea
+                              value={remarques1}
+                              rows={3}
+                              onChange={(e) => setRemarques1(e.target.value)}
+                              label="Compte rendu"
+                            ></CFormTextarea>
+                          </CCol>
+                          <CCol xs={12}>
+                            <CFormTextarea
+                              value={recommendations1}
+                              onChange={(e) =>
+                                setRecommendations1(e.target.value)
+                              }
+                              label="Recommandations"
+                            ></CFormTextarea>
+                          </CCol>
+                        </CForm>
+                        {/* </div> */}
+                      </CCol>
+                    </CContainer>
+                    <br></br>
+                    <br></br>
+                  </div>
+                </CContainer>
+              </CCardBody>
+            </CCard>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setVisible2(false)}>
+              Close
+            </CButton>
+            <CButton onClick={handleModifyActivite} color="primary">
+              Mettre à jour
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      ) : (
         ""
-      )} */}
+      )}
 
       {/******************************** MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
       {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}

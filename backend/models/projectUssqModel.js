@@ -81,7 +81,7 @@ const projectUssqSchema = mongoose.Schema(
         ref: { type: String, required: true },
         source: { type: String, required: true },
         date: { type: String, required: true },
-        description: { type: String },
+        description: { type: String, required: true },
         tache: { type: String, required: true },
       },
     ],
