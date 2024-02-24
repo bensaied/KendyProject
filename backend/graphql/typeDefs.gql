@@ -7,8 +7,8 @@ module.exports = gql`
     resource: ID!
     date: String!
     sujet: String!
-    recommendation: String!
-    remarques: String                                                                                                                             
+    remarques: String! 
+    recommendation: String                                                                                                                       
   }
 
   scalar Upload
@@ -19,7 +19,7 @@ module.exports = gql`
     ref: String!
     source: String!
     date: String!
-    description: String
+    description: String!
     tache: String!
   }
   # To Query a Ressource
@@ -29,7 +29,7 @@ module.exports = gql`
     ref: String!
     source: String!
     date: String!
-    description: String
+    description: String!
     tache: String!
   }
   input AdminInput {
@@ -57,8 +57,9 @@ module.exports = gql`
     resourceRef: String!
     date: String!
     sujet: String!
-    recommendation: String!
-    remarques: String
+    remarques: String!
+    recommendation: String
+
   }
   input CreateResourceInput {
     projectId: ID!
@@ -66,7 +67,7 @@ module.exports = gql`
     ref: String!
     source: String!
     date: String!
-    description: String
+    description: String!
     tache: String!
   }
 
@@ -74,11 +75,11 @@ module.exports = gql`
     projectId: ID!
     activityId: ID!
     name: String!
-    # resource: ResourceDetails!
     date: String!
     sujet: String!
-    recommendation: String!
-    remarques: String
+    remarques: String!
+    recommendation: String
+
   }
   input ModifyRessourceInput {
     projectId: ID!
@@ -87,7 +88,7 @@ module.exports = gql`
     ref: String!
     source: String!
     date: String!
-    description: String
+    description: String!
     # tache: String!
   }
   type ProjetUSSCQ {
@@ -189,22 +190,26 @@ module.exports = gql`
     resourceRef: String
   }
   type Mutation {
-    # ProjectUSSCQ
+   
+    # # # ProjectUSSCQ
     # Modify ProjectUSSCQ
     modifyProject(input: ModifyProjectInput!): ProjetUSSCQ!
+
+     # Create Ressource Project USSCQ
+    createResource(input: CreateResourceInput!): ResourceCreationResult
+     #  Modify Ressource Project USSCQ
+    modifyRessource(input: ModifyRessourceInput!): ResourceDetails!
+    # Delete Ressource Project USSCQ
+    deleteRessource(projectId: ID!, ressourceId: ID!): ResourceDetails!
+
     # Create Activity Project USSCQ
     createActivite(input: CreateActiviteInput!): Activite!
     # Modify Activity Project USSCQ
     modifyActivite(input: ModifyActiviteInput!): Activite!
     # Delete Activity Project USSCQ
     deleteActivite(projectId: ID!, activiteId: ID!): Activite!
-    # Create Ressource Project USSCQ
-    createResource(input: CreateResourceInput!): ResourceCreationResult
-    # Delete Ressource Project USSCQ
-    deleteRessource(projectId: ID!, ressourceId: ID!): ResourceDetails!
-    #  Modify Ressource Project USSCQ
-    modifyRessource(input: ModifyRessourceInput!): ResourceDetails!
-    # ProjectLABO
+   
+    # # # ProjectLABO
     # Create Version Project LABO
     createVersion(input: CreateVersionInput!): Version!
 

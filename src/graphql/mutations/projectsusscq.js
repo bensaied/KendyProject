@@ -82,16 +82,9 @@ export const CREATE_ACTIVITE_MUTATION = gql`
 export const MODIFY_ACTIVITE_MUTATION = gql`
   mutation ModifyActivite($input: ModifyActiviteInput!) {
     modifyActivite(input: $input) {
+      id
       name
-      resource {
-        id
-        pdfFile
-        ref
-        source
-        date
-        description
-        tache
-      }
+      resource
       date
       sujet
       recommendation
