@@ -87,13 +87,14 @@ import { GET_ACTIVITY } from "../../graphql/queries/projectsusscq";
 //IMPORT MUTATIONS PROJECTUSSCQ
 import { useMutation } from "@apollo/client";
 import {
+  MODIFY_PROJECT_MUTATION,
   CREATE_RESOURCE_MUTATION,
   MODIFY_RESOURCE_MUTATION,
   DELETE_RESSOURCE_MUTATION,
   CREATE_ACTIVITE_MUTATION,
   DELETE_ACTIVITE_MUTATION,
   MODIFY_ACTIVITE_MUTATION,
-  MODIFY_PROJECT_MUTATION,
+  CREATE_RESPONSE_MUTATION,
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
@@ -293,13 +294,18 @@ const ProjetQt = () => {
     CREATE_RESOURCE_MUTATION
   );
 
-  // 1 - CREATE ACTIVITY
+  // 1 - CREATE ACTIVITY ( Réunion )
 
   const [createActivite, { loading1, error1 }] = useMutation(
     CREATE_ACTIVITE_MUTATION
   );
-  // Function to handle File Change (Add Ressource File)
 
+  // 2 - CREATE ACTIVITY ( Response )
+  const [createResponse, { loading11, error11 }] = useMutation(
+    CREATE_RESPONSE_MUTATION
+  );
+
+  // Function to handle File Change (Add Ressource File)
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setPdfFile(file);
@@ -322,8 +328,7 @@ const ProjetQt = () => {
         variables: { input },
       });
 
-      // Create Activity
-
+      // Create Activity ( Réunion )
       if (
         eventType == "Réunion" &&
         data.createResource.resourceRef != null &&
@@ -340,21 +345,9 @@ const ProjetQt = () => {
               remarques: remarques,
               recommendation: recommendations || " ",
             };
-
-            if (
-              rscRef === "" ||
-              dateActivite === "" ||
-              sujet === "" ||
-              remarques === ""
-            ) {
-              return alert("Merci de remplir tous les champs");
-            }
-
             const { data } = await createActivite({
               variables: { input },
             });
-            // Handle success, e.g., display a success message or update UI
-
             // Reset the form fields
             setReference("");
             setDateActivite("");
@@ -368,10 +361,44 @@ const ProjetQt = () => {
           } catch (error) {
             // Handle error, e.g., display an error message or log the error
             console.error("Error creating activite:", error);
+            setErrorModal(error.message);
           }
         })();
       }
-
+      // Create Activity ( Response )
+      if (
+        eventType == "Réponse" &&
+        data.createResource.resourceRef != null &&
+        data.createResource.success == true
+      ) {
+        (async () => {
+          let rscRef = data.createResource.resourceRef;
+          try {
+            const input = {
+              projectId: project.id,
+              resourceRef: rscRef,
+              degre: urgency,
+              description: descriptionResponse,
+              dateLimite: dateResponse,
+            };
+            const { data } = await createResponse({
+              variables: { input },
+            });
+            // Reset the form fields
+            setDescriptionResponse("");
+            setUrgency("");
+            setDateResponse("");
+            // Close the modal
+            setVisible(false);
+            // Reload the page after create new Activity
+            window.location.reload();
+          } catch (error) {
+            // Handle error, e.g., display an error message or log the error
+            console.error("Error creating response:", error);
+            setErrorModal(error.message);
+          }
+        })();
+      }
       // Create Simple Resource with "Suivi" task
       if (eventType == "Suivi" && data.createResource.success == true) {
         // Reset the form fields

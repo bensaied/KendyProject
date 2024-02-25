@@ -100,3 +100,12 @@ export const DELETE_ACTIVITE_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_RESPONSE_MUTATION = gql`
+  mutation CreateResponse($input: CreateResponseInput!) {
+    createResponse(input: $input) {
+      id
+      name
+    }
+  }
+`;
