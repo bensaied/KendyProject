@@ -409,7 +409,6 @@ module.exports = {
       if (!project) {
         throw new Error("Project not found");
       }
-
       // Find the resource within the project's resources array
       // const resource = project.resource.find(
       //   (res) => res.id.toString() === resourceRef
@@ -583,6 +582,62 @@ module.exports = {
 
       // Return the created version
       return newVersion;
+    },
+    //******************* CREATE USSCQ RESPONSE BY ( PROJECT_ID and response infos) *******************//
+    createResponse: async (parent, { input }, context) => {
+      // Extract the input values
+      const { projectId, resourceRef, degre, description, dateLimite } = input;
+
+      // Update the project document with the new response
+      const project = await ProjetUSSCQ.findById(projectId);
+      if (!project) {
+        throw new Error("Project not found");
+      }
+      // Find the resource within the project's resources array
+      // const resource = project.resource.find(
+      //   (res) => res.id.toString() === resourceRef
+      // );
+      // if (!resource) {
+      //   throw new Error("Resource not found within the project");
+      // }
+      const resourceObjectId = new ObjectId(resourceRef);
+      const newResponse = {
+        id: new ObjectId(), // Generate a new ObjectId for the response
+        name: "",
+        resource: resourceObjectId,
+        degre,
+        description,
+        dateLimite,
+        etat: "Non répondu",
+      };
+      // Response name function
+      if (project.response.length == 0) {
+        newResponse.name = "Réponse 1";
+      } else {
+        let lastResponseIndex = project.response.length;
+        let lastResponseNum = lastResponseIndex + 1;
+        newResponse.name = "Réponse " + lastResponseNum.toString();
+        if (project.response[lastResponseIndex - 1].name == newResponse.name) {
+          let lastResponseNum = lastResponseIndex + 2;
+          newResponse.name = "Réponse " + lastResponseNum.toString();
+        }
+      }
+      if (!description) {
+        throw new Error("La description du réponse n'est pas saisie.");
+      }
+      if (!degre) {
+        throw new Error("Le degré du réponse n'est pas choisi.");
+      }
+      if (!dateLimite) {
+        throw new Error("La date du réponse n'est pas choisie.");
+      }
+      // Add the new response to the project's response array
+      project.response.push(newResponse);
+
+      // Save the updated project document
+      await project.save();
+      // Return the created activity
+      return newResponse;
     },
   },
 };

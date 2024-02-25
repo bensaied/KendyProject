@@ -144,20 +144,27 @@ const ProjetQt = () => {
   const [dateRes, setDateRes] = useState("");
   const [descriptionRes, setDescriptionRes] = useState("");
   const [tacheRes, setTacheRes] = useState("");
-  // Activity States for modify
+  // Activity (Reunion) States for modify
   const [reference1, setReference1] = useState("");
   const [dateActivite1, setDateActivite1] = useState("");
   const [sujet1, setSujet1] = useState("");
   const [recommendations1, setRecommendations1] = useState("");
   const [remarques1, setRemarques1] = useState("");
 
-  // Activity States for add
+  // Activity ( Reunion ) States for add
   const [dateActivite, setDateActivite] = useState("");
   const [sujet, setSujet] = useState("");
   const [remarques, setRemarques] = useState("");
   const [recommendations, setRecommendations] = useState("");
-
   const [reference, setReference] = useState("");
+
+  // Activity ( Response ) States for add
+  const [descriptionResponse, setDescriptionResponse] = useState("");
+  const [dateResponse, setDateResponse] = useState("");
+  const [urgency, setUrgency] = useState("Faible"); // Initialize with default value
+  const handleUrgencyChange = (event) => {
+    setUrgency(event.target.value);
+  };
 
   // STATES FOR MODALS VISIBILITY
   const [visible, setVisible] = useState(false);
@@ -2291,54 +2298,62 @@ const ProjetQt = () => {
                       id="descriptionReponse"
                       rows={1}
                       required
-                      value={recommendations}
-                      onChange={(e) => setRecommendations(e.target.value)}
+                      value={descriptionResponse}
+                      onChange={(e) => setDescriptionResponse(e.target.value)}
                     />
                   </CFormGroup>
-                  <CButtonGroup
+                  {/* <CButtonGroup
                     vertical
                     role="group"
                     aria-label="Vertical button group"
-                  >
-                    <CFormGroup>
-                      <CLabel htmlFor="remarques">Degré d'urgence </CLabel>
-                      <br></br>
-                      <CFormCheck
-                        type="radio"
-                        button={{ color: "secondary", variant: "outline" }}
-                        name="vbtnradio"
-                        id="vbtnradio1"
-                        autoComplete="off"
-                        label="Faible"
-                        defaultChecked
-                      />
-                      <CFormCheck
-                        type="radio"
-                        button={{ color: "warning", variant: "outline" }}
-                        name="vbtnradio"
-                        id="vbtnradio2"
-                        autoComplete="off"
-                        label="Moyenne"
-                      />
-                      <CFormCheck
-                        type="radio"
-                        button={{ color: "danger", variant: "outline" }}
-                        name="vbtnradio"
-                        id="vbtnradio3"
-                        autoComplete="off"
-                        label="Élevée"
-                      />
-                    </CFormGroup>
-                  </CButtonGroup>
+                  > */}
+                  <CFormGroup>
+                    <CLabel htmlFor="remarques">Degré d'urgence </CLabel>
+                    <br></br>
+                    <CFormCheck
+                      type="radio"
+                      button={{ color: "secondary", variant: "outline" }}
+                      name="vbtnradio"
+                      id="vbtnradio1"
+                      autoComplete="off"
+                      label="Faible"
+                      value="Faible"
+                      checked={urgency === "Faible"}
+                      onChange={handleUrgencyChange}
+                    />
+                    <CFormCheck
+                      type="radio"
+                      button={{ color: "warning", variant: "outline" }}
+                      name="vbtnradio"
+                      id="vbtnradio2"
+                      autoComplete="off"
+                      label="Moyenne"
+                      value="Moyenne"
+                      checked={urgency === "Moyenne"}
+                      onChange={handleUrgencyChange}
+                    />
+                    <CFormCheck
+                      type="radio"
+                      button={{ color: "danger", variant: "outline" }}
+                      name="vbtnradio"
+                      id="vbtnradio3"
+                      autoComplete="off"
+                      label="Élevée"
+                      value="Élevée"
+                      checked={urgency === "Élevée"}
+                      onChange={handleUrgencyChange}
+                    />
+                  </CFormGroup>
+                  {/* </CButtonGroup> */}
 
                   <CFormGroup>
                     <CLabel htmlFor="date">Date limite de réponse</CLabel>
                     <input
                       type="date"
                       id="dateActivite"
-                      value={dateActivite}
                       required
-                      onChange={(e) => setDateActivite(e.target.value)}
+                      value={dateResponse}
+                      onChange={(e) => setDateResponse(e.target.value)}
                       className="form-control"
                     />
                   </CFormGroup>

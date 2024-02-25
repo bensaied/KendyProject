@@ -1,6 +1,7 @@
 {
   "name": "kendyproject",
   "description": "Project Management",
+  "proxy": "http://localhost:5000",
   "homepage": ".",
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
@@ -53,7 +54,6 @@
     "core-js": "^3.24.1",
     "graphql": "^16.6.0",
     "html2canvas": "^1.4.1",
-    "http-proxy-middleware": "^2.0.6",
     "material-react-table": "^2.0.2",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",
