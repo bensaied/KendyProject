@@ -439,6 +439,17 @@ module.exports = {
           newActivite.name = "Réunion " + lastActivityNum.toString();
         }
       }
+      // Error Handling
+      if (!date) {
+        throw new Error("La date du réunion n'est pas saisie.");
+      }
+      if (!sujet) {
+        throw new Error("Le sujet du réunion n'est pas saisi.");
+      }
+      if (!remarques) {
+        throw new Error("Le compte rendu du réunion n'est pas saisi.");
+      }
+
       // console.log(remarques);
       if (remarques == "") {
         newActivite.remarques = "";
@@ -622,6 +633,7 @@ module.exports = {
           newResponse.name = "Réponse " + lastResponseNum.toString();
         }
       }
+      // Error Handling
       if (!description) {
         throw new Error("La description du réponse n'est pas saisie.");
       }
