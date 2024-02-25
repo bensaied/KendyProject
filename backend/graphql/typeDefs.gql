@@ -10,7 +10,15 @@ module.exports = gql`
     remarques: String! 
     recommendation: String                                                                                                                       
   }
-
+  type Response {
+    id: ID!
+    name: String!
+    resource: ID!
+    degre: String!
+    description: String!
+    dateLimite: String!
+    etat: String!
+  }
   scalar Upload
   # To Create A Ressource
   type Resource {
@@ -59,7 +67,13 @@ module.exports = gql`
     sujet: String!
     remarques: String!
     recommendation: String
-
+  }
+  input CreateResponseInput {
+    projectId: ID!
+    resourceRef: String!
+    degre: String!
+    description: String!
+    dateLimite: String!
   }
   input CreateResourceInput {
     projectId: ID!
@@ -202,13 +216,16 @@ module.exports = gql`
     # Delete Ressource Project USSCQ
     deleteRessource(projectId: ID!, ressourceId: ID!): ResourceDetails!
 
-    # Create Activity Project USSCQ
+    # Create Activity Project USSCQ ( Reunion )
     createActivite(input: CreateActiviteInput!): Activite!
     # Modify Activity Project USSCQ
     modifyActivite(input: ModifyActiviteInput!): Activite!
     # Delete Activity Project USSCQ
     deleteActivite(projectId: ID!, activiteId: ID!): Activite!
    
+    # Create Activity Project USSCQ ( Response )
+    createResponse(input: CreateResponseInput!): Response!
+
     # # # ProjectLABO
     # Create Version Project LABO
     createVersion(input: CreateVersionInput!): Version!

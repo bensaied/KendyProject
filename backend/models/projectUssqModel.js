@@ -74,7 +74,37 @@ const projectUssqSchema = mongoose.Schema(
       ],
       required: true,
     },
-
+    response: {
+      type: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          resource: {
+            type: ObjectId,
+            required: true,
+          },
+          degre: {
+            type: String,
+            required: true,
+          },
+          description: {
+            type: String,
+            required: true,
+          },
+          dateLimite: {
+            type: String,
+            required: true,
+          },
+          etat: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      required: true,
+    },
     resource: [
       {
         pdfFile: { type: String, required: true },
