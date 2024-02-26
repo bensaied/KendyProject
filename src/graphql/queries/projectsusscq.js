@@ -45,6 +45,15 @@ export const GET_PROJECT = gql`
         recommendation
         remarques
       }
+      response {
+        id
+        name
+        resource
+        degre
+        description
+        dateLimite
+        etat
+      }
       resource {
         id
         pdfFile
