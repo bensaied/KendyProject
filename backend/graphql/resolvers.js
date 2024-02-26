@@ -33,6 +33,8 @@ module.exports = {
         // Log resource for each activite
         // console.log("Resources for activite:", activite.resource);
       });
+      // Retrieve project from MongoDB & populating the resource of the Responses
+      project.response.forEach((response) => {});
       return project;
     },
 

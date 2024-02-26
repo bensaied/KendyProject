@@ -190,6 +190,8 @@ const ProjetQt = () => {
   // STATES FOR ACTIVITY (REUNION)
   const [rowsReunion, setrowsReunion] = useState("");
   const [refActivity, setRefActivity] = useState("");
+  // STATES FOR ACTIVITY (RESPONSE)
+  const [rowsReponses, setRowsResponse] = useState("");
 
   setRefActivity;
   const [fileName, setFileName] = useState("");
@@ -801,7 +803,7 @@ const ProjetQt = () => {
 
   const columnsReponses = [
     {
-      field: "reponse",
+      field: "name",
       renderHeader: () => (
         <div style={{ paddingLeft: "5px" }}>
           <strong>{"Réponse"}</strong>{" "}
@@ -825,7 +827,7 @@ const ProjetQt = () => {
       filterable: true,
     },
     {
-      field: "ref",
+      field: "resource",
       renderHeader: () => (
         <div>
           <strong>{"Référence"}</strong>{" "}
@@ -834,15 +836,32 @@ const ProjetQt = () => {
       renderCell: (params) => {
         const { value } = params;
 
+        // Find the reference of the resource
+        const ref = findResourceRef(value);
         return (
           <div>
-            <CButton color="link" shape="rounded-0" size="sm">
-              {value}
+            <CButton
+              title="Ouvrir la Référence"
+              color="link"
+              shape="rounded-0"
+              size="sm"
+              onClick={() => handleResourceActivityClick(params.row)}
+            >
+              {ref}
             </CButton>
 
             {/* <small className="text-medium-emphasis">{value}</small> */}
           </div>
         );
+        // return (
+        //   <div>
+        //     <CButton color="link" shape="rounded-0" size="sm">
+        //       {value}
+        //     </CButton>
+
+        //     {/* <small className="text-medium-emphasis">{value}</small> */}
+        //   </div>
+        // );
       },
 
       headerName: "Référence",
@@ -871,7 +890,7 @@ const ProjetQt = () => {
         return <div style={cellStyle}>{value}</div>;
       },
       headerName: "Degré d'urgence",
-      width: 180,
+      width: 175,
       filterable: true,
       sortComparator: (a, b) => {
         const sortOrder = ["Faible", "Moyenne", "Élevée"];
@@ -889,7 +908,7 @@ const ProjetQt = () => {
     },
 
     {
-      field: "date",
+      field: "dateLimite",
       renderHeader: () => <strong>{"Date limite"}</strong>,
       renderCell: (params) => {
         const { value } = params;
@@ -925,7 +944,7 @@ const ProjetQt = () => {
         );
       },
       headerName: "État de réponse",
-      width: 155,
+      width: 150,
       filterable: true,
     },
 
@@ -956,64 +975,6 @@ const ProjetQt = () => {
       },
     },
   ];
-
-  const rowsReponses = [
-    {
-      id: "1",
-      reponse: "Réponse 1",
-      ref: "9342",
-      degre: "Moyenne",
-      description: "zcuckjndcjn jdjkcndjnd",
-      date: "2023-11-15",
-      etat: "Répondu",
-    },
-    {
-      id: "2",
-      reponse: "Réponse 2",
-      ref: "37384",
-      degre: "Faible",
-      description: "sdclkdsk kld,k,d",
-      date: "2025-10-18",
-      etat: "Répondu",
-    },
-    {
-      id: "3",
-      reponse: "Réponse 3",
-      ref: "9473",
-      degre: "Moyenne",
-      description: "dclkdso dsjckds,",
-      date: "2020-16-02",
-      etat: "Non répondu",
-    },
-    {
-      id: "4",
-      reponse: "Réponse 4",
-      ref: "2746",
-      degre: "Élevée",
-      description: "sdcpok sdk kjs kopazkcudcbzciuhdsjcnklsdcpodcn djkdsid",
-      date: "2021-01-08",
-      etat: "Non répondu",
-    },
-    {
-      id: "5",
-      reponse: "Réponse 5",
-      ref: "1049",
-      degre: "Élevée",
-      description: "icjscjdcoijzy  hscyz zczjcnzc",
-      date: "2019-09-29",
-      etat: "Non répondu",
-    },
-    {
-      id: "6",
-      reponse: "Réponse 6",
-      ref: "8205",
-      degre: "Faible",
-      description: "dck,d kndk dij ijidjd",
-      date: "2023-07-15",
-      etat: "Répondu",
-    },
-  ];
-
   // Dispatch USERS LIST
   useEffect(() => {
     dispatch(listUsers());
@@ -2323,7 +2284,7 @@ const ProjetQt = () => {
                     </CLabel>
                     <CFormTextarea
                       id="descriptionReponse"
-                      rows={1}
+                      rows={2}
                       required
                       value={descriptionResponse}
                       onChange={(e) => setDescriptionResponse(e.target.value)}
@@ -3179,7 +3140,10 @@ const ProjetQt = () => {
                   <CAccordionItem itemKey={1}>
                     <CAccordionHeader
                       component="h6"
-                      onClick={() => setrowsReunion(project.activite)}
+                      onClick={() => {
+                        setrowsReunion(project.activite);
+                        setRowsResponse(project.response);
+                      }}
                     >
                       <CIcon
                         icon={cilNewspaper}

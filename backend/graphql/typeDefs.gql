@@ -118,6 +118,7 @@ module.exports = gql`
     liaison: [String]!
     KeyDuration: Int!
     activite: [Activite!]!
+    response: [Response!]!
     resource: [ResourceDetails]!
     description: String!
     partage: String!
