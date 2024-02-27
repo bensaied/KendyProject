@@ -445,16 +445,6 @@ const ProjetQt = () => {
         recommendation: recommendations1,
         remarques: remarques1,
       };
-      // console.log("inputActivityModified", input);
-      if (
-        // nameAcitivite === "" ||
-        dateActivite1 === "" ||
-        sujet1 === "" ||
-        remarques1 === ""
-      ) {
-        return alert("Merci de remplir tous les champs");
-      }
-
       const { data } = await modifyActivite({
         variables: { input },
       });
@@ -465,6 +455,7 @@ const ProjetQt = () => {
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying activite:", error);
+      setErrorModal(error.message);
     }
   };
 
@@ -512,16 +503,6 @@ const ProjetQt = () => {
         date: dateRsc,
         description: descriptionRsc,
       };
-
-      if (
-        referenceRsc === "" ||
-        sourceRsc === "" ||
-        dateRsc === "" ||
-        descriptionRsc === ""
-      ) {
-        return alert("Merci de remplir tous les champs");
-      }
-
       const { data } = await modifyRessource({
         variables: { input },
       });
@@ -532,6 +513,7 @@ const ProjetQt = () => {
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying a ressource:", error);
+      setErrorModal(error.message);
     }
   };
 
@@ -838,8 +820,8 @@ const ProjetQt = () => {
               shape="rounded-0"
               size="sm"
               onClick={() => {
-                setResponseToOpen(res);
                 setVisible4(!visible4);
+                setResponseToOpen(res);
                 // Find resource's ref of the Response Opened
                 let ref = findResourceRef(res.resource);
                 setRefResponse(ref);
@@ -2461,8 +2443,37 @@ const ProjetQt = () => {
               ) */}
             </CModalTitle>{" "}
           </CModalHeader>
-          {/* Rest of the Modal Logic  */}
+
           <CModalBody>
+            {errorModal ? (
+              <div className="error-message">
+                <CAlert color="danger">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span>{errorModal}</span>
+                    <button
+                      className="close-button"
+                      onClick={() => setErrorModal(null)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "#333",
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                </CAlert>
+              </div>
+            ) : (
+              ""
+            )}
             <CCard>
               <CCardBody>
                 <CContainer>
@@ -2608,17 +2619,6 @@ const ProjetQt = () => {
                     <CCardText>{activity.remarques}.</CCardText>
                   </CCardBody>
                 </CCardSubtitle>
-
-                {/* <footer className="blockquote-footer ">
-                  Compte rendu:{" "}
-                  <cite title="Source Title">{activity.remarques}.</cite>
-                </footer> */}
-
-                {/* <footer className="blockquote-footer">
-                  Recommandations:{" "}
-                  <cite title="Source Title">{activity.recommendation}.</cite>
-                </footer> */}
-
                 <CCardText>
                   <small className="text-medium-emphasis">
                     Recommandations: {activity.recommendation}.
@@ -2650,22 +2650,41 @@ const ProjetQt = () => {
           <CModalBody>
             <CCard>
               <CCardBody>
+                {errorModal ? (
+                  <div className="error-message">
+                    <CAlert color="danger">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span>{errorModal}</span>
+                        <button
+                          className="close-button"
+                          onClick={() => setErrorModal(null)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "#333",
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </CAlert>
+                  </div>
+                ) : (
+                  ""
+                )}
                 <CContainer>
                   <div className="mb-3 row justify-content-md-center">
                     <CContainer>
                       <CCol className="justify-content-md-center">
                         {/* <div className=" row justify-content-md-center"> */}
                         <CForm className="row g-3">
-                          {/* <CCol md={12}>
-                             <CFormInput
-                              value={reference1}
-                              onChange={(e) => setReference1(e.target.value)}
-                              required
-                              type="text"
-                              id="inputRef"
-                              label="Référence"
-                            />
-                          </CCol> */}
                           <CFormGroup>
                             <CLabel htmlFor="date">Date</CLabel>
                             <input
@@ -2748,78 +2767,73 @@ const ProjetQt = () => {
       )}
       {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
       {/********************************  MODAL POUR OUVRIR UNE REPONSE ********************************/}
-      {responseToOpen ? (
-        <CModal
-          alignment="center"
-          visible={visible4}
-          onClose={() => setVisible4(false)}
-        >
-          <CModalHeader>
-            <FontAwesomeIcon icon={faPaperPlane} size="sm" />
-            &nbsp;
-            <CModalTitle> {responseToOpen.name} </CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <CCard
-              textColor={"dark"}
-              className={`mb-3 border-dark text-center`}
-            >
-              <CCardHeader>Référence: {refResponse}</CCardHeader>
-              <CCardBody>
-                <CCardSubtitle>
-                  Degré d'urgence:{" "}
-                  {responseToOpen.degre === "Faible" ? (
-                    <small className="text-dark" style={{ fontSize: "1em" }}>
-                      Faible
-                    </small>
-                  ) : responseToOpen.degre === "Moyenne" ? (
-                    <small className="text-warning" style={{ fontSize: "1em" }}>
-                      Moyenne
-                    </small>
-                  ) : (
-                    <small className="text-danger" style={{ fontSize: "1em" }}>
-                      Élevée
-                    </small>
-                  )}
-                </CCardSubtitle>
-                <CCardText>{/* {activity.sujet}. */}</CCardText>
-                <CCardSubtitle
-                  className="mb-1 text-medium-emphasis"
-                  style={{ fontSize: "1em" }}
-                >
-                  Description:
-                </CCardSubtitle>
-                <CCardBody>
-                  <CCardText>{responseToOpen.description}.</CCardText>
-                </CCardBody>
-                <CCardText>
-                  {responseToOpen.etat === "Non répondue" ? (
-                    <CIcon className="text-danger" icon={cilWarning} />
-                  ) : (
-                    <CIcon className="text-success" icon={cilCheck} />
-                  )}
 
-                  <small
-                    className={`text-medium-emphasis ${
-                      responseToOpen.etat === "Répondue"
-                        ? "text-success"
-                        : "text-danger"
-                    }`}
-                    style={{ fontSize: "1em", marginLeft: "5px" }}
-                  >
-                    {responseToOpen.etat}.
+      <CModal
+        alignment="center"
+        visible={visible4}
+        onClose={() => setVisible4(false)}
+      >
+        <CModalHeader>
+          <FontAwesomeIcon icon={faPaperPlane} size="sm" />
+          &nbsp;
+          <CModalTitle> {responseToOpen.name} </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CCard textColor={"dark"} className={`mb-3 border-dark text-center`}>
+            <CCardHeader>Référence: {refResponse}</CCardHeader>
+            <CCardBody>
+              <CCardSubtitle>
+                Degré d'urgence:{" "}
+                {responseToOpen.degre === "Faible" ? (
+                  <small className="text-dark" style={{ fontSize: "1em" }}>
+                    Faible
                   </small>
-                </CCardText>
+                ) : responseToOpen.degre === "Moyenne" ? (
+                  <small className="text-warning" style={{ fontSize: "1em" }}>
+                    Moyenne
+                  </small>
+                ) : (
+                  <small className="text-danger" style={{ fontSize: "1em" }}>
+                    Élevée
+                  </small>
+                )}
+              </CCardSubtitle>
+              <CCardText>{/* {activity.sujet}. */}</CCardText>
+              <CCardSubtitle
+                className="mb-1 text-medium-emphasis"
+                style={{ fontSize: "1em" }}
+              >
+                Description:
+              </CCardSubtitle>
+              <CCardBody>
+                <CCardText>{responseToOpen.description}.</CCardText>
               </CCardBody>
-              <CCardFooter className="text-medium-emphasis">
-                Date limite: {responseToOpen.dateLimite}
-              </CCardFooter>
-            </CCard>
-          </CModalBody>
-        </CModal>
-      ) : (
-        ""
-      )}
+              <CCardText>
+                {responseToOpen.etat === "Non répondue" ? (
+                  <CIcon className="text-danger" icon={cilWarning} />
+                ) : (
+                  <CIcon className="text-success" icon={cilCheck} />
+                )}
+
+                <small
+                  className={`text-medium-emphasis ${
+                    responseToOpen.etat === "Répondue"
+                      ? "text-success"
+                      : "text-danger"
+                  }`}
+                  style={{ fontSize: "1em", marginLeft: "5px" }}
+                >
+                  {responseToOpen.etat}.
+                </small>
+              </CCardText>
+            </CCardBody>
+            <CCardFooter className="text-medium-emphasis">
+              Date limite: {responseToOpen.dateLimite}
+            </CCardFooter>
+          </CCard>
+        </CModalBody>
+      </CModal>
+
       {/******************************** FIN MODAL POUR OUVRIR UNE REPONSE ********************************/}
 
       {/*********************************************************  HEADER PROJET SuperADMINQT & ADMIN QT **********************************************************/}

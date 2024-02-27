@@ -95,6 +95,14 @@ module.exports = gql`
     recommendation: String
 
   }
+  input ModifyResponseInput{
+    projectId: ID!
+    responseId: ID!
+    degre: String!
+    description: String!
+    dateLimite: String!
+    etat: String!
+  }
   input ModifyRessourceInput {
     projectId: ID!
     ressourceId: ID!
@@ -226,6 +234,9 @@ module.exports = gql`
    
     # Create Activity Project USSCQ ( Response )
     createResponse(input: CreateResponseInput!): Response!
+    # Modify Activity ( Response ) Project USSCQ
+    modifyResponse(input: ModifyResponseInput!): Response!
+
 
     # # # ProjectLABO
     # Create Version Project LABO

@@ -338,35 +338,43 @@ module.exports = {
         // tache,
       } = input;
 
-      try {
-        const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
-        if (!project) {
-          throw new Error("Project not found");
-        }
+      const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+      if (!project) {
+        throw new Error("Project not found");
+      }
 
-        const ressources = project.resource;
+      const ressources = project.resource;
 
-        for (let i = 0; i < ressources.length; i++) {
-          if (ressources[i].id == ressourceId) {
-            // Modify the Ressource
-            project.resource[i].ref = ref;
-            // project.resource[i].pdfFile = pdfFile;
-            project.resource[i].source = source.toUpperCase();
-            project.resource[i].date = date;
-            project.resource[i].description = description;
-            // project.resource[i].tache = tache;
+      for (let i = 0; i < ressources.length; i++) {
+        if (ressources[i].id == ressourceId) {
+          // Modify the Ressource
+          project.resource[i].ref = ref;
+          // project.resource[i].pdfFile = pdfFile;
+          project.resource[i].source = source.toUpperCase();
+          project.resource[i].date = date;
+          project.resource[i].description = description;
+          // project.resource[i].tache = tache;
 
-            // console.log(project.resource[i]);
-
-            // Save modified Ressource
-            await project.save();
-
-            // Return the modified resource
-            return project.resource[i];
+          // Handle Modify Resource Errors
+          if (!ref) {
+            throw new Error("La référence du ressource n'est pas saisie.");
           }
+          if (!source) {
+            throw new Error("La source du ressource n'est pas saisie.");
+          }
+          if (!date) {
+            throw new Error("La date du ressource n'est pas choisie.");
+          }
+          if (!description) {
+            throw new Error("La description du ressource n'est pas saisie.");
+          }
+
+          // Save modified Ressource
+          await project.save();
+
+          // Return the modified resource
+          return project.resource[i];
         }
-      } catch (error) {
-        throw new Error("Failed to fetch ressource");
       }
     },
     //******************* DELETE USSCQ Ressource BY (PROJECT_ID & Ressource_ID) *******************//
@@ -479,40 +487,45 @@ module.exports = {
         recommendation,
       } = input;
 
-      try {
-        const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
-        if (!project) {
-          throw new Error("Project not found");
-        }
+      const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+      if (!project) {
+        throw new Error("Project not found");
+      }
 
-        const activities = project.activite;
+      const activities = project.activite;
 
-        for (let i = 0; i < activities.length; i++) {
-          if (activities[i].id == activityId) {
-            // Modify the Activity
-            project.activite[i].name = name;
-            project.activite[i].sujet = sujet;
-            project.activite[i].date = date;
-            project.activite[i].remarques = remarques;
-            if (recommendation) {
-              project.activite[i].recommendation = recommendation;
-            } else {
-              project.activite[i].recommendation = " ";
-            }
-            // console.log(project.activite[i]);
-
-            // Save modified activity
-            await project.save();
-
-            // Return the modified activite
-            return project.activite[i];
+      for (let i = 0; i < activities.length; i++) {
+        if (activities[i].id == activityId) {
+          // Modify the Activity
+          project.activite[i].name = name;
+          project.activite[i].sujet = sujet;
+          project.activite[i].date = date;
+          project.activite[i].remarques = remarques;
+          if (recommendation) {
+            project.activite[i].recommendation = recommendation;
+          } else {
+            project.activite[i].recommendation = " ";
           }
+
+          // Handle Modifying activity Errors
+          if (!date) {
+            throw new Error("La date du réunion n'est pas choisie.");
+          }
+          if (!sujet) {
+            throw new Error("Le sujet du réunion n'est pas saisi.");
+          }
+          if (!remarques) {
+            throw new Error("Le compte rendu du réunion n'est pas saisi.");
+          }
+
+          // Save modified activity
+          await project.save();
+
+          // Return the modified activite
+          return project.activite[i];
         }
-      } catch (error) {
-        throw new Error("Failed to fetch activity");
       }
     },
-
     //******************* DELETE USSCQ ACTIVITY BY (PROJECT_ID & ACTIVITY_ID) *******************//
     deleteActivite: async (_, { projectId, activiteId }) => {
       try {
@@ -543,7 +556,101 @@ module.exports = {
         throw new Error(error.message);
       }
     },
+    //******************* CREATE USSCQ RESPONSE BY ( PROJECT_ID and response infos) *******************//
+    createResponse: async (parent, { input }, context) => {
+      // Extract the input values
+      const { projectId, resourceRef, degre, description, dateLimite } = input;
 
+      // Update the project document with the new response
+      const project = await ProjetUSSCQ.findById(projectId);
+      if (!project) {
+        throw new Error("Project not found");
+      }
+      const resourceObjectId = new ObjectId(resourceRef);
+      const newResponse = {
+        id: new ObjectId(), // Generate a new ObjectId for the response
+        name: "",
+        resource: resourceObjectId,
+        degre,
+        description,
+        dateLimite,
+        etat: "Non répondue",
+      };
+      // Response name function
+      if (project.response.length == 0) {
+        newResponse.name = "Réponse 1";
+      } else {
+        let lastResponseIndex = project.response.length;
+        let lastResponseNum = lastResponseIndex + 1;
+        newResponse.name = "Réponse " + lastResponseNum.toString();
+        if (project.response[lastResponseIndex - 1].name == newResponse.name) {
+          let lastResponseNum = lastResponseIndex + 2;
+          newResponse.name = "Réponse " + lastResponseNum.toString();
+        }
+      }
+      // Error Handling
+      if (!description) {
+        throw new Error("La description du réponse n'est pas saisie.");
+      }
+      if (!degre) {
+        throw new Error("Le degré du réponse n'est pas choisi.");
+      }
+      if (!dateLimite) {
+        throw new Error("La date du réponse n'est pas choisie.");
+      }
+      // Add the new response to the project's response array
+      project.response.push(newResponse);
+
+      // Save the updated project document
+      await project.save();
+      // Return the created activity
+      return newResponse;
+    },
+    //******************* MODIFY USSCQ ACTIVITY ( RESPONSE ) BY (PROJECT_ID, RESPONSE_ID and response infos) *******************//
+    modifyResponse: async (parent, { input }, context) => {
+      // Extract the input values
+      const { projectId, responseId, degre, description, dateLimite, etat } =
+        input;
+
+      const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+      if (!project) {
+        throw new Error("Project not found");
+      }
+
+      const responses = project.response;
+
+      for (let i = 0; i < responses.length; i++) {
+        if (responses[i].id == responseId) {
+          // Modify the Response
+          project.response[i].degre = degre;
+          project.response[i].description = description;
+          project.response[i].dateLimite = dateLimite;
+          project.response[i].etat = etat;
+
+          // Handle Modifying Response Errors
+          if (!degre) {
+            throw new Error(
+              "Le degré d'urgence de la réponse n'est pas choisi."
+            );
+          }
+          if (!description) {
+            throw new Error("La description du réponse n'est pas saisi.");
+          }
+          if (!dateLimite) {
+            throw new Error("La date limite du réponse n'est pas choisie.");
+          }
+          if (!etat) {
+            throw new Error("L'état de réponse n'est pas saisi.");
+          }
+
+          // Save modified response
+          await project.save();
+
+          // Return the modified response
+          return project.response[i];
+        }
+      }
+    },
     //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
     //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
     createVersion: async (parent, { input }, context) => {
@@ -595,63 +702,6 @@ module.exports = {
 
       // Return the created version
       return newVersion;
-    },
-    //******************* CREATE USSCQ RESPONSE BY ( PROJECT_ID and response infos) *******************//
-    createResponse: async (parent, { input }, context) => {
-      // Extract the input values
-      const { projectId, resourceRef, degre, description, dateLimite } = input;
-
-      // Update the project document with the new response
-      const project = await ProjetUSSCQ.findById(projectId);
-      if (!project) {
-        throw new Error("Project not found");
-      }
-      // Find the resource within the project's resources array
-      // const resource = project.resource.find(
-      //   (res) => res.id.toString() === resourceRef
-      // );
-      // if (!resource) {
-      //   throw new Error("Resource not found within the project");
-      // }
-      const resourceObjectId = new ObjectId(resourceRef);
-      const newResponse = {
-        id: new ObjectId(), // Generate a new ObjectId for the response
-        name: "",
-        resource: resourceObjectId,
-        degre,
-        description,
-        dateLimite,
-        etat: "Non répondue",
-      };
-      // Response name function
-      if (project.response.length == 0) {
-        newResponse.name = "Réponse 1";
-      } else {
-        let lastResponseIndex = project.response.length;
-        let lastResponseNum = lastResponseIndex + 1;
-        newResponse.name = "Réponse " + lastResponseNum.toString();
-        if (project.response[lastResponseIndex - 1].name == newResponse.name) {
-          let lastResponseNum = lastResponseIndex + 2;
-          newResponse.name = "Réponse " + lastResponseNum.toString();
-        }
-      }
-      // Error Handling
-      if (!description) {
-        throw new Error("La description du réponse n'est pas saisie.");
-      }
-      if (!degre) {
-        throw new Error("Le degré du réponse n'est pas choisi.");
-      }
-      if (!dateLimite) {
-        throw new Error("La date du réponse n'est pas choisie.");
-      }
-      // Add the new response to the project's response array
-      project.response.push(newResponse);
-
-      // Save the updated project document
-      await project.save();
-      // Return the created activity
-      return newResponse;
     },
   },
 };
