@@ -338,35 +338,43 @@ module.exports = {
         // tache,
       } = input;
 
-      try {
-        const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
-        if (!project) {
-          throw new Error("Project not found");
-        }
+      const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+      if (!project) {
+        throw new Error("Project not found");
+      }
 
-        const ressources = project.resource;
+      const ressources = project.resource;
 
-        for (let i = 0; i < ressources.length; i++) {
-          if (ressources[i].id == ressourceId) {
-            // Modify the Ressource
-            project.resource[i].ref = ref;
-            // project.resource[i].pdfFile = pdfFile;
-            project.resource[i].source = source.toUpperCase();
-            project.resource[i].date = date;
-            project.resource[i].description = description;
-            // project.resource[i].tache = tache;
+      for (let i = 0; i < ressources.length; i++) {
+        if (ressources[i].id == ressourceId) {
+          // Modify the Ressource
+          project.resource[i].ref = ref;
+          // project.resource[i].pdfFile = pdfFile;
+          project.resource[i].source = source.toUpperCase();
+          project.resource[i].date = date;
+          project.resource[i].description = description;
+          // project.resource[i].tache = tache;
 
-            // console.log(project.resource[i]);
-
-            // Save modified Ressource
-            await project.save();
-
-            // Return the modified resource
-            return project.resource[i];
+          // Handle Modify Resource Errors
+          if (!ref) {
+            throw new Error("La référence du ressource n'est pas saisie.");
           }
+          if (!source) {
+            throw new Error("La source du ressource n'est pas saisie.");
+          }
+          if (!date) {
+            throw new Error("La date du ressource n'est pas choisie.");
+          }
+          if (!description) {
+            throw new Error("La description du ressource n'est pas saisie.");
+          }
+
+          // Save modified Ressource
+          await project.save();
+
+          // Return the modified resource
+          return project.resource[i];
         }
-      } catch (error) {
-        throw new Error("Failed to fetch ressource");
       }
     },
     //******************* DELETE USSCQ Ressource BY (PROJECT_ID & Ressource_ID) *******************//
@@ -479,37 +487,43 @@ module.exports = {
         recommendation,
       } = input;
 
-      try {
-        const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
-        if (!project) {
-          throw new Error("Project not found");
-        }
+      const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+      if (!project) {
+        throw new Error("Project not found");
+      }
 
-        const activities = project.activite;
+      const activities = project.activite;
 
-        for (let i = 0; i < activities.length; i++) {
-          if (activities[i].id == activityId) {
-            // Modify the Activity
-            project.activite[i].name = name;
-            project.activite[i].sujet = sujet;
-            project.activite[i].date = date;
-            project.activite[i].remarques = remarques;
-            if (recommendation) {
-              project.activite[i].recommendation = recommendation;
-            } else {
-              project.activite[i].recommendation = " ";
-            }
-            // console.log(project.activite[i]);
-
-            // Save modified activity
-            await project.save();
-
-            // Return the modified activite
-            return project.activite[i];
+      for (let i = 0; i < activities.length; i++) {
+        if (activities[i].id == activityId) {
+          // Modify the Activity
+          project.activite[i].name = name;
+          project.activite[i].sujet = sujet;
+          project.activite[i].date = date;
+          project.activite[i].remarques = remarques;
+          if (recommendation) {
+            project.activite[i].recommendation = recommendation;
+          } else {
+            project.activite[i].recommendation = " ";
           }
+
+          // Handle Modifying activity Errors
+          if (!date) {
+            throw new Error("La date du réunion n'est pas choisie.");
+          }
+          if (!sujet) {
+            throw new Error("Le sujet du réunion n'est pas saisi.");
+          }
+          if (!remarques) {
+            throw new Error("Le compte rendu du réunion n'est pas saisi.");
+          }
+
+          // Save modified activity
+          await project.save();
+
+          // Return the modified activite
+          return project.activite[i];
         }
-      } catch (error) {
-        throw new Error("Failed to fetch activity");
       }
     },
 
@@ -542,59 +556,6 @@ module.exports = {
       } catch (error) {
         throw new Error(error.message);
       }
-    },
-
-    //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
-    //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
-    createVersion: async (parent, { input }, context) => {
-      // Extract the input values
-      const { projectId, nameVersion, descriptionVersion } = input;
-
-      const project = await ProjectLabo.findById(projectId);
-      if (!project) {
-        throw new Error("Project not found");
-      }
-
-      const versions = project.versionProject;
-
-      for (let i = 0; i < versions.length; i++) {
-        if (versions[i].nameVersion == nameVersion) {
-          throw new Error("Version déja existe.");
-        }
-      }
-
-      let newVersion = {
-        nameVersion,
-        versionId: "",
-        descriptionVersion,
-      };
-
-      // Version name function
-      if (project.versionProject.length == 0) {
-        newVersion.versionId = "1";
-      } else {
-        let lastVersionIndex = project.versionProject.length;
-        let lastVersionNum = lastVersionIndex + 1;
-        newVersion.versionId = lastVersionNum.toString();
-        if (
-          project.versionProject[lastVersionIndex - 1].versionId ==
-          newVersion.versionId
-        ) {
-          let lastVersionNum = lastVersionIndex + 2;
-          newVersion.versionId = lastVersionNum.toString();
-        }
-      }
-
-      // Update the project document with the new version
-
-      // Add the new version to the project's version array
-      project.versionProject.push(newVersion);
-
-      // Save the updated project document
-      await project.save();
-
-      // Return the created version
-      return newVersion;
     },
     //******************* CREATE USSCQ RESPONSE BY ( PROJECT_ID and response infos) *******************//
     createResponse: async (parent, { input }, context) => {
@@ -652,6 +613,58 @@ module.exports = {
       await project.save();
       // Return the created activity
       return newResponse;
+    },
+    //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
+    //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
+    createVersion: async (parent, { input }, context) => {
+      // Extract the input values
+      const { projectId, nameVersion, descriptionVersion } = input;
+
+      const project = await ProjectLabo.findById(projectId);
+      if (!project) {
+        throw new Error("Project not found");
+      }
+
+      const versions = project.versionProject;
+
+      for (let i = 0; i < versions.length; i++) {
+        if (versions[i].nameVersion == nameVersion) {
+          throw new Error("Version déja existe.");
+        }
+      }
+
+      let newVersion = {
+        nameVersion,
+        versionId: "",
+        descriptionVersion,
+      };
+
+      // Version name function
+      if (project.versionProject.length == 0) {
+        newVersion.versionId = "1";
+      } else {
+        let lastVersionIndex = project.versionProject.length;
+        let lastVersionNum = lastVersionIndex + 1;
+        newVersion.versionId = lastVersionNum.toString();
+        if (
+          project.versionProject[lastVersionIndex - 1].versionId ==
+          newVersion.versionId
+        ) {
+          let lastVersionNum = lastVersionIndex + 2;
+          newVersion.versionId = lastVersionNum.toString();
+        }
+      }
+
+      // Update the project document with the new version
+
+      // Add the new version to the project's version array
+      project.versionProject.push(newVersion);
+
+      // Save the updated project document
+      await project.save();
+
+      // Return the created version
+      return newVersion;
     },
   },
 };
