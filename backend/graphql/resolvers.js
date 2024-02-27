@@ -526,7 +526,6 @@ module.exports = {
         }
       }
     },
-
     //******************* DELETE USSCQ ACTIVITY BY (PROJECT_ID & ACTIVITY_ID) *******************//
     deleteActivite: async (_, { projectId, activiteId }) => {
       try {
@@ -567,13 +566,6 @@ module.exports = {
       if (!project) {
         throw new Error("Project not found");
       }
-      // Find the resource within the project's resources array
-      // const resource = project.resource.find(
-      //   (res) => res.id.toString() === resourceRef
-      // );
-      // if (!resource) {
-      //   throw new Error("Resource not found within the project");
-      // }
       const resourceObjectId = new ObjectId(resourceRef);
       const newResponse = {
         id: new ObjectId(), // Generate a new ObjectId for the response
@@ -613,6 +605,51 @@ module.exports = {
       await project.save();
       // Return the created activity
       return newResponse;
+    },
+    //******************* MODIFY USSCQ ACTIVITY ( RESPONSE ) BY (PROJECT_ID, RESPONSE_ID and response infos) *******************//
+    modifyResponse: async (parent, { input }, context) => {
+      // Extract the input values
+      const { projectId, responseId, degre, description, dateLimite, etat } =
+        input;
+
+      const project = await ProjetUSSCQ.findById(projectId); // Retrieve the project based on the provided project ID
+      if (!project) {
+        throw new Error("Project not found");
+      }
+
+      const responses = project.response;
+
+      for (let i = 0; i < responses.length; i++) {
+        if (responses[i].id == responseId) {
+          // Modify the Response
+          project.response[i].degre = degre;
+          project.response[i].description = description;
+          project.response[i].dateLimite = dateLimite;
+          project.response[i].etat = etat;
+
+          // Handle Modifying Response Errors
+          if (!degre) {
+            throw new Error(
+              "Le degré d'urgence de la réponse n'est pas choisi."
+            );
+          }
+          if (!description) {
+            throw new Error("La description du réponse n'est pas saisi.");
+          }
+          if (!dateLimite) {
+            throw new Error("La date limite du réponse n'est pas choisie.");
+          }
+          if (!etat) {
+            throw new Error("L'état de réponse n'est pas saisi.");
+          }
+
+          // Save modified response
+          await project.save();
+
+          // Return the modified response
+          return project.response[i];
+        }
+      }
     },
     //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
     //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
