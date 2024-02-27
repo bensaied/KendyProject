@@ -30,7 +30,7 @@ import {
   CCard,
   CCardBody,
   CCardSubtitle,
-  //  CCardTitle,
+  CCardTitle,
   CModal,
   CModalBody,
   CModalHeader,
@@ -60,6 +60,8 @@ import {
 import CIcon from "@coreui/icons-react";
 import {
   cilPenAlt,
+  cilWarning,
+  cilCheck,
   //cilWallet,
   cilBook,
   //cilClipboard,
@@ -180,6 +182,7 @@ const ProjetQt = () => {
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
+  const [visible4, setVisible4] = useState(false);
   // STATES FOR RESSOURCE
   const [selectedResource, setSelectedResource] = useState([]);
   const [docs, setDocs] = useState([]);
@@ -192,9 +195,9 @@ const ProjetQt = () => {
   const [refActivity, setRefActivity] = useState("");
   // STATES FOR ACTIVITY (RESPONSE)
   const [rowsReponses, setRowsResponse] = useState("");
-
-  setRefActivity;
+  const [responseToOpen, setResponseToOpen] = useState("");
   const [fileName, setFileName] = useState("");
+  const [refResponse, setRefResponse] = useState("");
 
   //Reunion & Réponse Field
   const [eventType, setEventType] = useState("Suivi"); // Default value
@@ -650,6 +653,20 @@ const ProjetQt = () => {
       return "";
     }
   };
+  // Find Response By ResponseName
+  const findResponseToOpen = (responseName) => {
+    // Check if the project exists
+    if (project) {
+      // Find Respone in the project Doc by ResponseName
+      const response = project.response.find(
+        (res) => res.name === responseName
+      );
+
+      // If the response exists, return it
+      return response;
+    }
+  };
+
   //Find the resource of a given activity and Open It
   const handleResourceActivityClick = async (resourceId) => {
     // Find the resource by ID within the project's resources array
@@ -812,9 +829,22 @@ const ProjetQt = () => {
       renderCell: (params) => {
         const { value } = params;
 
+        const res = findResponseToOpen(value);
         return (
           <div>
-            <CButton color="link" shape="rounded-0" size="sm">
+            <CButton
+              title="Ouvrir la Réponse"
+              color="link"
+              shape="rounded-0"
+              size="sm"
+              onClick={() => {
+                setResponseToOpen(res);
+                setVisible4(!visible4);
+                // Find resource's ref of the Response Opened
+                let ref = findResourceRef(res.resource);
+                setRefResponse(ref);
+              }}
+            >
               {value}
             </CButton>
 
@@ -853,15 +883,6 @@ const ProjetQt = () => {
             {/* <small className="text-medium-emphasis">{value}</small> */}
           </div>
         );
-        // return (
-        //   <div>
-        //     <CButton color="link" shape="rounded-0" size="sm">
-        //       {value}
-        //     </CButton>
-
-        //     {/* <small className="text-medium-emphasis">{value}</small> */}
-        //   </div>
-        // );
       },
 
       headerName: "Référence",
@@ -937,7 +958,7 @@ const ProjetQt = () => {
         // };
         return (
           <div>
-            <CBadge color={value === "Répondu" ? "success" : "danger"}>
+            <CBadge color={value === "Répondue" ? "success" : "danger"}>
               {value}
             </CBadge>
           </div>
@@ -959,6 +980,7 @@ const ProjetQt = () => {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
+            title="Modifier la Réponse"
             icon={<EditIcon style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
@@ -966,6 +988,7 @@ const ProjetQt = () => {
             color="inherit"
           />,
           <GridActionsCellItem
+            title="Supprimer la Réponse"
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
             //  onClick={handleDeleteClick(id)}
@@ -2378,6 +2401,10 @@ const ProjetQt = () => {
           <CModalBody>
             <CCard className="text-center">
               <CCardHeader>
+                {/* <FontAwesomeIcon
+                  icon={faFilePdf}
+                  style={{ fontSize: "17px", color: "#4CAF50" }}
+                />{" "} */}
                 Référence: {selectedResource.ref}
                 <span style={{ color: getTextColor(selectedResource.tache) }}>
                   {" "}
@@ -2425,6 +2452,7 @@ const ProjetQt = () => {
           {/* To close the Modal by X button  */}
           <CModalHeader>
             <CModalTitle>
+              <FontAwesomeIcon icon={faFilePdf} style={{ fontSize: "19px" }} />{" "}
               Modifier la ressource {selectedResource.ref}
               {/* (
               <span style={{ color: getTextColor(selectedResource.tache) }}>
@@ -2562,6 +2590,7 @@ const ProjetQt = () => {
           onClose={() => setVisible1(false)}
         >
           <CModalHeader>
+            <FontAwesomeIcon icon={faHandshake} size="sm" /> &nbsp;
             <CModalTitle> {activity.name} </CModalTitle>
           </CModalHeader>
           <CModalBody>
@@ -2615,6 +2644,7 @@ const ProjetQt = () => {
           onClose={() => setVisible2(false)}
         >
           <CModalHeader>
+            <FontAwesomeIcon icon={faHandshake} size="sm" /> &nbsp;
             <CModalTitle>{activityModified.name}</CModalTitle>
           </CModalHeader>
           <CModalBody>
@@ -2717,6 +2747,80 @@ const ProjetQt = () => {
         ""
       )}
       {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
+      {/********************************  MODAL POUR OUVRIR UNE REPONSE ********************************/}
+      {responseToOpen ? (
+        <CModal
+          alignment="center"
+          visible={visible4}
+          onClose={() => setVisible4(false)}
+        >
+          <CModalHeader>
+            <FontAwesomeIcon icon={faPaperPlane} size="sm" />
+            &nbsp;
+            <CModalTitle> {responseToOpen.name} </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CCard
+              textColor={"dark"}
+              className={`mb-3 border-dark text-center`}
+            >
+              <CCardHeader>Référence: {refResponse}</CCardHeader>
+              <CCardBody>
+                <CCardSubtitle>
+                  Degré d'urgence:{" "}
+                  {responseToOpen.degre === "Faible" ? (
+                    <small className="text-dark" style={{ fontSize: "1em" }}>
+                      Faible
+                    </small>
+                  ) : responseToOpen.degre === "Moyenne" ? (
+                    <small className="text-warning" style={{ fontSize: "1em" }}>
+                      Moyenne
+                    </small>
+                  ) : (
+                    <small className="text-danger" style={{ fontSize: "1em" }}>
+                      Élevée
+                    </small>
+                  )}
+                </CCardSubtitle>
+                <CCardText>{/* {activity.sujet}. */}</CCardText>
+                <CCardSubtitle
+                  className="mb-1 text-medium-emphasis"
+                  style={{ fontSize: "1em" }}
+                >
+                  Description:
+                </CCardSubtitle>
+                <CCardBody>
+                  <CCardText>{responseToOpen.description}.</CCardText>
+                </CCardBody>
+                <CCardText>
+                  {responseToOpen.etat === "Non répondue" ? (
+                    <CIcon className="text-danger" icon={cilWarning} />
+                  ) : (
+                    <CIcon className="text-success" icon={cilCheck} />
+                  )}
+
+                  <small
+                    className={`text-medium-emphasis ${
+                      responseToOpen.etat === "Répondue"
+                        ? "text-success"
+                        : "text-danger"
+                    }`}
+                    style={{ fontSize: "1em", marginLeft: "5px" }}
+                  >
+                    {responseToOpen.etat}.
+                  </small>
+                </CCardText>
+              </CCardBody>
+              <CCardFooter className="text-medium-emphasis">
+                Date limite: {responseToOpen.dateLimite}
+              </CCardFooter>
+            </CCard>
+          </CModalBody>
+        </CModal>
+      ) : (
+        ""
+      )}
+      {/******************************** FIN MODAL POUR OUVRIR UNE REPONSE ********************************/}
 
       {/*********************************************************  HEADER PROJET SuperADMINQT & ADMIN QT **********************************************************/}
 

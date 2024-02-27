@@ -621,7 +621,7 @@ module.exports = {
         degre,
         description,
         dateLimite,
-        etat: "Non répondu",
+        etat: "Non répondue",
       };
       // Response name function
       if (project.response.length == 0) {
