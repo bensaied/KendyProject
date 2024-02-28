@@ -97,6 +97,7 @@ import {
   DELETE_ACTIVITE_MUTATION,
   MODIFY_ACTIVITE_MUTATION,
   CREATE_RESPONSE_MUTATION,
+  MODIFY_RESPONSE_MUTATION,
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
@@ -183,6 +184,8 @@ const ProjetQt = () => {
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
   const [visible4, setVisible4] = useState(false);
+  const [visible5, setVisible5] = useState(false);
+
   // STATES FOR RESSOURCE
   const [selectedResource, setSelectedResource] = useState([]);
   const [docs, setDocs] = useState([]);
@@ -198,8 +201,14 @@ const ProjetQt = () => {
   const [responseToOpen, setResponseToOpen] = useState("");
   const [fileName, setFileName] = useState("");
   const [refResponse, setRefResponse] = useState("");
+  const [responseToModify, setResponseToModify] = useState("");
+  const [degreResponseModify, setDegreResponseModify] = useState("");
+  const [dateResponseModify, setDateResponseModify] = useState("");
+  const [descriptionResponseModify, setDescriptionResponseModify] =
+    useState("");
+  const [etatResponseModify, setEtatResponseModify] = useState("");
 
-  //Reunion & Réponse Field
+  // Reunion & Réponse Field
   const [eventType, setEventType] = useState("Suivi"); // Default value
 
   // Additional state for  fields
@@ -428,11 +437,15 @@ const ProjetQt = () => {
     }
   };
 
-  // 2 - MODIFY ACTIVITY
+  // 2 - MODIFY ACTIVITY ( Réunion )
   const [modifyActivite, { loading2, error2 }] = useMutation(
     MODIFY_ACTIVITE_MUTATION
   );
-  // Function to handle creating an activite
+  // 3 - MODIFY ACTIVITY ( Réunion )
+  const [modifyResponse, { loading20, error20 }] = useMutation(
+    MODIFY_RESPONSE_MUTATION
+  );
+  // Function to handle modifying an activite
   const handleModifyActivite = async () => {
     try {
       const input = {
@@ -459,6 +472,29 @@ const ProjetQt = () => {
     }
   };
 
+  // Function to handle modifying a response
+  const handleModifyResponse = async () => {
+    try {
+      const input = {
+        projectId: project.id,
+        responseId: responseToModify.id,
+        dateLimite: dateResponseModify,
+        degre: degreResponseModify,
+        description: descriptionResponseModify,
+        etat: etatResponseModify,
+      };
+      const { data } = await modifyResponse({
+        variables: { input },
+      });
+      // Close the modal after modifying the response
+      setVisible5(false);
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      console.error("Error in modifying response", error);
+      setErrorModal(error.message);
+    }
+  };
   // 3 - DELETE ACTIVITY
   const getIdOnDelete = (actId) => {
     setVisible3(!visible3);
@@ -600,25 +636,25 @@ const ProjetQt = () => {
   };
 
   // FOR EDITING ROWS
-  const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
+  // const handleEditClick = (id) => () => {
+  //   setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  // };
 
-  function EditToolbar(props) {
-    const { setRows1, setRowModesModel } = props;
+  // function EditToolbar(props) {
+  //   const { setRows1, setRowModesModel } = props;
 
-    const handleClick = () => {
-      const id = randomId();
-      setRows1((oldRows) => [
-        ...oldRows,
-        { id, name: "", age: "", isNew: true },
-      ]);
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-      }));
-    };
-  }
+  //   const handleClick = () => {
+  //     const id = randomId();
+  //     setRows1((oldRows) => [
+  //       ...oldRows,
+  //       { id, name: "", age: "", isNew: true },
+  //     ]);
+  //     setRowModesModel((oldModel) => ({
+  //       ...oldModel,
+  //       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+  //     }));
+  //   };
+  // }
   // Function to handle the Ref of the resource in the Activity (Reunion)
   const findResourceRef = (resourceId) => {
     // Check if the project exists
@@ -674,7 +710,23 @@ const ProjetQt = () => {
       console.error("Error fetching file:", error);
     }
   };
-  //
+
+  // Edit a specific Response
+  const handleEditResponseClick = (responseId) => {
+    setVisible5(!visible5);
+    if (project) {
+      const response = project.response.find((res) => res.id === responseId);
+      setResponseToModify(response);
+    }
+  };
+  // Handle Degre Change when modifying Response
+  const handleDegreChange = (selectedDegre) => {
+    setDegreResponseModify(selectedDegre);
+  };
+  // Handle Etat Change when modifying Response
+  const handleEtatChange = (selectedEtat) => {
+    setEtatResponseModify(selectedEtat);
+  };
   const columnsReunion = [
     {
       field: "name",
@@ -933,11 +985,6 @@ const ProjetQt = () => {
 
       renderCell: (params) => {
         const { value } = params;
-
-        // const cellStyle = {
-        //   backgroundColor: value === "Répondu" ? "green" : "red",
-        //   color: "white",
-        // };
         return (
           <div>
             <CBadge color={value === "Répondue" ? "success" : "danger"}>
@@ -966,7 +1013,7 @@ const ProjetQt = () => {
             icon={<EditIcon style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
-            //  onClick={handleEditClick(id)}
+            onClick={() => handleEditResponseClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -1003,6 +1050,7 @@ const ProjetQt = () => {
       }
     }
   }, [userInfo, userList, selectedAdmin]);
+
   useEffect(() => {
     if (activityModified) {
       setReference1(activityModified.ref);
@@ -1012,6 +1060,16 @@ const ProjetQt = () => {
       setRemarques1(activityModified.remarques);
     }
   }, [activityModified]);
+
+  useEffect(() => {
+    if (responseToModify) {
+      setDateResponseModify(responseToModify.dateLimite);
+      setDescriptionResponseModify(responseToModify.description);
+      setEtatResponseModify(responseToModify.etat);
+      setDegreResponseModify(responseToModify.degre);
+    }
+  }, [responseToModify]);
+
   useEffect(() => {
     if (projectModified) {
       handleModifyProject();
@@ -1031,11 +1089,6 @@ const ProjetQt = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.project;
-  // useEffect(() => {
-  //   if (project) {
-  //     setrowsReunion(project.activite);
-  //   }
-  // }, [project]);
 
   console.log("PROJECT :", project);
 
@@ -1126,7 +1179,6 @@ const ProjetQt = () => {
     // Clear the modified properties state
     setModifiedProperties({});
   }
-  // console.log("projectModified", projectModified);
 
   // Function to handle Modifying Project an activite
 
@@ -1807,23 +1859,7 @@ const ProjetQt = () => {
                                 label="Nom"
                               />
                             </CCol>
-                            {/* <CCol md={12}>
-                                      Administrateur
-                                      <br></br>
-                                      <CFormSelect
-                                        className="basic-single"
-                                        classNamePrefix="select"
-                                        required
-                                        defaultValue={defaultAdmin}
-                                        onChange={(e) => handleAdminChange(e)}
-                                        disabled
-                                        // isLoading
-                                        isClearable
-                                        isSearchable
-                                        name="Administrateur"
-                                        options={admins}
-                                      ></CFormSelect>
-                                    </CCol> */}
+
                             <CCol md={12}>
                               Administrateur <br></br>
                               <Select
@@ -2214,15 +2250,6 @@ const ProjetQt = () => {
             {/* Add Réunion-specific form fields */}
             {eventType === "Réunion" && (
               <>
-                {/* <CFormInput
-                  required
-                  id="réunionField1"
-                  aria-label=""
-                  value={réunionField1}
-                  onChange={(e) => setRéunionField1(e.target.value)}
-                  placeholder="Réunion Field 1"
-                />
-             */}
                 <CContainer
                   style={{ border: "1px solid #ccc", padding: "20px" }}
                 >
@@ -2356,6 +2383,9 @@ const ProjetQt = () => {
           </CForm>
         </CModalBody>
         <CModalFooter>
+          <CButton color="secondary" onClick={() => setVisible0(false)}>
+            Fermer
+          </CButton>
           <CButton
             color="success"
             onClick={handleCreateResource}
@@ -2436,11 +2466,6 @@ const ProjetQt = () => {
             <CModalTitle>
               <FontAwesomeIcon icon={faFilePdf} style={{ fontSize: "19px" }} />{" "}
               Modifier la ressource {selectedResource.ref}
-              {/* (
-              <span style={{ color: getTextColor(selectedResource.tache) }}>
-                {selectedResource.tache}
-              </span>
-              ) */}
             </CModalTitle>{" "}
           </CModalHeader>
 
@@ -2495,20 +2520,7 @@ const ProjetQt = () => {
                               label="Tâche"
                             />
                           </CCol>
-                          {/* <div className="mb-3">
-                            <CFormInput
-                              type="file"
-                              onChange={handleFileChange}
-                              id="formFile"
-                              label="PDF"
-                              accept=".pdf"
-                            />{" "}
-                            <span>
-                              {fileName.substring(
-                                fileName.lastIndexOf("\\") + 1
-                              )}
-                            </span>
-                          </div> */}
+
                           <CCol md={12}>
                             <CFormInput
                               value={referenceRsc}
@@ -2548,7 +2560,6 @@ const ProjetQt = () => {
                             ></CFormTextarea>
                           </CCol>
                         </CForm>
-                        {/* </div> */}
                       </CCol>
                     </CContainer>
 
@@ -2560,9 +2571,9 @@ const ProjetQt = () => {
             </CCard>
           </CModalBody>
           <CModalFooter>
-            {/* <CButton color="secondary" onClick={() => setVisible2(false)}>
-          Close
-        </CButton> */}
+            <CButton color="secondary" onClick={() => setVisible001(false)}>
+              Fermer
+            </CButton>
             <CButton onClick={handleModifyRessource} color="primary">
               Mettre à jour
             </CButton>
@@ -2732,7 +2743,7 @@ const ProjetQt = () => {
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setVisible2(false)}>
-              Close
+              Fermer
             </CButton>
             <CButton onClick={handleModifyActivite} color="primary">
               Mettre à jour
@@ -2743,7 +2754,7 @@ const ProjetQt = () => {
         ""
       )}
 
-      {/******************************** MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
+      {/******************************** FIN MODAL POUR MODIFIER UNE ACTUALITE ********************************/}
       {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
       {activityDeleted ? (
         <CModal visible={visible3} onClose={() => setVisible3(false)}>
@@ -2765,9 +2776,8 @@ const ProjetQt = () => {
       ) : (
         ""
       )}
-      {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
+      {/******************************** FIN MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
       {/********************************  MODAL POUR OUVRIR UNE REPONSE ********************************/}
-
       <CModal
         alignment="center"
         visible={visible4}
@@ -2835,6 +2845,186 @@ const ProjetQt = () => {
       </CModal>
 
       {/******************************** FIN MODAL POUR OUVRIR UNE REPONSE ********************************/}
+      {/******************************** MODAL POUR MODIFIER UNE REPONSE ********************************/}
+      {responseToModify ? (
+        <CModal alignment="center" visible={visible5}>
+          <CModalHeader>
+            <FontAwesomeIcon icon={faPaperPlane} size="sm" />
+            &nbsp;
+            <CModalTitle> {responseToModify.name}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CCard>
+              <CCardBody>
+                {errorModal ? (
+                  <div className="error-message">
+                    <CAlert color="danger">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span>{errorModal}</span>
+                        <button
+                          className="close-button"
+                          onClick={() => setErrorModal(null)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "#333",
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </CAlert>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <CContainer>
+                  <div className="mb-3 row justify-content-md-center">
+                    <CContainer>
+                      <CCol className="justify-content-md-center">
+                        {/* <div className=" row justify-content-md-center"> */}
+                        <CForm className="row g-3">
+                          <CFormGroup>
+                            <CLabel htmlFor="date">Date limite</CLabel>
+                            <input
+                              type="date"
+                              id="dateResponse"
+                              value={dateResponseModify}
+                              onChange={(e) =>
+                                setDateResponseModify(e.target.value)
+                              }
+                              className="form-control"
+                            />
+                          </CFormGroup>
+
+                          <CFormGroup>
+                            <CLabel htmlFor="degre">Degré d'urgence</CLabel>
+                            <br></br>
+                            <CFormCheck
+                              type="radio"
+                              button={{ color: "dark", variant: "outline" }}
+                              name="btnradio"
+                              id="faible"
+                              autoComplete="off"
+                              label="Faible"
+                              value="Faible"
+                              onChange={() => handleDegreChange("Faible")}
+                              checked={degreResponseModify === "Faible"}
+                            />
+                            <CFormCheck
+                              type="radio"
+                              button={{ color: "warning", variant: "outline" }}
+                              name="btnradio"
+                              id="moyenne"
+                              autoComplete="off"
+                              value="Moyenne"
+                              label="Moyenne"
+                              onChange={() => handleDegreChange("Moyenne")}
+                              checked={degreResponseModify === "Moyenne"}
+                            />
+
+                            <CFormCheck
+                              type="radio"
+                              button={{ color: "danger", variant: "outline" }}
+                              name="btnradio"
+                              id="elevee"
+                              autoComplete="off"
+                              value="Élevée"
+                              label="Élevée"
+                              onChange={() => handleDegreChange("Élevée")}
+                              checked={degreResponseModify === "Élevée"}
+                            />
+                          </CFormGroup>
+
+                          <CCol xs={12}>
+                            <CFormTextarea
+                              value={descriptionResponseModify}
+                              onChange={(e) =>
+                                setDescriptionResponseModify(e.target.value)
+                              }
+                              label="Description"
+                            ></CFormTextarea>
+                          </CCol>
+
+                          <CFormGroup>
+                            <CLabel htmlFor="etat">État de réponse</CLabel>
+                            <br></br>
+                            <CFormCheck
+                              type="radio"
+                              button={{ color: "danger", variant: "outline" }}
+                              name="btnradio1"
+                              id="nonrepondue"
+                              autoComplete="off"
+                              label="Non répondue"
+                              value="Non répondue"
+                              onChange={() => handleEtatChange("Non répondue")}
+                              checked={etatResponseModify === "Non répondue"}
+                            />
+                            <CFormCheck
+                              type="radio"
+                              button={{ color: "success", variant: "outline" }}
+                              name="btnradio1"
+                              id="repondue"
+                              autoComplete="off"
+                              value="Répondue"
+                              label="Répondue"
+                              checked={etatResponseModify === "Répondue"}
+                              onChange={() => handleEtatChange("Répondue")}
+                            />
+                          </CFormGroup>
+                        </CForm>
+                      </CCol>
+                    </CContainer>
+                    <br></br>
+                    <br></br>
+                  </div>
+                </CContainer>
+              </CCardBody>
+            </CCard>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setVisible5(false)}>
+              Fermer
+            </CButton>
+            <CButton onClick={handleModifyResponse} color="primary">
+              Mettre à jour
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      ) : (
+        ""
+      )}
+
+      {/******************************** FIN MODAL POUR MODIFIER UNE REPONSE ********************************/}
+      {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
+      {/* {activityDeleted ? ( */}
+      {/* <CModal visible={visible3} onClose={() => setVisible3(false)}>
+          <CModalHeader onClose={() => setVisible3(false)}>
+            <CModalTitle>Confirmation de la suppression</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            Êtes-vous sûr de vouloir supprimer la {activityDeleted.name} ?
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setVisible3(false)}>
+              Non
+            </CButton>
+            <CButton color="danger" onClick={confirmDelete}>
+              Oui
+            </CButton>
+          </CModalFooter>
+        </CModal> */}
+      {/* ) : (
+        ""
+      )} */}
+      {/******************************** FIN MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
 
       {/*********************************************************  HEADER PROJET SuperADMINQT & ADMIN QT **********************************************************/}
 
@@ -2851,16 +3041,6 @@ const ProjetQt = () => {
                   alignItems: "center",
                 }}
               >
-                {/* <FontAwesomeIcon
-                  icon={faWallet}
-                  size="xs"
-                  style={{ marginRight: "0.5rem" }}
-                /> */}
-                {/* <CIcon
-                  icon={cilBook}
-                  size="xl"
-                  style={{ marginRight: "0.5rem" }}
-                />{" "} */}
                 <span
                   style={{
                     backgroundImage:
@@ -2925,18 +3105,6 @@ const ProjetQt = () => {
                     <span style={{ color: "#007bff" }}>Détails du dossier</span>
                   </CAccordionHeader>
                   <CAccordionBody>
-                    {/* <CCol sm="{10}" className="d-none d-md-block">
-                      <br></br>
-                      <CButton
-                        onClick={() => {
-                          setSuperAdmin(true);
-                        }}
-                        color="primary"
-                        className="float-end"
-                      >
-                        <CIcon title="Modifier le dossier" icon={cilPenAlt} />
-                      </CButton>
-                    </CCol> */}
                     {/*********************************************************  TAB PROJET QT*************************************************************/}
                     {/* <CCardBody></CCardBody> */}
                     {currentTypeState.currentType === "SuperAdminQt" ||
@@ -3178,25 +3346,11 @@ const ProjetQt = () => {
                                           rows={rowsRessources}
                                           // rowHeight={25}
                                           density="compact"
-                                          // editMode="row"
-                                          // onRowEditStop={handleRowEditStop}
-                                          // slots={{
-                                          //   toolbar: EditToolbar,
-                                          // }}
                                           slots={{
                                             toolbar: CustomToolbar,
                                           }}
                                           components={CustomToolbar}
-                                          // slotProps={{
-                                          //   toolbar: { setRows1, setRowModesModel },
-                                          // }}
                                           pagination={false} // Enable pagination
-                                          // components={customComponents}
-
-                                          // checkboxSelection
-                                          // components={{
-                                          //   Toolbar: GridToolbar,
-                                          // }}
                                         />
                                       </div>
                                     </CContainer>{" "}
@@ -3245,10 +3399,6 @@ const ProjetQt = () => {
             </CCardBody>
             {/*********************************************************  Fin Ressources DU PROJET QT **********************************************************************/}
 
-            {/* <h4 id="traffic" className="card-title mb-0">
-                                                Cartes des projets
-                                                </h4> */}
-
             {/*********************************************************  ACUTUALITES DU PROJET QT **********************************************************************/}
             <>
               {currentTypeState.currentType === "SuperAdminQt" ||
@@ -3277,17 +3427,6 @@ const ProjetQt = () => {
                       {/*********************************************************  ACUTUALITES DU PROJET QT **********************************************************************/}
 
                       <CRow>
-                        {/* {currentTypeState.currentType === "SuperAdminQt" ||
-                          currentTypeState.currentType === "AdminQt" ? (
-                            <>
-                              {project.activite.length == 0 ? (
-                                <CCardHeader component="h6">
-                                  <CIcon icon={cilNewspaper} size="lg" />
-                                  &nbsp; Actualités du {project.name}
-                                </CCardHeader>
-                              ) : null}
-                            </>
-                          ) : null} */}
                         <CContainer>
                           <br></br>
                           {/*********************************************************  Reunions DU PROJET QT **********************************************************************/}
@@ -3295,29 +3434,6 @@ const ProjetQt = () => {
                             {(currentTypeState.currentType === "SuperAdminQt" ||
                               currentTypeState.currentType === "AdminQt") && (
                               <>
-                                {/* {project.activite.length == 0 ? (
-                        <div className="text-center mb-3 row justify-content-md-center">
-                          <h6>
-                            <p>
-                              <small className="text-muted">
-                                Il n'y a pas d'actualité.
-                                <br></br>
-                                {(currentTypeState.currentType === "AdminQt" ||
-                                  currentTypeState.currentType ===
-                                    "SuperAdminQt") && (
-                                  <CButton
-                                    onClick={() => setVisible(!visible)}
-                                    color="primary"
-                                    className="btn-sm"
-                                  >
-                                    Ajouter une actualité
-                                  </CButton>
-                                )}
-                              </small>
-                            </p>
-                          </h6>
-                        </div>
-                      ) : null} */}
                                 <CContainer
                                   style={{
                                     border: "1px solid #ccc",
@@ -3350,50 +3466,13 @@ const ProjetQt = () => {
                                         rows={rowsReunion}
                                         // rowHeight={25}
                                         density="compact"
-                                        // editMode="row"
-                                        // onRowEditStop={handleRowEditStop}
-                                        // slots={{
-                                        //   toolbar: EditToolbar,
-                                        // }}
                                         slots={{
                                           toolbar: CustomToolbar,
                                         }}
                                         components={CustomToolbar}
-                                        // slotProps={{
-                                        //   toolbar: { setRows1, setRowModesModel },
-                                        // }}
                                         pagination={false} // Enable pagination
-                                        // components={customComponents}
-
-                                        // checkboxSelection
-                                        // components={{
-                                        //   Toolbar: GridToolbar,
-                                        // }}
                                       />
                                     </div>
-                                    {/* <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                padding: "0.75rem 0.5rem",
-                                fontSize: "0.8rem",
-                                lineHeight: "1",
-                                borderRadius: "0.1rem",
-                              }}
-                            >
-                              {currentTypeState.currentType ===
-                                "SuperAdminQt" ||
-                              currentTypeState.currentType === "AdminQt" ? (
-                              <Button
-                                variant="success"
-                                onClick={handlePrint1}
-                                title="Imprimer"
-                              >
-                                <CIcon icon={cilPrint} />
-                              </Button>
-                              ) : null}
-                            </div> */}
                                   </CContainer>
                                   {/* Imprimer Button */}
                                   <div
@@ -3432,29 +3511,6 @@ const ProjetQt = () => {
                             {(currentTypeState.currentType === "SuperAdminQt" ||
                               currentTypeState.currentType === "AdminQt") && (
                               <>
-                                {/* {project.activite.length == 0 ? (
-                        <div className="text-center mb-3 row justify-content-md-center">
-                          <h6>
-                            <p>
-                              <small className="text-muted">
-                                Il n'y a pas d'actualité.
-                                <br></br>
-                                {(currentTypeState.currentType === "AdminQt" ||
-                                  currentTypeState.currentType ===
-                                    "SuperAdminQt") && (
-                                  <CButton
-                                    onClick={() => setVisible(!visible)}
-                                    color="primary"
-                                    className="btn-sm"
-                                  >
-                                    Ajouter une actualité
-                                  </CButton>
-                                )}
-                              </small>
-                            </p>
-                          </h6>
-                        </div>
-                      ) : null} */}
                                 <CContainer
                                   style={{
                                     border: "1px solid #ccc",
@@ -3486,26 +3542,11 @@ const ProjetQt = () => {
                                         columns={columnsReponses}
                                         rows={rowsReponses}
                                         density="compact"
-                                        // rowHeight={50}
-                                        // editMode="row"
-                                        // onRowEditStop={handleRowEditStop}
-                                        // slots={{
-                                        //   toolbar: EditToolbar,
-                                        // }}
                                         slots={{
                                           toolbar: CustomToolbar,
                                         }}
                                         components={CustomToolbar}
-                                        // slotProps={{
-                                        //   toolbar: { setRows1, setRowModesModel },
-                                        // }}
                                         pagination={false} // Enable pagination
-                                        // components={customComponents}
-
-                                        // checkboxSelection
-                                        // components={{
-                                        //   Toolbar: GridToolbar,
-                                        // }}
                                       />
                                     </div>
                                   </CContainer>
@@ -3563,5 +3604,4 @@ const ProjetQt = () => {
     </>
   );
 };
-
 export default ProjetQt;
