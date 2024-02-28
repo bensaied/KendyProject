@@ -232,11 +232,12 @@ module.exports = gql`
     # Delete Activity Project USSCQ
     deleteActivite(projectId: ID!, activiteId: ID!): Activite!
    
-    # Create Activity Project USSCQ ( Response )
+    # Create Activity ( Response ) Project USSCQ 
     createResponse(input: CreateResponseInput!): Response!
     # Modify Activity ( Response ) Project USSCQ
     modifyResponse(input: ModifyResponseInput!): Response!
-
+    # Delete Activity ( Response ) Project USSCQ
+    deleteResponse(projectId: ID!, responseId: ID!): Response!
 
     # # # ProjectLABO
     # Create Version Project LABO
