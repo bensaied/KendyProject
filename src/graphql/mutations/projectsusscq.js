@@ -109,3 +109,16 @@ export const CREATE_RESPONSE_MUTATION = gql`
     }
   }
 `;
+export const MODIFY_RESPONSE_MUTATION = gql`
+  mutation modifyResponse($input: ModifyResponseInput!) {
+    modifyResponse(input: $input) {
+      id
+      name
+      resource
+      degre
+      description
+      dateLimite
+      etat
+    }
+  }
+`;
