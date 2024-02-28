@@ -122,3 +122,10 @@ export const MODIFY_RESPONSE_MUTATION = gql`
     }
   }
 `;
+export const DELETE_RESPONSE_MUTATION = gql`
+  mutation deleteResponse($projectId: ID!, $responseId: ID!) {
+    deleteResponse(projectId: $projectId, responseId: $responseId) {
+      id
+    }
+  }
+`;

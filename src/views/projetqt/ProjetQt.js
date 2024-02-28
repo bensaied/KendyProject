@@ -98,6 +98,7 @@ import {
   MODIFY_ACTIVITE_MUTATION,
   CREATE_RESPONSE_MUTATION,
   MODIFY_RESPONSE_MUTATION,
+  DELETE_RESPONSE_MUTATION,
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
@@ -185,6 +186,7 @@ const ProjetQt = () => {
   const [visible3, setVisible3] = useState(false);
   const [visible4, setVisible4] = useState(false);
   const [visible5, setVisible5] = useState(false);
+  const [visible6, setVisible6] = useState(false);
 
   // STATES FOR RESSOURCE
   const [selectedResource, setSelectedResource] = useState([]);
@@ -207,15 +209,11 @@ const ProjetQt = () => {
   const [descriptionResponseModify, setDescriptionResponseModify] =
     useState("");
   const [etatResponseModify, setEtatResponseModify] = useState("");
-
+  // const [responseId, setResponseId] = useState("");
+  const [responseToDelete, setResponseToDelete] = useState("");
   // Reunion & Réponse Field
   const [eventType, setEventType] = useState("Suivi"); // Default value
 
-  // Additional state for  fields
-  const [réunionField1, setRéunionField1] = useState("");
-  const [réunionField2, setRéunionField2] = useState("");
-  const [réponseField1, setRéponseField1] = useState("");
-  const [réponseField2, setRéponseField2] = useState("");
   // Event handler to handle radio button selection
   const handleEventTypeChange = (selectedEventType) => {
     setEventType(selectedEventType);
@@ -495,11 +493,20 @@ const ProjetQt = () => {
       setErrorModal(error.message);
     }
   };
-  // 3 - DELETE ACTIVITY
+  // 3 - DELETE ACTIVITY (REUNION)
   const getIdOnDelete = (actId) => {
     setVisible3(!visible3);
     setactId(actId);
   };
+  // 4 - DELETE ACTIVITY (RESPONSE)
+  const getIdOnDeleteResponse = (resID) => {
+    setVisible6(!visible6);
+    if (project) {
+      const response = project.response.find((res) => res.id === resID);
+      setResponseToDelete(response);
+    }
+  };
+  // Get Activity by Id
   const { data: actDelete } = useQuery(GET_ACTIVITY, {
     variables: { projectId: id, activityId: actId }, // Use 'id' as the projectId variable
   });
@@ -557,6 +564,10 @@ const ProjetQt = () => {
   const [deleteRessource, { loadingRsc, errorRsc }] = useMutation(
     DELETE_RESSOURCE_MUTATION
   );
+  // - Delete Response
+  const [deleteResponse, { loadingRes, errorRes }] = useMutation(
+    DELETE_RESPONSE_MUTATION
+  );
 
   // - Handle Delete Ressource Function
   const handleDeleteClick = (ref, id) => {
@@ -564,7 +575,7 @@ const ProjetQt = () => {
     // console.log("selectedRsc", selectedResource[1]);
     setVisibleDelRcs(true);
   };
-  // Confirm Delte Ressource Function
+  // Confirm Delete Ressource Function
   const confirmDeleteRessource = async () => {
     try {
       await deleteRessource({
@@ -574,6 +585,17 @@ const ProjetQt = () => {
       window.location.reload();
     } catch (error) {}
     setVisible3(false);
+  };
+  // Confirm Delete Response Function
+  const confirmDeleteResponse = async () => {
+    try {
+      await deleteResponse({
+        variables: { projectId: id, responseId: responseToDelete.id },
+      });
+      // Reload the page after delete the response
+      window.location.reload();
+    } catch (error) {}
+    setVisible6(false);
   };
 
   // QUERIES PROJECTUSSCQ
@@ -1020,7 +1042,7 @@ const ProjetQt = () => {
             title="Supprimer la Réponse"
             icon={<DeleteIcon style={{ color: "red" }} />}
             label="Delete"
-            //  onClick={handleDeleteClick(id)}
+            onClick={() => getIdOnDeleteResponse(id)}
             color="inherit"
           />,
         ];
@@ -3004,26 +3026,24 @@ const ProjetQt = () => {
 
       {/******************************** FIN MODAL POUR MODIFIER UNE REPONSE ********************************/}
       {/******************************** MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
-      {/* {activityDeleted ? ( */}
-      {/* <CModal visible={visible3} onClose={() => setVisible3(false)}>
-          <CModalHeader onClose={() => setVisible3(false)}>
-            <CModalTitle>Confirmation de la suppression</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            Êtes-vous sûr de vouloir supprimer la {activityDeleted.name} ?
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible3(false)}>
-              Non
-            </CButton>
-            <CButton color="danger" onClick={confirmDelete}>
-              Oui
-            </CButton>
-          </CModalFooter>
-        </CModal> */}
-      {/* ) : (
-        ""
-      )} */}
+
+      <CModal visible={visible6} onClose={() => setVisible6(false)}>
+        <CModalHeader onClose={() => setVisible6(false)}>
+          <CModalTitle>Confirmation de la suppression</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          Êtes-vous sûr de vouloir supprimer la {responseToDelete.name} ?
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setVisible6(false)}>
+            Non
+          </CButton>
+          <CButton color="danger" onClick={confirmDeleteResponse}>
+            Oui
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
       {/******************************** FIN MODAL POUR SUPPRIMER UNE ACTUALITE ********************************/}
 
       {/*********************************************************  HEADER PROJET SuperADMINQT & ADMIN QT **********************************************************/}

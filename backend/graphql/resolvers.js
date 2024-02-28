@@ -651,7 +651,7 @@ module.exports = {
         }
       }
     },
-    //******************* DELETE USSCQ RESPONSE BY (PROJECT_ID & RESPONSE_ID) *******************//
+    //******************* DELETE USSCQ ACTIVITY ( RESPONSE ) BY (PROJECT_ID & RESPONSE_ID) *******************//
     deleteResponse: async (_, { projectId, responseId }) => {
       try {
         // Find the project by ID
