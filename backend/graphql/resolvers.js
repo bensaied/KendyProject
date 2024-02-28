@@ -536,7 +536,7 @@ module.exports = {
           throw new Error("Project not found");
         }
 
-        // Find the index of the activity with the given activiteId
+        // Find the index of the activity with the given activityArray
         const activityIndex = project.activite.findIndex(
           (activity) => activity.id === activiteId
         );
@@ -649,6 +649,30 @@ module.exports = {
           // Return the modified response
           return project.response[i];
         }
+      }
+    },
+    //******************* DELETE USSCQ RESPONSE BY (PROJECT_ID & RESPONSE_ID) *******************//
+    deleteResponse: async (_, { projectId, responseId }) => {
+      try {
+        // Find the project by ID
+        const project = await ProjetUSSCQ.findById(projectId);
+        if (!project) {
+          throw new Error("Project not found");
+        }
+        // Find the index of the response with the given responseArray
+        const responseIndex = project.response.findIndex(
+          (response) => response.id === responseId
+        );
+        if (responseIndex === -1) {
+          throw new Error("Response not found in the project.");
+        }
+        // Remove the response from the project's response array
+        const removedResponse = project.response.splice(responseIndex, 1)[0];
+        // Save the updated project
+        await project.save();
+        return removedResponse;
+      } catch (error) {
+        throw new Error(error.message);
       }
     },
     //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
