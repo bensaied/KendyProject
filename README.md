@@ -1,86 +1,70 @@
-<!-- prettier-ignore-start -->
+# KendyProject
 
-###### KendyProject v1.0
+This app will help you manage your projects and obtain statistics about them.
 
----
+![Logo](https://i.ibb.co/89vWdVt/Kendy-Project.png)
 
-/\*\* BEGIN
+## ✨ Demo
 
-This might help you to write your comments:
+![](demo-vid.mp4)
 
-- # Title
-- - Important information is highlighted.
-- ! Deprecated method, do not use.
-- ? Should use this method be exposed in the Public API.
-- TODO : refactor this method so that it conforms to the API.
+## 🧰 Tech Stack
 
-## END \*\*/
+**Client:** React, Redux, CoreUI
 
-## /\*\*
+**Server:** Node, Express, GraphQL, MongoDB
 
-## This file describes DefStream.
+## 🔥 Features
 
-- # DESCRIPTION :
-  Web Application for projects managing.
-  Language: Français.
-  Version: 1.0
+- Add, modify and delete users with different roles.
+- Add and modify projects.
+- Add, modify, preview and delete ressources.
+- Add, modify, preview and delete activities.
+- Get notifications about project activities.
+- Get project statistics in the dashboard.
+- Cross platform
 
----
+## 📑 Prerequisits
 
-- # Version Features :
+Before cloning/forking this project, make sure you have the following tools installed:
 
-* Users:
+- Git
+- NodeJS 16.18.0
 
-- - Add, modify and delete users.
+## 🚀 Installation
 
-* Project/ Versions/ Networks/ Missions : (LABO)
+Install KendyProject with npm
 
-- - Add & modify projects, versions, networks & missions.
+- Frontend side ( inside KendyProject folder )
 
-* Project/ Activities : (QT)
+```bash
+  npm install
+```
 
-- - Add & modify projects and activities (Activities can be deleted also).
+- Backend side ( inside backend folder )
 
----
+```bash
+  npm install
+```
 
-- # Contributors :
+Then run both sides with:
 
-  Oussama BEN SAIED
+```bash
+  npm start
+```
 
----
+## ⚖️ License
 
-- # Prerequisites :
-  Node version = 16.18.0
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
 
----
+## 💝 Support
 
-- # Table of Contents :
-  backend folder (BACKEND)
-  rest of files (Frontend)
+For support, email saayeed@outlook.fr and don't forget to leave a star ⭐️.
 
----
+## 📝 Authors
 
-- # How to Install and Run the Project :
-- - Install Project : (Both sides)
-    > npm install
-- - Run Client Side :
-    > npm run start
-- - Run Server Side :
-    > npm run start
-- - Build the project :
-    > npm run build
+- Github: [@bensaied](https://www.github.com/bensaied)
 
----
+## 🔗 Links
 
-- # Tests :
-  Security TESING: Snyk
-
----
-
-- # License :
-  KendyProject uses COREUI as a template.
-
----
-
-\*\*/
-<!-- prettier-ignore-end -->
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/oussama-ben-saayeed/)
