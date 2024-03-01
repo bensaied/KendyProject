@@ -6,7 +6,8 @@ This app will help you manage your projects and obtain statistics about them.
 
 ## ✨ Demo
 
-![](demo-vid.mp4)
+https://github.com/bensaied/KendyProject/assets/157906188/d6bb2d6d-edf3-47ab-ae98-9368f88d3010
+
 
 ## 🧰 Tech Stack
 
