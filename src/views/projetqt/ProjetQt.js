@@ -1221,6 +1221,7 @@ const ProjetQt = () => {
         source: projectModified.source,
         admin: projectModified.admin,
       };
+
       // KeyDuration Condition
       if (isNaN(projectModified.KeyDuration)) {
         alert(

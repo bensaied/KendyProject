@@ -5,23 +5,6 @@ export const MODIFY_PROJECT_MUTATION = gql`
     modifyProject(input: $input) {
       id
       KeyDuration
-      activite {
-        id
-        name
-        resource {
-          id
-          pdfFile
-          ref
-          source
-          date
-          description
-          tache
-        }
-        date
-        sujet
-        recommendation
-        remarques
-      }
       benificaire
       createdAt
       description
