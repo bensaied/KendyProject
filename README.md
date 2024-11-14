@@ -1,12 +1,11 @@
 # KendyProject
 
-This app will help you manage your projects and obtain statistics about them.
-
-![Logo](https://i.ibb.co/89vWdVt/Kendy-Project.png)
+![New Website Blue Mockup Instagram - Laptop](https://github.com/bensaied/KendyProject/assets/157906188/477a91b0-ffc2-49e8-9073-317b7ab63f55)
 
 ## ✨ Demo
 
-![](demo-vid.mp4)
+https://github.com/bensaied/KendyProject/assets/157906188/d6bb2d6d-edf3-47ab-ae98-9368f88d3010
+
 
 ## 🧰 Tech Stack
 
