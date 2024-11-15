@@ -248,7 +248,7 @@ const CreerProjet = () => {
       selectedValue = selected[0].value;
     }
     setIntegration(selected); // Set the selected object
-    setIntegrationValues([selected.value]); // Set the selected value as an array with one element
+    setIntegrationValues(selectedValue ? [selected.value] : []); // Set the selected value as an array with one element
   }
 
   //EncryptionType
@@ -262,7 +262,7 @@ const CreerProjet = () => {
       selectedValue = selected[0].value;
     }
     setEncryptionType(selected); // Set the selected objects
-    setEncryptionTypeValues([selected.value]); // Set the selected values
+    setEncryptionTypeValues(selectedValue ? [selected.value] : []); // Set the selected values
   }
 
   //LengthKey
@@ -276,7 +276,7 @@ const CreerProjet = () => {
       selectedValue = selected[0].value;
     }
     setLengthKey(selected); // Set the selected objects
-    setLengthKeyValues([selected.value]); // Set the selected values
+    setLengthKeyValues(selectedValue ? [selected.value] : []); // Set the selected values
   }
 
   //Liaison
@@ -290,7 +290,7 @@ const CreerProjet = () => {
       selectedValue = selected[0].value;
     }
     setLiaison(selected); // Set the selected objects
-    setLiaisonValues([selected.value]); // Set the selected values
+    setLiaisonValues(selectedValue ? [selected.value] : []); // Set the selected values
   }
 
   const [creatableSelectValue, setCreatableSelectValue] = useState("");
@@ -655,8 +655,8 @@ const CreerProjet = () => {
                         Integration
                         <br></br>
                         <CreatableSelect
-                          options={options3}
                           isClearable
+                          options={options3}
                           onChange={ChangeIntegration}
                           value={integration}
                         />

@@ -84,8 +84,6 @@ const MesProjets = () => {
     //REFRESH USER INFO
     dispatch(userInfoRefresh(userInfo.login));
   }, []);
-  console.log("test0", updatedProjectsList);
-  console.log("test1", currentTypeState);
 
   return (
     <>

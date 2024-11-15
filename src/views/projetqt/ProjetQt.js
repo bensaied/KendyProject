@@ -16,7 +16,7 @@ import {
   GridToolbarExport,
   GridToolbar,
   GridRowEditStopReasons,
-  GridRowModes,
+  // GridRowModes,
   GridActionsCellItem,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -30,7 +30,7 @@ import {
   CCard,
   CCardBody,
   CCardSubtitle,
-  CCardTitle,
+  // CCardTitle,
   CModal,
   CModalBody,
   CModalHeader,
@@ -102,6 +102,7 @@ import {
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
+import { userInfoRefresh } from "../actions/userActions";
 
 const ProjetQt = () => {
   const dispatch = useDispatch();
@@ -110,9 +111,10 @@ const ProjetQt = () => {
   const [open, setOpen] = useState(false);
   const refOne = useRef(null);
 
-  // USERLOGIN&INFO
+  // USERLOGIN&INFO&refreshInfo
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const refreshInfo = useSelector((state) => state.refreshInfo.refreshInfo);
 
   //CURRENT_TYPE
   const currentTypeState = useSelector((state) => state.currentType);
@@ -1052,6 +1054,10 @@ const ProjetQt = () => {
   // Dispatch USERS LIST
   useEffect(() => {
     dispatch(listUsers());
+    dispatch(userInfoRefresh(userInfo.login));
+    console.log("refreshInfos: ", refreshInfo);
+
+    console.log("userInfo: ", userInfo.login);
   }, [dispatch]);
 
   // Display USERS IN THE ADMIN DROP MENU
@@ -1111,8 +1117,6 @@ const ProjetQt = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.project;
-
-  console.log("PROJECT :", project);
 
   // Consolidated update function
   function handleInputChange(e, property) {
@@ -3053,7 +3057,10 @@ const ProjetQt = () => {
         <CCardBody>
           <CRow>
             {currentTypeState.currentType === "SuperAdminQt" ||
-            currentTypeState.currentType === "AdminQt" ? (
+            (currentTypeState.currentType === "AdminQt" &&
+              refreshInfo &&
+              refreshInfo.projectQt &&
+              Object.values(refreshInfo.projectQt).includes(project.id)) ? (
               <CCardHeader
                 component="h1"
                 style={{
@@ -3111,7 +3118,10 @@ const ProjetQt = () => {
 
             {/*********************************************************  Details DU PROJET SUPERADMINQT*************************************************************/}
             {currentTypeState.currentType === "SuperAdminQt" ||
-            currentTypeState.currentType === "AdminQt" ? (
+            (currentTypeState.currentType === "AdminQt" &&
+              refreshInfo &&
+              refreshInfo.projectQt &&
+              Object.values(refreshInfo.projectQt).includes(project.id)) ? (
               <CAccordion activeItemKey={0} flush>
                 <br></br>
                 <CAccordionItem itemKey={1}>
@@ -3129,7 +3139,12 @@ const ProjetQt = () => {
                     {/*********************************************************  TAB PROJET QT*************************************************************/}
                     {/* <CCardBody></CCardBody> */}
                     {currentTypeState.currentType === "SuperAdminQt" ||
-                    currentTypeState.currentType === "AdminQt" ? (
+                    (currentTypeState.currentType === "AdminQt" &&
+                      refreshInfo &&
+                      refreshInfo.projectQt &&
+                      Object.values(refreshInfo.projectQt).includes(
+                        project.id
+                      )) ? (
                       <div
                         style={{ border: "1px #ccc", padding: "13px" }}
                         ref={componentRef}
@@ -3262,7 +3277,10 @@ const ProjetQt = () => {
             <CCardBody>
               <CRow>
                 {currentTypeState.currentType === "SuperAdminQt" ||
-                currentTypeState.currentType === "AdminQt" ? (
+                (currentTypeState.currentType === "AdminQt" &&
+                  refreshInfo &&
+                  refreshInfo.projectQt &&
+                  Object.values(refreshInfo.projectQt).includes(project.id)) ? (
                   <>
                     {/* {project.resource.length == 0 ? ( */}
                     <CCardHeader component="h6">
@@ -3280,11 +3298,16 @@ const ProjetQt = () => {
                 ) : null}
                 <CContainer>
                   {(currentTypeState.currentType === "SuperAdminQt" ||
-                    currentTypeState.currentType === "AdminQt") && (
+                    (currentTypeState.currentType === "AdminQt" &&
+                      refreshInfo &&
+                      refreshInfo.projectQt &&
+                      Object.values(refreshInfo.projectQt).includes(
+                        project.id
+                      ))) && (
                     <>
                       {/*********************************************************  Ressources DU PROJET QT VIDE **********************************************************************/}
 
-                      {project.resource.length == 0 ? (
+                      {project.resource.length === 0 ? (
                         <>
                           <br></br>
                           <br></br>
@@ -3295,9 +3318,14 @@ const ProjetQt = () => {
                                   Il n'y a pas de ressource.
                                   <br></br>
                                   {(currentTypeState.currentType ===
-                                    "AdminQt" ||
-                                    currentTypeState.currentType ===
-                                      "SuperAdminQt") && (
+                                    "SuperAdminQt" ||
+                                    (currentTypeState.currentType ===
+                                      "AdminQt" &&
+                                      refreshInfo &&
+                                      refreshInfo.projectQt &&
+                                      Object.values(
+                                        refreshInfo.projectQt
+                                      ).includes(project.id))) && (
                                     <CButton
                                       onClick={() => setVisible0(!visible0)}
                                       color="success"
@@ -3360,7 +3388,10 @@ const ProjetQt = () => {
                                       ref={componentRef4}
                                     >
                                       <div
-                                        style={{ height: 350, width: "100%" }}
+                                        style={{
+                                          height: 350,
+                                          width: "100%",
+                                        }}
                                       >
                                         <DataGrid
                                           columns={columnsRessources}
@@ -3423,7 +3454,10 @@ const ProjetQt = () => {
             {/*********************************************************  ACUTUALITES DU PROJET QT **********************************************************************/}
             <>
               {currentTypeState.currentType === "SuperAdminQt" ||
-              currentTypeState.currentType === "AdminQt" ? (
+              (currentTypeState.currentType === "AdminQt" &&
+                refreshInfo &&
+                refreshInfo.projectQt &&
+                Object.values(refreshInfo.projectQt).includes(project.id)) ? (
                 <CAccordion activeItemKey={0} flush>
                   <br></br>
                   <CAccordionItem itemKey={1}>
