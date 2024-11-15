@@ -4,23 +4,22 @@ export const MODIFY_PROJECT_MUTATION = gql`
   mutation ModifyProject($input: ModifyProjectInput!) {
     modifyProject(input: $input) {
       id
-      KeyDuration
-      benificaire
-      createdAt
-      description
-      encryptionType
-      integration
-      lengthKey
-      liaison
       name
-      partage
-      periodeProject
-      source
-      updatedAt
       admin {
         firstname
         name
+        grade
       }
+      source
+      benificaire
+      periodeProject
+      integration
+      encryptionType
+      lengthKey
+      liaison
+      partage
+      description
+      KeyDuration
     }
   }
 `;

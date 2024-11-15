@@ -49,8 +49,8 @@ module.exports = gql`
     id: ID!
     name: String!
     admin: [AdminInput]
-    createdAt: String!
-    updatedAt: String!
+    createdAt: String
+    updatedAt: String
     source: String!
     benificaire: [String]!
     periodeProject: [String]!
