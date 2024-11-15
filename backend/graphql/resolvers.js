@@ -167,6 +167,7 @@ module.exports = {
         if (!project) {
           throw new Error("Project not found");
         }
+        console.log("Ici!! en resolver");
 
         project.name = name.toUpperCase();
         project.source = source;

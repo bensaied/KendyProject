@@ -42,6 +42,7 @@ const MesProjets = () => {
   // USERLOGIN&INFO
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
   // PROJET USSCQ
   // QUERIES PROJETUSSCQ
   const { loading, error, data } = useQuery(GET_PROJECTS);
@@ -83,7 +84,8 @@ const MesProjets = () => {
     //REFRESH USER INFO
     dispatch(userInfoRefresh(userInfo.login));
   }, []);
-  //console.log("test", updatedProjectsList);
+  console.log("test0", updatedProjectsList);
+  console.log("test1", currentTypeState);
 
   return (
     <>
@@ -99,10 +101,52 @@ const MesProjets = () => {
       )}
       {/******************************************************  Carte des Projets QT (Vide)  ********************************************************/}
 
-      {currentTypeState.currentType === "SuperAdminQt" ||
-      currentTypeState.currentType === "AdminQt" ? (
+      {currentTypeState.currentType === "SuperAdminQt" ? (
         <>
           {projectsusscq.length === 0 ? (
+            <CCard className="mb-4">
+              <CCardBody>
+                <CRow>
+                  <CCardHeader component="h4">
+                    <CIcon icon={cilLibrary} /> Cartes des dossiers
+                  </CCardHeader>
+                  <CContainer>
+                    <br />
+                    <br />
+                    <CCol className="justify-content-md-center">
+                      <div className="text-center mb-3 row justify-content-md-center">
+                        <h4>
+                          <p>
+                            <small className="text-muted">
+                              Il n'y a pas de dossier.
+                              {currentTypeState.currentType ===
+                                "SuperAdminQt" && (
+                                <>
+                                  <br />
+                                  <Link to="/projets/creerprojet">
+                                    <CButton color="link">
+                                      Créer un dossier
+                                    </CButton>
+                                  </Link>
+                                </>
+                              )}
+                            </small>
+                          </p>
+                        </h4>
+                      </div>
+                    </CCol>
+                  </CContainer>
+                  <br />
+                  <br />
+                </CRow>
+              </CCardBody>
+            </CCard>
+          ) : null}
+        </>
+      ) : null}
+      {currentTypeState.currentType === "AdminQt" ? (
+        <>
+          {updatedProjectsList && updatedProjectsList.projectQt.length === 0 ? (
             <CCard className="mb-4">
               <CCardBody>
                 <CRow>
@@ -640,8 +684,137 @@ const MesProjets = () => {
 
       {/******************************************************  Carte des Projets QT  *************************************************************************/}
 
-      {currentTypeState.currentType === "SuperAdminQt" ||
-      currentTypeState.currentType === "AdminQt" ? (
+      {currentTypeState.currentType === "AdminQt" ? (
+        <>
+          {updatedProjectsList && updatedProjectsList.projectQt.length >= 1 ? (
+            <CCard className="mb-4">
+              <CCardBody>
+                <CRow>
+                  <CCardHeader component="h4">
+                    <CIcon icon={cilLibrary} /> Cartes des dossiers
+                  </CCardHeader>
+
+                  <br />
+                  <CCol sm="{10}" className="d-none d-md-block">
+                    <br />
+                    {currentTypeState.currentType === "SuperAdminQt" ? (
+                      <CButton
+                        href="/projets/creerprojet"
+                        color="primary"
+                        className="float-end"
+                      >
+                        <CIcon title="Ajouter un dossier" icon={cilPlus} />
+                      </CButton>
+                    ) : null}
+                  </CCol>
+
+                  <br />
+                  <br />
+                  <br />
+
+                  <CContainer>
+                    <div className="mb-3 row justify-content-md-center">
+                      {formattedUSSCQProjects.map((project) => (
+                        <>
+                          {currentTypeState.currentType === "SuperAdminQt" ? (
+                            <>
+                              <CCol sm="auto" key={project.id}>
+                                <CCard className="text-center mb-3 border-success">
+                                  <CCardHeader color="grey">
+                                    Statut: Active
+                                  </CCardHeader>
+                                  <CCardBody>
+                                    <CCardTitle>{project.name}</CCardTitle>
+                                    <CCardText>
+                                      {project.description}.
+                                    </CCardText>
+                                    <footer className="blockquote-footer">
+                                      Admin :{" "}
+                                      <cite title="Source Title">
+                                        {project.admin[0].grade +
+                                          " " +
+                                          project.admin[0].firstname +
+                                          " " +
+                                          project.admin[0].name}
+                                      </cite>
+                                    </footer>
+                                    <CButton
+                                      className="me-md-2"
+                                      href={`/projets/projetqt/${project.id}`}
+                                    >
+                                      Entrer
+                                    </CButton>
+                                  </CCardBody>
+                                  <CCardFooter className="text-medium-emphasis">
+                                    Dernière modification: {project.updatedAt}
+                                  </CCardFooter>
+                                </CCard>
+                              </CCol>
+                            </>
+                          ) : updatedProjectsList &&
+                            updatedProjectsList.projectQt ? (
+                            <>
+                              {updatedProjectsList.projectQt.map(
+                                (projectQtId) => (
+                                  <>
+                                    {project.id === projectQtId &&
+                                    currentTypeState.currentType ===
+                                      "AdminQt" ? (
+                                      <>
+                                        <CCol sm="auto" key={project.id}>
+                                          <CCard className="text-center mb-3 border-success">
+                                            <CCardHeader color="grey">
+                                              Statut: Active
+                                            </CCardHeader>
+                                            <CCardBody>
+                                              <CCardTitle>
+                                                {project.name}
+                                              </CCardTitle>
+                                              <CCardText>
+                                                {project.description}.
+                                              </CCardText>
+                                              <footer className="blockquote-footer">
+                                                Admin :{" "}
+                                                <cite title="Source Title">
+                                                  {project.admin[0].grade +
+                                                    " " +
+                                                    project.admin[0].firstname +
+                                                    " " +
+                                                    project.admin[0].name}
+                                                </cite>
+                                              </footer>
+                                              <CButton
+                                                className="me-md-2"
+                                                href={`/projets/projetqt/${project.id}`}
+                                              >
+                                                Entrer
+                                              </CButton>
+                                            </CCardBody>
+                                            <CCardFooter className="text-medium-emphasis">
+                                              Dernière modification:{" "}
+                                              {project.updatedAt}
+                                            </CCardFooter>
+                                          </CCard>
+                                        </CCol>
+                                      </>
+                                    ) : null}
+                                  </>
+                                )
+                              )}
+                            </>
+                          ) : null}
+                        </>
+                      ))}
+                    </div>
+                  </CContainer>
+                </CRow>
+              </CCardBody>
+            </CCard>
+          ) : null}
+        </>
+      ) : null}
+
+      {currentTypeState.currentType === "SuperAdminQt" ? (
         <>
           {projectsusscq.length >= 1 ? (
             <CCard className="mb-4">
