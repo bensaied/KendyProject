@@ -102,6 +102,7 @@ import {
 } from "../../graphql/mutations/projectsusscq";
 
 import { listUsers } from "../actions/userActions";
+import { userInfoRefresh } from "../actions/userActions";
 
 const ProjetQt = () => {
   const dispatch = useDispatch();
@@ -110,9 +111,10 @@ const ProjetQt = () => {
   const [open, setOpen] = useState(false);
   const refOne = useRef(null);
 
-  // USERLOGIN&INFO
+  // USERLOGIN&INFO&refreshInfo
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const refreshInfo = useSelector((state) => state.refreshInfo.refreshInfo);
 
   //CURRENT_TYPE
   const currentTypeState = useSelector((state) => state.currentType);
@@ -1052,6 +1054,7 @@ const ProjetQt = () => {
   // Dispatch USERS LIST
   useEffect(() => {
     dispatch(listUsers());
+    dispatch(userInfoRefresh(userInfo.login));
   }, [dispatch]);
 
   // Display USERS IN THE ADMIN DROP MENU
@@ -1111,8 +1114,6 @@ const ProjetQt = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.project;
-
-  console.log("PROJECT :", project);
 
   // Consolidated update function
   function handleInputChange(e, property) {
@@ -3053,7 +3054,10 @@ const ProjetQt = () => {
         <CCardBody>
           <CRow>
             {currentTypeState.currentType === "SuperAdminQt" ||
-            currentTypeState.currentType === "AdminQt" ? (
+            (currentTypeState.currentType === "AdminQt" &&
+              refreshInfo &&
+              refreshInfo.projectQt &&
+              Object.values(refreshInfo.projectQt).includes(project.id)) ? (
               <CCardHeader
                 component="h1"
                 style={{
@@ -3111,7 +3115,10 @@ const ProjetQt = () => {
 
             {/*********************************************************  Details DU PROJET SUPERADMINQT*************************************************************/}
             {currentTypeState.currentType === "SuperAdminQt" ||
-            currentTypeState.currentType === "AdminQt" ? (
+            (currentTypeState.currentType === "AdminQt" &&
+              refreshInfo &&
+              refreshInfo.projectQt &&
+              Object.values(refreshInfo.projectQt).includes(project.id)) ? (
               <CAccordion activeItemKey={0} flush>
                 <br></br>
                 <CAccordionItem itemKey={1}>
@@ -3129,7 +3136,12 @@ const ProjetQt = () => {
                     {/*********************************************************  TAB PROJET QT*************************************************************/}
                     {/* <CCardBody></CCardBody> */}
                     {currentTypeState.currentType === "SuperAdminQt" ||
-                    currentTypeState.currentType === "AdminQt" ? (
+                    (currentTypeState.currentType === "AdminQt" &&
+                      refreshInfo &&
+                      refreshInfo.projectQt &&
+                      Object.values(refreshInfo.projectQt).includes(
+                        project.id
+                      )) ? (
                       <div
                         style={{ border: "1px #ccc", padding: "13px" }}
                         ref={componentRef}
@@ -3262,7 +3274,10 @@ const ProjetQt = () => {
             <CCardBody>
               <CRow>
                 {currentTypeState.currentType === "SuperAdminQt" ||
-                currentTypeState.currentType === "AdminQt" ? (
+                (currentTypeState.currentType === "AdminQt" &&
+                  refreshInfo &&
+                  refreshInfo.projectQt &&
+                  Object.values(refreshInfo.projectQt).includes(project.id)) ? (
                   <>
                     {/* {project.resource.length == 0 ? ( */}
                     <CCardHeader component="h6">
@@ -3279,139 +3294,160 @@ const ProjetQt = () => {
                   </>
                 ) : null}
                 <CContainer>
-                  {(currentTypeState.currentType === "SuperAdminQt" ||
-                    currentTypeState.currentType === "AdminQt") && (
-                    <>
-                      {/*********************************************************  Ressources DU PROJET QT VIDE **********************************************************************/}
+                  {currentTypeState.currentType === "SuperAdminQt" ||
+                    (currentTypeState.currentType === "AdminQt" &&
+                      refreshInfo &&
+                      refreshInfo.projectQt &&
+                      Object.values(refreshInfo.projectQt).includes(
+                        project.id
+                      ) && (
+                        <>
+                          {/*********************************************************  Ressources DU PROJET QT VIDE **********************************************************************/}
 
-                      {project.resource.length == 0 ? (
-                        <>
-                          <br></br>
-                          <br></br>
-                          <div className="text-center mb-3 row justify-content-md-center">
-                            <h6>
-                              <p>
-                                <small className="text-muted">
-                                  Il n'y a pas de ressource.
-                                  <br></br>
-                                  {(currentTypeState.currentType ===
-                                    "AdminQt" ||
+                          {project.resource.length == 0 ? (
+                            <>
+                              <br></br>
+                              <br></br>
+                              <div className="text-center mb-3 row justify-content-md-center">
+                                <h6>
+                                  <p>
+                                    <small className="text-muted">
+                                      Il n'y a pas de ressource.
+                                      <br></br>
+                                      {currentTypeState.currentType ===
+                                        "SuperAdminQt" ||
+                                        (currentTypeState.currentType ===
+                                          "AdminQt" &&
+                                          refreshInfo &&
+                                          refreshInfo.projectQt &&
+                                          Object.values(
+                                            refreshInfo.projectQt
+                                          ).includes(project.id) && (
+                                            <CButton
+                                              onClick={() =>
+                                                setVisible0(!visible0)
+                                              }
+                                              color="success"
+                                              className="btn-sm"
+                                              variant="outline"
+                                            >
+                                              Ajouter une ressource
+                                            </CButton>
+                                          ))}
+                                    </small>
+                                  </p>
+                                </h6>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {" "}
+                              {/*********************************************************  Ressources DU PROJET QT NOT EMPTY **********************************************************************/}
+                              <CCardBody>
+                                <CRow>
+                                  <CContainer>
+                                    <CCol
+                                      sm="{10}"
+                                      className="d-none d-md-block"
+                                    >
+                                      <br></br>
+                                      {currentTypeState.currentType ===
+                                        "SuperAdminQt" ||
+                                      currentTypeState.currentType ===
+                                        "AdminQt" ? (
+                                        <CButton
+                                          onClick={() => setVisible0(!visible0)}
+                                          color="success"
+                                          className="float-end"
+                                          style={{
+                                            fontSize: "15px",
+                                            padding: "5px 10px",
+                                          }}
+                                          variant="outline"
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={faFileCirclePlus}
+                                            title="Ajouter une ressource"
+                                            // size="sm"
+                                          />
+                                        </CButton>
+                                      ) : null}
+                                    </CCol>
+                                    <br></br>
+                                    {currentTypeState.currentType ===
+                                      "SuperAdminQt" ||
                                     currentTypeState.currentType ===
-                                      "SuperAdminQt") && (
-                                    <CButton
-                                      onClick={() => setVisible0(!visible0)}
-                                      color="success"
-                                      className="btn-sm"
-                                      variant="outline"
-                                    >
-                                      Ajouter une ressource
-                                    </CButton>
-                                  )}
-                                </small>
-                              </p>
-                            </h6>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {" "}
-                          {/*********************************************************  Ressources DU PROJET QT NOT EMPTY **********************************************************************/}
-                          <CCardBody>
-                            <CRow>
-                              <CContainer>
-                                <CCol sm="{10}" className="d-none d-md-block">
-                                  <br></br>
-                                  {currentTypeState.currentType ===
-                                    "SuperAdminQt" ||
-                                  currentTypeState.currentType === "AdminQt" ? (
-                                    <CButton
-                                      onClick={() => setVisible0(!visible0)}
-                                      color="success"
-                                      className="float-end"
+                                      "AdminQt" ? (
+                                      <>
+                                        <CContainer
+                                          style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            padding: "20px",
+                                            marginTop: "20px",
+                                            marginBottom: "-20px",
+                                          }}
+                                          ref={componentRef4}
+                                        >
+                                          <div
+                                            style={{
+                                              height: 350,
+                                              width: "100%",
+                                            }}
+                                          >
+                                            <DataGrid
+                                              columns={columnsRessources}
+                                              rows={rowsRessources}
+                                              // rowHeight={25}
+                                              density="compact"
+                                              slots={{
+                                                toolbar: CustomToolbar,
+                                              }}
+                                              components={CustomToolbar}
+                                              pagination={false} // Enable pagination
+                                            />
+                                          </div>
+                                        </CContainer>{" "}
+                                      </>
+                                    ) : null}
+                                    {/* Imprimer Button */}
+                                    <div
                                       style={{
-                                        fontSize: "15px",
-                                        padding: "5px 10px",
-                                      }}
-                                      variant="outline"
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faFileCirclePlus}
-                                        title="Ajouter une ressource"
-                                        // size="sm"
-                                      />
-                                    </CButton>
-                                  ) : null}
-                                </CCol>
-                                <br></br>
-                                {currentTypeState.currentType ===
-                                  "SuperAdminQt" ||
-                                currentTypeState.currentType === "AdminQt" ? (
-                                  <>
-                                    <CContainer
-                                      style={{
-                                        width: "100%",
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        padding: "20px",
-                                        marginTop: "20px",
-                                        marginBottom: "-20px",
+                                        padding: "0.75rem 0.5rem",
+                                        fontSize: "0.8rem",
+                                        lineHeight: "1",
+                                        borderRadius: "0.1rem",
                                       }}
-                                      ref={componentRef4}
                                     >
-                                      <div
-                                        style={{ height: 350, width: "100%" }}
-                                      >
-                                        <DataGrid
-                                          columns={columnsRessources}
-                                          rows={rowsRessources}
-                                          // rowHeight={25}
-                                          density="compact"
-                                          slots={{
-                                            toolbar: CustomToolbar,
-                                          }}
-                                          components={CustomToolbar}
-                                          pagination={false} // Enable pagination
-                                        />
-                                      </div>
-                                    </CContainer>{" "}
-                                  </>
-                                ) : null}
-                                {/* Imprimer Button */}
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    padding: "0.75rem 0.5rem",
-                                    fontSize: "0.8rem",
-                                    lineHeight: "1",
-                                    borderRadius: "0.1rem",
-                                  }}
-                                >
-                                  {currentTypeState.currentType ===
-                                    "SuperAdminQt" ||
-                                  currentTypeState.currentType === "AdminQt" ? (
-                                    <Button
-                                      variant="success"
-                                      onClick={handlePrint4}
-                                      title="Imprimer"
-                                    >
-                                      <CIcon icon={cilPrint} />
-                                    </Button>
-                                  ) : null}
-                                </div>
-                                <CCol className="justify-content-md-center"></CCol>
-                              </CContainer>
-                              <br></br>
-                              <br></br>
-                            </CRow>
-                          </CCardBody>
-                          {/********************************************************* Fin Ressources DU PROJET QT NON VIDE **********************************************************************/}
+                                      {currentTypeState.currentType ===
+                                        "SuperAdminQt" ||
+                                      currentTypeState.currentType ===
+                                        "AdminQt" ? (
+                                        <Button
+                                          variant="success"
+                                          onClick={handlePrint4}
+                                          title="Imprimer"
+                                        >
+                                          <CIcon icon={cilPrint} />
+                                        </Button>
+                                      ) : null}
+                                    </div>
+                                    <CCol className="justify-content-md-center"></CCol>
+                                  </CContainer>
+                                  <br></br>
+                                  <br></br>
+                                </CRow>
+                              </CCardBody>
+                              {/********************************************************* Fin Ressources DU PROJET QT NON VIDE **********************************************************************/}
+                            </>
+                          )}
                         </>
-                      )}
-                    </>
-                  )}
+                      ))}
                   <CCol className="justify-content-md-center"></CCol>
                 </CContainer>
                 <br></br>
@@ -3423,7 +3459,10 @@ const ProjetQt = () => {
             {/*********************************************************  ACUTUALITES DU PROJET QT **********************************************************************/}
             <>
               {currentTypeState.currentType === "SuperAdminQt" ||
-              currentTypeState.currentType === "AdminQt" ? (
+              (currentTypeState.currentType === "AdminQt" &&
+                refreshInfo &&
+                refreshInfo.projectQt &&
+                Object.values(refreshInfo.projectQt).includes(project.id)) ? (
                 <CAccordion activeItemKey={0} flush>
                   <br></br>
                   <CAccordionItem itemKey={1}>
