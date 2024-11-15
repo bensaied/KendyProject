@@ -16,7 +16,7 @@ import {
   GridToolbarExport,
   GridToolbar,
   GridRowEditStopReasons,
-  GridRowModes,
+  // GridRowModes,
   GridActionsCellItem,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -30,7 +30,7 @@ import {
   CCard,
   CCardBody,
   CCardSubtitle,
-  CCardTitle,
+  // CCardTitle,
   CModal,
   CModalBody,
   CModalHeader,
@@ -1055,6 +1055,9 @@ const ProjetQt = () => {
   useEffect(() => {
     dispatch(listUsers());
     dispatch(userInfoRefresh(userInfo.login));
+    console.log("refreshInfos: ", refreshInfo);
+
+    console.log("userInfo: ", userInfo.login);
   }, [dispatch]);
 
   // Display USERS IN THE ADMIN DROP MENU

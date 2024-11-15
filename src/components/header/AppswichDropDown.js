@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   // CAvatar,
   // CBadge,
@@ -28,6 +28,7 @@ import CIcon from "@coreui/icons-react";
 // import { HiUser } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { currentType } from "src/views/actions/userActions";
+import { userInfoRefresh } from "src/views/actions/userActions";
 
 const AppswichDropDown = () => {
   const navItemBoxStyle = {
@@ -37,6 +38,7 @@ const AppswichDropDown = () => {
     borderRadius: "7px",
   };
   const currentTypeState = useSelector((state) => state.currentType);
+  const refreshInfo = useSelector((state) => state.refreshInfo.refreshInfo);
   const [selectedUserType, setSelectedUserType] = useState(
     currentTypeState.currentType
   );
@@ -49,6 +51,9 @@ const AppswichDropDown = () => {
     dispatch(currentType(selectedType));
     window.location.reload(); // Reload the window
   };
+  useEffect(() => {
+    dispatch(userInfoRefresh(userInfo.login));
+  }, [dispatch]);
 
   return (
     <div>
@@ -93,10 +98,10 @@ const AppswichDropDown = () => {
                 <CDropdownHeader className="bg-light fw-semibold py-2">
                   Connectez en tant que:
                 </CDropdownHeader>
-                {userInfo &&
-                userInfo.userType &&
-                userInfo.userType.length > 0 ? (
-                  userInfo.userType.map((type) => (
+                {refreshInfo &&
+                refreshInfo.userType &&
+                refreshInfo.userType.length > 0 ? (
+                  refreshInfo.userType.map((type) => (
                     <CDropdownItem
                       key={type}
                       onClick={() => handleUserTypeSelect(type)}
