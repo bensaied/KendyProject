@@ -38,6 +38,11 @@ import {
   CAccordionItem,
   CAccordionHeader,
   CAccordionBody,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+  CModalFooter,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -107,7 +112,10 @@ const ProjetLabo = () => {
 
   //COMPONENT REF
   const componentRef = useRef();
-
+  const componentRef0 = useRef();
+  // STATES FOR MODALS VISIBILITY
+  const [visible0, setVisible0] = useState(false);
+  const [visible00, setVisible00] = useState(false);
   // Handle Print
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -263,6 +271,500 @@ const ProjetLabo = () => {
   const formattedDate = date.toISOString().substring(0, 10);
   return (
     <>
+      {/********************************  MODAL POUR Modifier Le Projet SuperAdminLABO********************************/}
+      {/*********************************************************  FICHE DU PROJET SUPERADMINLABO *************************************************************/}
+      <CModal
+        // style={{ maxWidth: "800px" }}
+        size="lg"
+        visible={visible0}
+        onHide={() => setVisible0(false)}
+      >
+        <div
+          style={{ border: "1px #ccc", padding: "13px" }}
+          ref={componentRef0}
+        >
+          <CModalHeader>
+            <div style={{ textAlign: "center", width: "100%" }}>
+              <CModalTitle>
+                <h3>
+                  {/* <CIcon icon={cilWallet} /> */}
+                  <strong>{project && project.nameProject}</strong>
+                </h3>
+              </CModalTitle>
+            </div>
+          </CModalHeader>
+          <CModalBody>
+            <CCard>
+              <CCardBody>
+                <CContainer>
+                  <div className="mb-3 row justify-content-md-center">
+                    {/* <h4 id="traffic" className="card-title mb-0">
+                                                Creer un nouveau projet
+                                                </h4> */}
+                    <br></br>
+                    <br></br>
+                    <CContainer>
+                      <CCol className="justify-content-md-center">
+                        <div className="mb-3 row justify-content-md-center">
+                          <CForm className="row g-3">
+                            <CCol md={12}>
+                              <CFormInput
+                                disabled={!superadmin}
+                                defaultValue={"Maktarus"}
+                                required
+                                type="text"
+                                id="inputNom"
+                                label="Nom"
+                              />
+                            </CCol>
+
+                            <CCol md={12}>
+                              Administrateur
+                              <br></br>
+                              <Select
+                                className="basic-single"
+                                classNamePrefix="select"
+                                required
+                                defaultValue={{
+                                  value: "Cne Haythem TRABELSI",
+                                  label: "Cne Haythem TRABELSI",
+                                }}
+                                isDisabled={!superadmin}
+                                // isLoading
+                                isClearable
+                                isSearchable
+                                name="Administrateur"
+                                options={options1}
+                              />
+                            </CCol>
+
+                            <CCol xs={12}>
+                              Type de référence
+                              <br></br>
+                              <div>
+                                <input
+                                  type="radio"
+                                  disabled={!superadmin}
+                                  defaultChecked
+                                  value="Image"
+                                  name="gender"
+                                />{" "}
+                                Image <br></br>
+                                <input
+                                  type="radio"
+                                  disabled={!superadmin}
+                                  value="Text"
+                                  name="gender"
+                                />{" "}
+                                Texte <br></br>
+                              </div>
+                            </CCol>
+
+                            <CCol xs={12}>
+                              Type de chiffrement
+                              <br></br>
+                              <CreatableSelect
+                                isDisabled={!superadmin}
+                                defaultValue={{
+                                  value: "Symetrique",
+                                  label: "Symetrique",
+                                }}
+                                required
+                                name="Chiffrement"
+                                options={options2}
+                                placeholder={""}
+                                isClearable
+                                onChange={(opt, meta) => console.log(opt, meta)}
+                              />
+                            </CCol>
+
+                            <CCol xs={12}>
+                              Integration
+                              <br></br>
+                              <CreatableSelect
+                                isDisabled={!superadmin}
+                                defaultValue={{
+                                  value: "Hardware",
+                                  label: "Hardware",
+                                }}
+                                required
+                                name="Integration"
+                                options={options3}
+                                placeholder={""}
+                                isClearable
+                                onChange={(opt, meta) => console.log(opt, meta)}
+                              />
+                            </CCol>
+
+                            {/*
+                                                                        <CCol xs={12}> 
+                                                                           Livrables 
+                                                                           <br></br> 
+                                                                          <CFormSelect size="lg" multiple aria-label="Multiple select example">
+                                                                            <option>Open this select menu</option>
+                                                                            <option value="1">One</option>
+                                                                            <option value="2">Two</option>
+                                                                            <option value="3">Three</option>
+                                                                            </CFormSelect>
+                                                                        </CCol>
+
+                                                                         <Select
+                                                                            labelId="demo-multiple-checkbox-label"
+                                                                            id="demo-multiple-checkbox"
+                                                                            multiple
+                                                                            name="allowedUsers"
+                                                                            onChange={handleChange}
+                                                                            label="Allowed Users"
+                                                                            renderValue={(selected) => selected.join(', ')}                                              
+                                                                            defaultValue={setmission.mission && setmission.mission.allowedUsers}                                   
+                                                                            //input={<OutlinedInput label="Allowed Users" />}
+                                                                            //MENUPROPS is a restricted menu with scrollbar
+                                                                            //MenuProps={MenuProps}
+                                                                            >
+                                                                            {auth.user && (users.users.filter(users => users.userType == "user")).map((user) => (
+                                                                                    <MenuItem key={user} value={user.name}>
+                                                                                    <Checkbox color="primary" checked={personName.indexOf(user.name) > -1} />
+                                                                                    <ListItemText primary={user.name} />
+                                                                                    </MenuItem>
+                                                                                ))}
+                                                                        </Select> */}
+
+                            <CCol xs={12}>
+                              Livrables rendus
+                              <br></br>
+                              <CFormSwitch
+                                disabled={!superadmin}
+                                label="CD"
+                                id="formSwitchCheckDefault"
+                              />
+                              <CFormSwitch
+                                disabled={!superadmin}
+                                defaultChecked
+                                label="Boîte de chiffrement"
+                                id="formSwitchCheckDefault1"
+                              />
+                            </CCol>
+                            {/* 
+                                                                        <CCol xs={12}> 
+                                                                          Documents rendus
+                                                                          <br></br> 
+                                                                          <CInputGroup className="mb-3">
+                                                                            <CInputGroupText id="inputGroup-sizing-default">Bordereau</CInputGroupText>
+                                                                            <CFormInput disabled defaultValue={"2"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
+                                                                           </CInputGroup>
+                                                                           <CInputGroup className="mb-3">
+                                                                            <CInputGroupText id="inputGroup-sizing-default1">Boîte de chiffrement</CInputGroupText>
+                                                                            <CFormInput disabled defaultValue={"4"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
+                                                                           </CInputGroup>
+                                                                          </CCol> */}
+
+                            <CCol md={12}>
+                              <CFormSelect
+                                disabled={!superadmin}
+                                size="lg"
+                                label="Formateurs"
+                                multiple
+                                aria-label="Multiple select example"
+                              >
+                                <option>Cne Haythem TRABELSI</option>
+                                <option value="1">Lt Ghassen BEN ALI</option>
+                                <option value="2">
+                                  Lt Oussama BEN SAAYEED
+                                </option>
+                                <option value="3">Slt Karim OUELHEZI</option>
+                              </CFormSelect>
+                            </CCol>
+
+                            <CCol xs={12}>
+                              <CFormTextarea
+                                disabled={!superadmin}
+                                defaultValue={"Peer to Peer encryption"}
+                                label="Description"
+                              ></CFormTextarea>
+                            </CCol>
+
+                            <CCol xs={12}>
+                              <CFormCheck
+                                disabled={!superadmin}
+                                defaultChecked={1}
+                                type="checkbox"
+                                id="gridCheck"
+                                label="Partager ce projet"
+                              />
+                            </CCol>
+
+                            <CCol xs={12}>
+                              <CButton
+                                disabled={!superadmin}
+                                color="primary"
+                                type="submit"
+                              >
+                                Effectuer
+                              </CButton>
+                            </CCol>
+                          </CForm>
+                        </div>
+                      </CCol>
+                    </CContainer>
+                    <br></br>
+                    <br></br>
+                  </div>
+                </CContainer>
+              </CCardBody>
+            </CCard>
+          </CModalBody>
+        </div>
+      </CModal>
+      {/********************************************************* FIN FICHE DU PROJET SUPERADMINLABO **********************************************************************/}
+      {/*********************************************************  FICHE DU PROJET ADMINLABO  **********************************************************************/}
+      <CModal
+        // style={{ maxWidth: "800px" }}
+        size="lg"
+        visible={visible00}
+        onHide={() => setVisible00(false)}
+      >
+        <div
+          style={{ border: "1px #ccc", padding: "13px" }}
+          ref={componentRef0}
+        >
+          <CModalHeader>
+            <div style={{ textAlign: "center", width: "100%" }}>
+              <CModalTitle>
+                <h3>
+                  {/* <CIcon icon={cilWallet} /> */}
+                  <strong>{project && project.nameProject}</strong>
+                </h3>
+              </CModalTitle>
+            </div>
+          </CModalHeader>
+          <CModalBody>
+            <CCard>
+              <CCardBody>
+                <CContainer>
+                  <div className="mb-3 row justify-content-md-center">
+                    {/* <h4 id="traffic" className="card-title mb-0">
+                                                Creer un nouveau projet
+                                                </h4> */}
+                    <br></br>
+                    <br></br>
+                    <CContainer>
+                      <CCol className="justify-content-md-center">
+                        <div className="mb-3 row justify-content-md-center">
+                          <CForm className="row g-3">
+                            <CCol md={12}>
+                              <CFormInput
+                                disabled
+                                defaultValue={"Maktarus"}
+                                required
+                                type="text"
+                                id="inputNom"
+                                label="Nom"
+                              />
+                            </CCol>
+
+                            <CCol md={12}>
+                              Administrateur
+                              <br></br>
+                              <Select
+                                className="basic-single"
+                                classNamePrefix="select"
+                                required
+                                defaultValue={{
+                                  value: "Cne Haythem TRABELSI",
+                                  label: "Cne Haythem TRABELSI",
+                                }}
+                                isDisabled
+                                // isLoading
+                                isClearable
+                                isSearchable
+                                name="Administrateur"
+                                options={options1}
+                              />
+                            </CCol>
+
+                            <CCol xs={12}>
+                              Type de référence
+                              <br></br>
+                              <div>
+                                <input
+                                  type="radio"
+                                  // disabled
+                                  defaultChecked
+                                  value="Image"
+                                  name="gender"
+                                />{" "}
+                                Image <br></br>
+                                <input
+                                  type="radio"
+                                  // disabled
+                                  value="Text"
+                                  name="gender"
+                                />{" "}
+                                Texte <br></br>
+                              </div>
+                            </CCol>
+
+                            <CCol xs={12}>
+                              Type de chiffrement
+                              <br></br>
+                              <CreatableSelect
+                                // isDisabled
+                                defaultValue={{
+                                  value: "Symetrique",
+                                  label: "Symetrique",
+                                }}
+                                required
+                                name="Chiffrement"
+                                options={options2}
+                                placeholder={""}
+                                isClearable
+                                onChange={(opt, meta) => console.log(opt, meta)}
+                              />
+                            </CCol>
+
+                            <CCol xs={12}>
+                              Integration
+                              <br></br>
+                              <CreatableSelect
+                                // isDisabled
+                                defaultValue={{
+                                  value: "Hardware",
+                                  label: "Hardware",
+                                }}
+                                required
+                                name="Integration"
+                                options={options3}
+                                placeholder={""}
+                                isClearable
+                                onChange={(opt, meta) => console.log(opt, meta)}
+                              />
+                            </CCol>
+
+                            {/*
+                                                                        <CCol xs={12}> 
+                                                                           Livrables 
+                                                                           <br></br> 
+                                                                          <CFormSelect size="lg" multiple aria-label="Multiple select example">
+                                                                            <option>Open this select menu</option>
+                                                                            <option value="1">One</option>
+                                                                            <option value="2">Two</option>
+                                                                            <option value="3">Three</option>
+                                                                            </CFormSelect>
+                                                                        </CCol>
+
+                                                                         <Select
+                                                                            labelId="demo-multiple-checkbox-label"
+                                                                            id="demo-multiple-checkbox"
+                                                                            multiple
+                                                                            name="allowedUsers"
+                                                                            onChange={handleChange}
+                                                                            label="Allowed Users"
+                                                                            renderValue={(selected) => selected.join(', ')}                                              
+                                                                            defaultValue={setmission.mission && setmission.mission.allowedUsers}                                   
+                                                                            //input={<OutlinedInput label="Allowed Users" />}
+                                                                            //MENUPROPS is a restricted menu with scrollbar
+                                                                            //MenuProps={MenuProps}
+                                                                            >
+                                                                            {auth.user && (users.users.filter(users => users.userType == "user")).map((user) => (
+                                                                                    <MenuItem key={user} value={user.name}>
+                                                                                    <Checkbox color="primary" checked={personName.indexOf(user.name) > -1} />
+                                                                                    <ListItemText primary={user.name} />
+                                                                                    </MenuItem>
+                                                                                ))}
+                                                                        </Select> */}
+
+                            <CCol xs={12}>
+                              Livrables rendus
+                              <br></br>
+                              <CFormSwitch
+                                // disabled={!admin}
+                                label="CD"
+                                id="formSwitchCheckDefault"
+                              />
+                              <CFormSwitch
+                                // disabled={!admin}
+                                defaultChecked
+                                label="Boîte de chiffrement"
+                                id="formSwitchCheckDefault1"
+                              />
+                            </CCol>
+
+                            {/* <CCol xs={12}> 
+                                                                          Documents rendus
+                                                                          <br></br> 
+                                                                          <CInputGroup className="mb-3">
+                                                                            <CInputGroupText id="inputGroup-sizing-default">Bordereau</CInputGroupText>
+                                                                            <CFormInput disabled={!admin} defaultValue={"2"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
+                                                                           </CInputGroup>
+                                                                           <CInputGroup className="mb-3">
+                                                                            <CInputGroupText id="inputGroup-sizing-default1">Boîte de chiffrement</CInputGroupText>
+                                                                            <CFormInput disabled={!admin} defaultValue={"4"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
+                                                                           </CInputGroup>
+                                                                          </CCol> */}
+
+                            <CCol md={12}>
+                              <CFormSelect
+                                // disabled={!admin}
+                                size="lg"
+                                label="Formateurs"
+                                multiple
+                                aria-label="Multiple select example"
+                              >
+                                <option>Cne Haythem TRABELSI</option>
+                                <option value="1">Lt Ghassen BEN ALI</option>
+                                <option value="2">
+                                  Lt Oussama BEN SAAYEED
+                                </option>
+                                <option value="3">Slt Karim OUELHEZI</option>
+                              </CFormSelect>
+                            </CCol>
+
+                            <CCol xs={12}>
+                              <CFormTextarea
+                                // disabled={!admin}
+                                defaultValue={"Peer to Peer encryption"}
+                                label="Description"
+                              ></CFormTextarea>
+                            </CCol>
+
+                            <CCol xs={12}>
+                              <CFormCheck
+                                // disabled
+                                defaultChecked={1}
+                                type="checkbox"
+                                id="gridCheck"
+                                label="Partager ce projet"
+                              />
+                            </CCol>
+
+                            <CCol xs={12}>
+                              {currentTypeState.currentType === "AdminLabo" && (
+                                <CButton
+                                  disabled={!admin}
+                                  color="primary"
+                                  type="submit"
+                                >
+                                  Effectuer
+                                </CButton>
+                              )}
+                            </CCol>
+                          </CForm>
+                        </div>
+                      </CCol>
+                    </CContainer>
+                    <br></br>
+                    <br></br>
+                  </div>
+                </CContainer>
+              </CCardBody>
+            </CCard>
+          </CModalBody>
+        </div>
+      </CModal>
+      {/********************************************************* FIN FICHE DU PROJET ADMINLABO ********************************************************/}
+
+      {/******************************** FIN MODAL POUR Modifier Le Projet SuperAdminLABO ********************************/}
+
       {/******************************************************  Test d'affichage  ********************************************************/}
       {currentTypeState.currentType === "Visiteur" ||
       currentTypeState.currentType === "SuperAdminQt" ||
@@ -291,7 +793,7 @@ const ProjetLabo = () => {
                 <span
                   style={{
                     backgroundImage:
-                      "linear-gradient(to left, #7e3a78, #efa2e7)", // Nouveau gradient
+                      "linear-gradient(to left, #7e3a78, #efa2e7)",
                     WebkitBackgroundClip: "text",
                     color: "transparent",
                     marginRight: "5px",
@@ -300,26 +802,30 @@ const ProjetLabo = () => {
                 >
                   {project.nameProject}
                 </span>
-                <CButton
-                  color="primary"
-                  size="sm"
-                  className="me-md-2"
-                  title="Modifier le projet"
-                  variant="ghost"
-                  onClick={() => {
-                    if (currentTypeState.currentType === "SuperAdminLabo") {
-                      setSuperAdmin(true);
-                      // Function to open the modal for the SuperAdmin
-                      // Open the Modal with setting the visiblity example : setVisible00(!visible00);
-                    } else if (currentTypeState.currentType === "AdminLabo") {
-                      setAdmin(true);
-                      // Function to open the modal for the Admin
-                      // Open the Modal with setting the visiblity example : setVisible000(!visible000);
-                    }
-                  }}
-                >
-                  <CIcon icon={cilPenAlt} size="sm" />
-                </CButton>
+                {currentTypeState.currentType === "SuperAdminLabo" ||
+                currentTypeState.currentType === "AdminLabo" ? (
+                  <CButton
+                    color="primary"
+                    size="sm"
+                    className="me-md-2"
+                    title="Modifier le projet"
+                    variant="ghost"
+                    onClick={() => {
+                      if (currentTypeState.currentType === "SuperAdminLabo") {
+                        setSuperAdmin(true);
+                        // Function to open the modal for the SuperAdmin
+                        setVisible0(!visible0);
+                      } else if (currentTypeState.currentType === "AdminLabo") {
+                        setAdmin(true);
+                        // Function to open the modal for the Admin
+                        setVisible00(!visible00);
+                      }
+                    }}
+                  >
+                    <CIcon icon={cilPenAlt} size="sm" />
+                  </CButton>
+                ) : null}
+
                 {/* <FontAwesomeIcon
                   icon={faWallet}
                   size="xs"
@@ -499,530 +1005,6 @@ const ProjetLabo = () => {
 
             {/*********************************************************  FIN TAB DU PROJET SUPERADMIN ADMIN & FORMATEUR *************************************************************/}
 
-            {/*********************************************************  FICHE DU PROJET SUPERADMINLABO *************************************************************/}
-            <CAccordion flush>
-              <br></br>
-              <CAccordionItem itemKey={1}>
-                {currentTypeState.currentType === "SuperAdminLabo" ? (
-                  <CAccordionHeader component="h5">
-                    <strong>
-                      {" "}
-                      <CIcon icon={cilClipboard} />
-                      &nbsp; Fiche du projet
-                    </strong>
-                  </CAccordionHeader>
-                ) : null}
-                <CAccordionBody>
-                  <CCol sm="{10}" className="d-none d-md-block">
-                    <br></br>
-
-                    {currentTypeState.currentType === "SuperAdminLabo" && (
-                      <>
-                        <CButton
-                          onClick={() => setSuperAdmin(true)}
-                          color="primary"
-                          className="float-end"
-                        >
-                          <CIcon title="Modifier le projet" icon={cilPen} />
-                        </CButton>
-                      </>
-                    )}
-                  </CCol>
-                  {currentTypeState.currentType === "SuperAdminLabo" ? (
-                    <CCard>
-                      <CCardBody>
-                        <CContainer>
-                          <div className="mb-3 row justify-content-md-center">
-                            {/* <h4 id="traffic" className="card-title mb-0">
-                                                Creer un nouveau projet
-                                                </h4> */}
-                            <br></br>
-                            <br></br>
-                            <CContainer>
-                              <CCol className="justify-content-md-center">
-                                <div className="mb-3 row justify-content-md-center">
-                                  <CForm className="row g-3">
-                                    <CCol md={12}>
-                                      <CFormInput
-                                        disabled={!superadmin}
-                                        defaultValue={"Maktarus"}
-                                        required
-                                        type="text"
-                                        id="inputNom"
-                                        label="Nom"
-                                      />
-                                    </CCol>
-
-                                    <CCol md={12}>
-                                      Administrateur
-                                      <br></br>
-                                      <Select
-                                        className="basic-single"
-                                        classNamePrefix="select"
-                                        required
-                                        defaultValue={{
-                                          value: "Cne Haythem TRABELSI",
-                                          label: "Cne Haythem TRABELSI",
-                                        }}
-                                        isDisabled={!superadmin}
-                                        // isLoading
-                                        isClearable
-                                        isSearchable
-                                        name="Administrateur"
-                                        options={options1}
-                                      />
-                                    </CCol>
-
-                                    <CCol xs={12}>
-                                      Type de référence
-                                      <br></br>
-                                      <div>
-                                        <input
-                                          type="radio"
-                                          disabled={!superadmin}
-                                          defaultChecked
-                                          value="Image"
-                                          name="gender"
-                                        />{" "}
-                                        Image <br></br>
-                                        <input
-                                          type="radio"
-                                          disabled={!superadmin}
-                                          value="Text"
-                                          name="gender"
-                                        />{" "}
-                                        Texte <br></br>
-                                      </div>
-                                    </CCol>
-
-                                    <CCol xs={12}>
-                                      Type de chiffrement
-                                      <br></br>
-                                      <CreatableSelect
-                                        isDisabled={!superadmin}
-                                        defaultValue={{
-                                          value: "Symetrique",
-                                          label: "Symetrique",
-                                        }}
-                                        required
-                                        name="Chiffrement"
-                                        options={options2}
-                                        placeholder={""}
-                                        isClearable
-                                        onChange={(opt, meta) =>
-                                          console.log(opt, meta)
-                                        }
-                                      />
-                                    </CCol>
-
-                                    <CCol xs={12}>
-                                      Integration
-                                      <br></br>
-                                      <CreatableSelect
-                                        isDisabled={!superadmin}
-                                        defaultValue={{
-                                          value: "Hardware",
-                                          label: "Hardware",
-                                        }}
-                                        required
-                                        name="Integration"
-                                        options={options3}
-                                        placeholder={""}
-                                        isClearable
-                                        onChange={(opt, meta) =>
-                                          console.log(opt, meta)
-                                        }
-                                      />
-                                    </CCol>
-
-                                    {/*
-                                                                        <CCol xs={12}> 
-                                                                           Livrables 
-                                                                           <br></br> 
-                                                                          <CFormSelect size="lg" multiple aria-label="Multiple select example">
-                                                                            <option>Open this select menu</option>
-                                                                            <option value="1">One</option>
-                                                                            <option value="2">Two</option>
-                                                                            <option value="3">Three</option>
-                                                                            </CFormSelect>
-                                                                        </CCol>
-
-                                                                         <Select
-                                                                            labelId="demo-multiple-checkbox-label"
-                                                                            id="demo-multiple-checkbox"
-                                                                            multiple
-                                                                            name="allowedUsers"
-                                                                            onChange={handleChange}
-                                                                            label="Allowed Users"
-                                                                            renderValue={(selected) => selected.join(', ')}                                              
-                                                                            defaultValue={setmission.mission && setmission.mission.allowedUsers}                                   
-                                                                            //input={<OutlinedInput label="Allowed Users" />}
-                                                                            //MENUPROPS is a restricted menu with scrollbar
-                                                                            //MenuProps={MenuProps}
-                                                                            >
-                                                                            {auth.user && (users.users.filter(users => users.userType == "user")).map((user) => (
-                                                                                    <MenuItem key={user} value={user.name}>
-                                                                                    <Checkbox color="primary" checked={personName.indexOf(user.name) > -1} />
-                                                                                    <ListItemText primary={user.name} />
-                                                                                    </MenuItem>
-                                                                                ))}
-                                                                        </Select> */}
-
-                                    <CCol xs={12}>
-                                      Livrables rendus
-                                      <br></br>
-                                      <CFormSwitch
-                                        disabled={!superadmin}
-                                        label="CD"
-                                        id="formSwitchCheckDefault"
-                                      />
-                                      <CFormSwitch
-                                        disabled={!superadmin}
-                                        defaultChecked
-                                        label="Boîte de chiffrement"
-                                        id="formSwitchCheckDefault1"
-                                      />
-                                    </CCol>
-                                    {/* 
-                                                                        <CCol xs={12}> 
-                                                                          Documents rendus
-                                                                          <br></br> 
-                                                                          <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default">Bordereau</CInputGroupText>
-                                                                            <CFormInput disabled defaultValue={"2"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                           <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default1">Boîte de chiffrement</CInputGroupText>
-                                                                            <CFormInput disabled defaultValue={"4"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                          </CCol> */}
-
-                                    <CCol md={12}>
-                                      <CFormSelect
-                                        disabled={!superadmin}
-                                        size="lg"
-                                        label="Formateurs"
-                                        multiple
-                                        aria-label="Multiple select example"
-                                      >
-                                        <option>Cne Haythem TRABELSI</option>
-                                        <option value="1">
-                                          Lt Ghassen BEN ALI
-                                        </option>
-                                        <option value="2">
-                                          Lt Oussama BEN SAAYEED
-                                        </option>
-                                        <option value="3">
-                                          Slt Karim OUELHEZI
-                                        </option>
-                                      </CFormSelect>
-                                    </CCol>
-
-                                    <CCol xs={12}>
-                                      <CFormTextarea
-                                        disabled={!superadmin}
-                                        defaultValue={"Peer to Peer encryption"}
-                                        label="Description"
-                                      ></CFormTextarea>
-                                    </CCol>
-
-                                    <CCol xs={12}>
-                                      <CFormCheck
-                                        disabled={!superadmin}
-                                        defaultChecked={1}
-                                        type="checkbox"
-                                        id="gridCheck"
-                                        label="Partager ce projet"
-                                      />
-                                    </CCol>
-
-                                    <CCol xs={12}>
-                                      <CButton
-                                        disabled={!superadmin}
-                                        color="primary"
-                                        type="submit"
-                                      >
-                                        Effectuer
-                                      </CButton>
-                                    </CCol>
-                                  </CForm>
-                                </div>
-                              </CCol>
-                            </CContainer>
-                            <br></br>
-                            <br></br>
-                          </div>
-                        </CContainer>
-                      </CCardBody>
-                    </CCard>
-                  ) : null}
-                </CAccordionBody>
-              </CAccordionItem>
-            </CAccordion>
-
-            {/********************************************************* FIN FICHE DU PROJET SUPERADMINLABO **********************************************************************/}
-            {/*********************************************************  FICHE DU PROJET ADMINLABO FORMATEUR **********************************************************************/}
-            <CAccordion flush>
-              <br></br>
-              <CAccordionItem itemKey={1}>
-                {currentTypeState.currentType === "AdminLabo" ||
-                currentTypeState.currentType === "Formateur" ? (
-                  <CAccordionHeader component="h5">
-                    <strong>
-                      {" "}
-                      <CIcon icon={cilClipboard} />
-                      &nbsp; Fiche du projet
-                    </strong>
-                  </CAccordionHeader>
-                ) : null}
-                <CAccordionBody>
-                  <CCol sm="{10}" className="d-none d-md-block">
-                    <br></br>
-                    {currentTypeState.currentType === "AdminLabo" && (
-                      <CButton
-                        onClick={() => setAdmin(true)}
-                        color="primary"
-                        className="float-end"
-                      >
-                        <CIcon title="Modifier le projet" icon={cilPen} />
-                      </CButton>
-                    )}
-                  </CCol>
-
-                  <CCard>
-                    <CCardBody>
-                      <CContainer>
-                        <div className="mb-3 row justify-content-md-center">
-                          {/* <h4 id="traffic" className="card-title mb-0">
-                                                Creer un nouveau projet
-                                                </h4> */}
-                          <br></br>
-                          <br></br>
-                          <CContainer>
-                            <CCol className="justify-content-md-center">
-                              <div className="mb-3 row justify-content-md-center">
-                                <CForm className="row g-3">
-                                  <CCol md={12}>
-                                    <CFormInput
-                                      disabled
-                                      defaultValue={"Maktarus"}
-                                      required
-                                      type="text"
-                                      id="inputNom"
-                                      label="Nom"
-                                    />
-                                  </CCol>
-
-                                  <CCol md={12}>
-                                    Administrateur
-                                    <br></br>
-                                    <Select
-                                      className="basic-single"
-                                      classNamePrefix="select"
-                                      required
-                                      defaultValue={{
-                                        value: "Cne Haythem TRABELSI",
-                                        label: "Cne Haythem TRABELSI",
-                                      }}
-                                      isDisabled
-                                      // isLoading
-                                      isClearable
-                                      isSearchable
-                                      name="Administrateur"
-                                      options={options1}
-                                    />
-                                  </CCol>
-
-                                  <CCol xs={12}>
-                                    Type de référence
-                                    <br></br>
-                                    <div>
-                                      <input
-                                        type="radio"
-                                        disabled
-                                        defaultChecked
-                                        value="Image"
-                                        name="gender"
-                                      />{" "}
-                                      Image <br></br>
-                                      <input
-                                        type="radio"
-                                        disabled
-                                        value="Text"
-                                        name="gender"
-                                      />{" "}
-                                      Texte <br></br>
-                                    </div>
-                                  </CCol>
-
-                                  <CCol xs={12}>
-                                    Type de chiffrement
-                                    <br></br>
-                                    <CreatableSelect
-                                      isDisabled
-                                      defaultValue={{
-                                        value: "Symetrique",
-                                        label: "Symetrique",
-                                      }}
-                                      required
-                                      name="Chiffrement"
-                                      options={options2}
-                                      placeholder={""}
-                                      isClearable
-                                      onChange={(opt, meta) =>
-                                        console.log(opt, meta)
-                                      }
-                                    />
-                                  </CCol>
-
-                                  <CCol xs={12}>
-                                    Integration
-                                    <br></br>
-                                    <CreatableSelect
-                                      isDisabled
-                                      defaultValue={{
-                                        value: "Hardware",
-                                        label: "Hardware",
-                                      }}
-                                      required
-                                      name="Integration"
-                                      options={options3}
-                                      placeholder={""}
-                                      isClearable
-                                      onChange={(opt, meta) =>
-                                        console.log(opt, meta)
-                                      }
-                                    />
-                                  </CCol>
-
-                                  {/*
-                                                                        <CCol xs={12}> 
-                                                                           Livrables 
-                                                                           <br></br> 
-                                                                          <CFormSelect size="lg" multiple aria-label="Multiple select example">
-                                                                            <option>Open this select menu</option>
-                                                                            <option value="1">One</option>
-                                                                            <option value="2">Two</option>
-                                                                            <option value="3">Three</option>
-                                                                            </CFormSelect>
-                                                                        </CCol>
-
-                                                                         <Select
-                                                                            labelId="demo-multiple-checkbox-label"
-                                                                            id="demo-multiple-checkbox"
-                                                                            multiple
-                                                                            name="allowedUsers"
-                                                                            onChange={handleChange}
-                                                                            label="Allowed Users"
-                                                                            renderValue={(selected) => selected.join(', ')}                                              
-                                                                            defaultValue={setmission.mission && setmission.mission.allowedUsers}                                   
-                                                                            //input={<OutlinedInput label="Allowed Users" />}
-                                                                            //MENUPROPS is a restricted menu with scrollbar
-                                                                            //MenuProps={MenuProps}
-                                                                            >
-                                                                            {auth.user && (users.users.filter(users => users.userType == "user")).map((user) => (
-                                                                                    <MenuItem key={user} value={user.name}>
-                                                                                    <Checkbox color="primary" checked={personName.indexOf(user.name) > -1} />
-                                                                                    <ListItemText primary={user.name} />
-                                                                                    </MenuItem>
-                                                                                ))}
-                                                                        </Select> */}
-
-                                  <CCol xs={12}>
-                                    Livrables rendus
-                                    <br></br>
-                                    <CFormSwitch
-                                      disabled={!admin}
-                                      label="CD"
-                                      id="formSwitchCheckDefault"
-                                    />
-                                    <CFormSwitch
-                                      disabled={!admin}
-                                      defaultChecked
-                                      label="Boîte de chiffrement"
-                                      id="formSwitchCheckDefault1"
-                                    />
-                                  </CCol>
-
-                                  {/* <CCol xs={12}> 
-                                                                          Documents rendus
-                                                                          <br></br> 
-                                                                          <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default">Bordereau</CInputGroupText>
-                                                                            <CFormInput disabled={!admin} defaultValue={"2"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                           <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default1">Boîte de chiffrement</CInputGroupText>
-                                                                            <CFormInput disabled={!admin} defaultValue={"4"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                          </CCol> */}
-
-                                  <CCol md={12}>
-                                    <CFormSelect
-                                      disabled={!admin}
-                                      size="lg"
-                                      label="Formateurs"
-                                      multiple
-                                      aria-label="Multiple select example"
-                                    >
-                                      <option>Cne Haythem TRABELSI</option>
-                                      <option value="1">
-                                        Lt Ghassen BEN ALI
-                                      </option>
-                                      <option value="2">
-                                        Lt Oussama BEN SAAYEED
-                                      </option>
-                                      <option value="3">
-                                        Slt Karim OUELHEZI
-                                      </option>
-                                    </CFormSelect>
-                                  </CCol>
-
-                                  <CCol xs={12}>
-                                    <CFormTextarea
-                                      disabled={!admin}
-                                      defaultValue={"Peer to Peer encryption"}
-                                      label="Description"
-                                    ></CFormTextarea>
-                                  </CCol>
-
-                                  <CCol xs={12}>
-                                    <CFormCheck
-                                      disabled
-                                      defaultChecked={1}
-                                      type="checkbox"
-                                      id="gridCheck"
-                                      label="Partager ce projet"
-                                    />
-                                  </CCol>
-
-                                  <CCol xs={12}>
-                                    {currentTypeState.currentType ===
-                                      "AdminLabo" && (
-                                      <CButton
-                                        disabled={!admin}
-                                        color="primary"
-                                        type="submit"
-                                      >
-                                        Effectuer
-                                      </CButton>
-                                    )}
-                                  </CCol>
-                                </CForm>
-                              </div>
-                            </CCol>
-                          </CContainer>
-                          <br></br>
-                          <br></br>
-                        </div>
-                      </CContainer>
-                    </CCardBody>
-                  </CCard>
-                </CAccordionBody>
-              </CAccordionItem>
-            </CAccordion>
-
-            {/********************************************************* FIN FICHE DU PROJET ADMINLABO ********************************************************/}
             <br></br>
             <br></br>
             <br></br>
