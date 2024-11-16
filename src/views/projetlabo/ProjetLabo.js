@@ -49,6 +49,8 @@ import CIcon from "@coreui/icons-react";
 import {
   cilPen,
   cilPenAlt,
+  cilInfo,
+  cilPrint,
   cilPlus,
   cilClipboard,
   cilWallet,
@@ -329,136 +331,171 @@ const ProjetLabo = () => {
                 Vous n'avez pas l'autorisation d'accéder à cette page !
               </div>
             )}
-
-            {/* <h4 id="traffic" className="card-title mb-0">
-                                                Cartes des projets
-                                                </h4>
-           {/*********************************************************  TAB DU PROJET SUPERADMIN ADMIN & FORMATEUR *************************************************************/}
-            <CCardBody></CCardBody>
+            {/*********************************************************  Details DU PROJET SUPERADMINLABO *************************************************************/}
             {currentTypeState.currentType === "SuperAdminLabo" ||
             currentTypeState.currentType === "AdminLabo" ||
             currentTypeState.currentType === "Formateur" ? (
-              <div
-                style={{ border: "1px #ccc", padding: "13px" }}
-                ref={componentRef}
-              >
-                <CTable align="middle" className="mb-0 border" hover responsive>
-                  <CTableHead color="light">
-                    <CTableRow>
-                      <CTableHeaderCell className="text-center">
-                        <CIcon icon={cilWallet} />
-                      </CTableHeaderCell>
-                      <CTableHeaderCell>Projet</CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">
-                        Référence
-                      </CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">
-                        Statut
-                      </CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">
-                        Formateur
-                      </CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">
-                        Integration
-                      </CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">
-                        Chiffrement
-                      </CTableHeaderCell>
-                      <CTableHeaderCell className="text-center d-flex align-items-center">
-                        <span>Livrables</span>&nbsp;
-                        <span>rendus</span>
-                      </CTableHeaderCell>
-                      <CTableHeaderCell className="text-center">
-                        Description
-                      </CTableHeaderCell>
-                    </CTableRow>
-                  </CTableHead>
-                  <CTableBody>
-                    <CTableRow v-for="item in tableItems" key={project.id}>
-                      <CTableDataCell className="text-center"></CTableDataCell>
-                      <CTableDataCell>
-                        <strong>
-                          <div>{project.nameProject}</div>
-                        </strong>
-                        <div className="small text-medium-emphasis">
-                          <span>
-                            {project.adminProject[0].grade +
-                              " " +
-                              project.adminProject[0].firstname +
-                              " " +
-                              project.adminProject[0].name}
-                          </span>{" "}
-                          | Créé: {formattedDate}
-                        </div>
-                      </CTableDataCell>
+              <CAccordion activeItemKey={0} flush>
+                <br></br>
+                <CAccordionItem itemKey={1}>
+                  <CAccordionHeader
+                    component="h4"
+                    // onClick={() => {
+                    //   updatePeriodeAndAdminProject();
+                    // }}
+                  >
+                    <CIcon icon={cilInfo} style={{ color: "#007bff" }} />
+                    &nbsp;{" "}
+                    <span style={{ color: "#007bff" }}>Détails du projet</span>
+                  </CAccordionHeader>
+                  <CAccordionBody>
+                    {/*********************************************************  TAB PROJET LABO *************************************************************/}
+                    {/* <CCardBody></CCardBody> */}
+                    {currentTypeState.currentType === "SuperAdminLabo" ||
+                    currentTypeState.currentType === "AdminLabo" ||
+                    currentTypeState.currentType === "Formateur" ? (
+                      <div
+                        style={{ border: "1px #ccc", padding: "13px" }}
+                        ref={componentRef}
+                      >
+                        <CTable
+                          align="middle"
+                          className="mb-0 border"
+                          hover
+                          responsive
+                        >
+                          <CTableHead color="light">
+                            <CTableRow>
+                              <CTableHeaderCell className="text-center">
+                                <CIcon icon={cilWallet} />
+                              </CTableHeaderCell>
+                              <CTableHeaderCell>Projet</CTableHeaderCell>
+                              <CTableHeaderCell className="text-center">
+                                Référence
+                              </CTableHeaderCell>
+                              <CTableHeaderCell className="text-center">
+                                Statut
+                              </CTableHeaderCell>
+                              <CTableHeaderCell className="text-center">
+                                Formateur
+                              </CTableHeaderCell>
+                              <CTableHeaderCell className="text-center">
+                                Integration
+                              </CTableHeaderCell>
+                              <CTableHeaderCell className="text-center">
+                                Chiffrement
+                              </CTableHeaderCell>
+                              <CTableHeaderCell className="text-center d-flex align-items-center">
+                                <span>Livrables</span>&nbsp;
+                                <span>rendus</span>
+                              </CTableHeaderCell>
+                              <CTableHeaderCell className="text-center">
+                                Description
+                              </CTableHeaderCell>
+                            </CTableRow>
+                          </CTableHead>
+                          <CTableBody>
+                            <CTableRow
+                              v-for="item in tableItems"
+                              key={project.id}
+                            >
+                              <CTableDataCell className="text-center"></CTableDataCell>
+                              <CTableDataCell>
+                                <strong>
+                                  <div>{project.nameProject}</div>
+                                </strong>
+                                <div className="small text-medium-emphasis">
+                                  <span>
+                                    {project.adminProject[0].grade +
+                                      " " +
+                                      project.adminProject[0].firstname +
+                                      " " +
+                                      project.adminProject[0].name}
+                                  </span>{" "}
+                                  | Créé: {formattedDate}
+                                </div>
+                              </CTableDataCell>
 
-                      <CTableDataCell>
-                        <div className="clearfix">
-                          <div className="float-start">
-                            <small className="text-medium-emphasis">
-                              {project.referenceTypeProject[0].value}
-                            </small>
-                          </div>
-                        </div>
-                        {/* <CProgress thin color={item.usage.color} value={item.usage.value} /> */}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        {project.statusProject}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        {/* {         project.formateurProject.map(formateur).join(", ")=>{
+                              <CTableDataCell>
+                                <div className="clearfix">
+                                  <div className="float-start">
+                                    <small className="text-medium-emphasis">
+                                      {project.referenceTypeProject[0].value}
+                                    </small>
+                                  </div>
+                                </div>
+                                {/* <CProgress thin color={item.usage.color} value={item.usage.value} /> */}
+                              </CTableDataCell>
+                              <CTableDataCell className="text-center">
+                                {project.statusProject}
+                              </CTableDataCell>
+                              <CTableDataCell className="text-center">
+                                {/* {         project.formateurProject.map(formateur).join(", ")=>{
 
-  formateur[0].grade +
+                             formateur[0].grade +
                           " " +
                           formateur[0].firstname +
                           " " +
                           formateur[0].name
-
-
-                 }    } */}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        {project.integrationProject[0].value}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        {project.encryptionTypeProject[0].value}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        {project.livrablesProject[0].value}
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        {project.descriptionProject}
-                      </CTableDataCell>
-                      {/* <CTableDataCell className="text-center">
+                           }    } */}
+                              </CTableDataCell>
+                              <CTableDataCell className="text-center">
+                                {project.integrationProject[0].value}
+                              </CTableDataCell>
+                              <CTableDataCell className="text-center">
+                                {project.encryptionTypeProject[0].value}
+                              </CTableDataCell>
+                              <CTableDataCell className="text-center">
+                                {project.livrablesProject[0].value}
+                              </CTableDataCell>
+                              <CTableDataCell className="text-center">
+                                {project.descriptionProject}
+                              </CTableDataCell>
+                              {/* <CTableDataCell className="text-center">
                         <div className="small text-medium-emphasis">{item.chiffrement.name}</div>
                      
                          <span>   {item.chiffrement.longueurCle}</span>   | Durée:{' '}  {item.chiffrement.duree}
                     
                       </CTableDataCell> */}
-                    </CTableRow>
-                  </CTableBody>
-                </CTable>
-              </div>
+                            </CTableRow>
+                          </CTableBody>
+                        </CTable>
+                      </div>
+                    ) : null}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: "0.75rem 0.5rem",
+                        fontSize: "0.8rem",
+                        lineHeight: "1",
+                        borderRadius: "0.1rem",
+                      }}
+                    >
+                      {currentTypeState.currentType === "SuperAdminLabo" ||
+                      currentTypeState.currentType === "AdminLabo" ||
+                      currentTypeState.currentType === "Formateur" ? (
+                        <Button
+                          variant="success"
+                          onClick={handlePrint}
+                          title="Imprimer"
+                        >
+                          <CIcon icon={cilPrint} />
+                        </Button>
+                      ) : null}
+                    </div>
+
+                    {/*********************************************************  FIN DU TAB PROJET LABO*************************************************************/}
+                  </CAccordionBody>
+                </CAccordionItem>
+              </CAccordion>
             ) : null}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "0.75rem 0.5rem",
-                fontSize: "0.8rem",
-                lineHeight: "1",
-                borderRadius: "0.1rem",
-              }}
-            >
-              {currentTypeState.currentType === "SuperAdminLabo" ||
-              currentTypeState.currentType === "AdminLabo" ||
-              currentTypeState.currentType === "Formateur" ? (
-                <Button variant="success" onClick={handlePrint}>
-                  Imprimer
-                </Button>
-              ) : null}
-            </div>
+
+            {/* <h4 id="traffic" className="card-title mb-0">
+                                                Cartes des projets
+                                                </h4>
+           {/*********************************************************  TAB DU PROJET SUPERADMIN ADMIN & FORMATEUR *************************************************************/}
 
             {/*********************************************************  FIN TAB DU PROJET SUPERADMIN ADMIN & FORMATEUR *************************************************************/}
 
