@@ -48,14 +48,15 @@ import {
 import CIcon from "@coreui/icons-react";
 import {
   cilPen,
+  cilPenAlt,
   cilPlus,
   cilClipboard,
   cilWallet,
   cilLibrary,
   cilGlobeAlt,
 } from "@coreui/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWallet } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faWallet } from "@fortawesome/free-solid-svg-icons";
 import { addDays } from "date-fns";
 
 import { useParams } from "react-router";
@@ -278,15 +279,50 @@ const ProjetLabo = () => {
             currentTypeState.currentType === "AdminLabo" ||
             currentTypeState.currentType === "Formateur" ? (
               <CCardHeader
-                component="h2"
-                style={{ display: "flex", alignItems: "center" }}
+                component="h1"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                <FontAwesomeIcon
+                <span
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to left, #7e3a78, #efa2e7)", // Nouveau gradient
+                    WebkitBackgroundClip: "text",
+                    color: "transparent",
+                    marginRight: "5px",
+                    display: "inline-block",
+                  }}
+                >
+                  {project.nameProject}
+                </span>
+                <CButton
+                  color="primary"
+                  size="sm"
+                  className="me-md-2"
+                  title="Modifier le projet"
+                  variant="ghost"
+                  onClick={() => {
+                    if (currentTypeState.currentType === "SuperAdminLabo") {
+                      setSuperAdmin(true);
+                      // Function to open the modal for the SuperAdmin
+                      // Open the Modal with setting the visiblity example : setVisible00(!visible00);
+                    } else if (currentTypeState.currentType === "AdminLabo") {
+                      setAdmin(true);
+                      // Function to open the modal for the Admin
+                      // Open the Modal with setting the visiblity example : setVisible000(!visible000);
+                    }
+                  }}
+                >
+                  <CIcon icon={cilPenAlt} size="sm" />
+                </CButton>
+                {/* <FontAwesomeIcon
                   icon={faWallet}
                   size="xs"
                   style={{ marginRight: "0.5rem" }}
-                />
-                {project.nameProject}
+                /> */}
               </CCardHeader>
             ) : (
               <div className="alert alert-danger  text-center" role="alert">
