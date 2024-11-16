@@ -15,6 +15,8 @@ import { GET_VERSION } from "../../graphql/queries/projectslabo";
 import { useMutation } from "@apollo/client";
 import { CREATE_VERSION_MUTATION } from "../../graphql/mutations/projectslabo";
 import { listUsers } from "../actions/userActions";
+import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import Select from "@material-ui/core/Select";
 import {
@@ -1017,8 +1019,12 @@ const ProjetLabo = () => {
                     {currentTypeState.currentType === "SuperAdminLabo" ||
                     currentTypeState.currentType === "AdminLabo" ? (
                       <CCardHeader component="h4">
-                        <CIcon icon={cilLibrary} /> Cartes des versions du
-                        projet
+                        <FontAwesomeIcon
+                          icon={faCodeFork}
+                          size="xs"
+                          style={{ marginRight: "0.5rem" }}
+                        />
+                        Versions du {project.nameProject}
                       </CCardHeader>
                     ) : null}
 
@@ -1061,8 +1067,12 @@ const ProjetLabo = () => {
                     currentTypeState.currentType === "AdminLabo" ||
                     currentTypeState.currentType === "Formateur" ? (
                       <CCardHeader component="h4">
-                        <CIcon icon={cilLibrary} /> Cartes des versions du
-                        projet
+                        <FontAwesomeIcon
+                          icon={faCodeFork}
+                          size="xs"
+                          style={{ marginRight: "0.5rem" }}
+                        />{" "}
+                        Versions du {project.nameProject}
                       </CCardHeader>
                     ) : null}
                     <CCol sm="{10}" className="d-none d-md-block">
