@@ -1137,134 +1137,142 @@ const ProjetLabo = () => {
             </CCardBody>
 
             {/********************************************************* Réseaux des versions (SuperADMINLABO & AdminLABO & Formateur) ****************************************************/}
-            <CCardBody>
-              <CRow>
-                {currentTypeState.currentType === "SuperAdminLabo" ||
-                currentTypeState.currentType === "AdminLabo" ||
-                currentTypeState.currentType === "Formateur" ? (
-                  <CCardHeader component="h4">
-                    <CIcon icon={cilGlobeAlt} /> Réseaux des versions du projet
-                  </CCardHeader>
-                ) : null}
-                {/* <h4 id="traffic" className="card-title mb-0">
+            {project.versionProject.length != 0 ? (
+              <CCardBody>
+                <CRow>
+                  {currentTypeState.currentType === "SuperAdminLabo" ||
+                  currentTypeState.currentType === "AdminLabo" ||
+                  currentTypeState.currentType === "Formateur" ? (
+                    <CCardHeader component="h4">
+                      <CIcon icon={cilGlobeAlt} size="lg" /> Réseaux des
+                      versions
+                    </CCardHeader>
+                  ) : null}
+                  {/* <h4 id="traffic" className="card-title mb-0">
       Versions du projets
       </h4> */}
-                <br></br>
-                <br></br>
-                {currentTypeState.currentType === "SuperAdminLabo" ||
-                currentTypeState.currentType === "AdminLabo" ||
-                currentTypeState.currentType === "Formateur" ? (
-                  <CAccordion flush>
-                    <br></br>
-                    <CAccordionItem itemKey={1}>
-                      <CAccordionHeader component="h6">
-                        SecFile
-                      </CAccordionHeader>
-                      <CAccordionBody>
-                        <CContainer>
-                          <div className="mb-3 row justify-content-md-center">
-                            <CCol sm="auto">
-                              <CCard
-                                className="text-center border-dark"
-                                style={{ maxWidth: "18rem" }}
-                              >
-                                <CCardHeader>ID: 11</CCardHeader>
-                                <CCardBody>
-                                  {/* <CIcon icon={cilGlobeAlt} /> */}
-                                  <CCardTitle>Attaché militaire</CCardTitle>
-                                  {/* <CCardText>Lorem Ipsum est un générateur de faux textes aléatoires. Vous choisissez le nombre de paragraphes, de mots ou de listes.</CCardText> */}
-                                  {/* <CButton href="#">Go somewhere</CButton> */}
-                                  <CButton
-                                    href="/projets/projetlabo/version/reseau"
-                                    className="me-md-2"
-                                  >
-                                    Entrer
-                                  </CButton>
-                                </CCardBody>
-                                <CCardFooter className="text-medium-emphasis">
-                                  Type : Point à point
-                                </CCardFooter>
-                              </CCard>
-                            </CCol>
-                            <CCol sm="auto">
-                              <CCard
-                                className="text-center border-dark"
-                                style={{ maxWidth: "18rem" }}
-                              >
-                                <CCardHeader>ID: 12</CCardHeader>
-                                <CCardBody>
-                                  {/* <CIcon icon={cilGlobeAlt} /> */}
-                                  <CCardTitle>Attaché culturel</CCardTitle>
-                                  {/* <CCardText>Point à point.</CCardText> */}
-                                  {/* <CButton href="#">Go somewhere</CButton> */}
-                                  <CButton
-                                    href="/projets/projetlabo/version/reseau"
-                                    className="me-md-2"
-                                  >
-                                    Entrer
-                                  </CButton>
-                                </CCardBody>
-                                <CCardFooter className="text-medium-emphasis">
-                                  Type : Étoile
-                                </CCardFooter>
-                              </CCard>
-                            </CCol>
+                  <br></br>
+                  <br></br>
+                  {currentTypeState.currentType === "SuperAdminLabo" ||
+                  currentTypeState.currentType === "AdminLabo" ||
+                  currentTypeState.currentType === "Formateur" ? (
+                    <CAccordion flush>
+                      <br></br>
 
-                            <CCol sm={"auto"}>
-                              <CCard
-                                className="text-center border-dark"
-                                style={{ width: "18rem" }}
-                              >
-                                {/* <CCardImage orientation="top" src="/images/network.jpg" /> */}
-                                <CCardHeader>ID: 13</CCardHeader>
-                                <CCardBody>
-                                  <CCardTitle>ONU</CCardTitle>
-                                  {/* <CCardText>
-                                    Some quick example text to build on the card
-                                    title and make up the bulk of the card's
-                                    content.
-                                  </CCardText> */}
-                                  <CButton
-                                    href="/projets/projetlabo/version/reseau"
-                                    className="me-md-2"
-                                  >
-                                    Entrer
-                                  </CButton>
-                                </CCardBody>
-                                <CCardFooter className="text-medium-emphasis">
-                                  Type : Maillé
-                                </CCardFooter>
-                                {/* <CButton href="#">Go somewhere</CButton> */}
-                              </CCard>
-                            </CCol>
-                          </div>
-                        </CContainer>
-                      </CAccordionBody>
-                    </CAccordionItem>
-
-                    <CAccordionItem itemKey={2}>
-                      <CAccordionHeader component="h6">
-                        SecFileHard
-                      </CAccordionHeader>
-                      <CAccordionBody>
-                        <CCol className="justify-content-md-center">
-                          <div className="text-center row justify-content-md-center">
-                            <h5>
-                              <p>
-                                <small className="text-muted">
-                                  Il n'y a pas encore de réseau.
-                                  <br></br>
-                                </small>
-                              </p>
-                            </h5>
-                          </div>
-                        </CCol>
-                      </CAccordionBody>
-                    </CAccordionItem>
-                  </CAccordion>
-                ) : null}
-              </CRow>
-            </CCardBody>
+                      {project.versionProject.map((version) => (
+                        <>
+                          {currentTypeState.currentType === "SuperAdminLabo" ||
+                          currentTypeState.currentType === "AdminLabo" ? (
+                            project.versionProject ? (
+                              // AFTER ADDING NETWORKS to VERSION add this condithion
+                              // && version.refReseau.length == 0
+                              <CAccordionItem itemKey={version.id}>
+                                <CAccordionHeader component="h6">
+                                  {version.nameVersion}
+                                </CAccordionHeader>
+                                <CAccordionBody>
+                                  <CCol className="justify-content-md-center">
+                                    <div className="text-center row justify-content-md-center">
+                                      <h5>
+                                        <p>
+                                          <small className="text-muted">
+                                            Il n'y a pas encore de réseau.
+                                            <br />
+                                          </small>
+                                        </p>
+                                      </h5>
+                                    </div>
+                                  </CCol>
+                                </CAccordionBody>
+                              </CAccordionItem>
+                            ) : (
+                              <CAccordionItem itemKey={2}>
+                                <CAccordionHeader component="h6">
+                                  SecFileHard
+                                </CAccordionHeader>
+                                <CAccordionBody>
+                                  <CContainer>
+                                    <div className="mb-3 row justify-content-md-center">
+                                      {/* First Card */}
+                                      <CCol sm="auto">
+                                        <CCard
+                                          className="text-center border-dark"
+                                          style={{ maxWidth: "18rem" }}
+                                        >
+                                          <CCardHeader>ID: 11</CCardHeader>
+                                          <CCardBody>
+                                            <CCardTitle>
+                                              Attaché militaire
+                                            </CCardTitle>
+                                            <CButton
+                                              href="/projets/projetlabo/version/reseau"
+                                              className="me-md-2"
+                                            >
+                                              Entrer
+                                            </CButton>
+                                          </CCardBody>
+                                          <CCardFooter className="text-medium-emphasis">
+                                            Type : Point à point
+                                          </CCardFooter>
+                                        </CCard>
+                                      </CCol>
+                                      {/* Second Card */}
+                                      <CCol sm="auto">
+                                        <CCard
+                                          className="text-center border-dark"
+                                          style={{ maxWidth: "18rem" }}
+                                        >
+                                          <CCardHeader>ID: 12</CCardHeader>
+                                          <CCardBody>
+                                            <CCardTitle>
+                                              Attaché culturel
+                                            </CCardTitle>
+                                            <CButton
+                                              href="/projets/projetlabo/version/reseau"
+                                              className="me-md-2"
+                                            >
+                                              Entrer
+                                            </CButton>
+                                          </CCardBody>
+                                          <CCardFooter className="text-medium-emphasis">
+                                            Type : Étoile
+                                          </CCardFooter>
+                                        </CCard>
+                                      </CCol>
+                                      {/* Third Card */}
+                                      <CCol sm="auto">
+                                        <CCard
+                                          className="text-center border-dark"
+                                          style={{ width: "18rem" }}
+                                        >
+                                          <CCardHeader>ID: 13</CCardHeader>
+                                          <CCardBody>
+                                            <CCardTitle>ONU</CCardTitle>
+                                            <CButton
+                                              href="/projets/projetlabo/version/reseau"
+                                              className="me-md-2"
+                                            >
+                                              Entrer
+                                            </CButton>
+                                          </CCardBody>
+                                          <CCardFooter className="text-medium-emphasis">
+                                            Type : Maillé
+                                          </CCardFooter>
+                                        </CCard>
+                                      </CCol>
+                                    </div>
+                                  </CContainer>
+                                </CAccordionBody>
+                              </CAccordionItem>
+                            )
+                          ) : null}
+                        </>
+                      ))}
+                    </CAccordion>
+                  ) : null}
+                </CRow>
+              </CCardBody>
+            ) : null}
           </CRow>
         </CCardBody>
       </CCard>

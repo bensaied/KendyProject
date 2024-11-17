@@ -36,7 +36,13 @@ import {
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
-import { cilPen, cilPlus, cilClipboard, cilViewModule } from "@coreui/icons";
+import {
+  cilPen,
+  cilPlus,
+  cilClipboard,
+  cilViewModule,
+  cilGlobeAlt,
+} from "@coreui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
@@ -299,10 +305,15 @@ const Reseau = () => {
                 component="h2"
                 style={{ display: "flex", alignItems: "center" }}
               >
-                <FontAwesomeIcon
+                {/* <FontAwesomeIcon
                   icon={faGlobe}
                   size="xs"
                   style={{ marginRight: "0.5rem" }}
+                /> */}
+                <CIcon
+                  icon={cilGlobeAlt}
+                  size="xl"
+                  style={{ marginRight: "6px" }}
                 />
                 Attaché militaire
               </CCardHeader>
@@ -668,8 +679,7 @@ const Reseau = () => {
                 {currentTypeState.currentType === "SuperAdminLabo" ||
                 currentTypeState.currentType === "AdminLabo" ? (
                   <CCardHeader component="h5">
-                    <CIcon icon={cilViewModule} /> Tableau des missions du
-                    réseau{" "}
+                    <CIcon icon={cilViewModule} /> Missions du Attaché militaire{" "}
                   </CCardHeader>
                 ) : null}
                 {currentTypeState.currentType === "SuperAdminLabo" ||
@@ -723,8 +733,7 @@ const Reseau = () => {
                 currentTypeState.currentType === "AdminLabo" ||
                 currentTypeState.currentType === "Formateur" ? (
                   <CCardHeader component="h5">
-                    <CIcon icon={cilViewModule} /> Tableau des missions du
-                    réseau{" "}
+                    <CIcon icon={cilViewModule} /> Missions du Attaché militaire{" "}
                   </CCardHeader>
                 ) : null}
                 <br></br>
