@@ -22,11 +22,13 @@ import {
 import CIcon from "@coreui/icons-react";
 import {
   cilPlus,
-  cilLibrary,
+  // cilLibrary,
   cilListRich,
   cilMonitor,
   cilWallet,
 } from "@coreui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
 //IMPORT QUERIES
 import { useQuery } from "@apollo/client";
 //IMPORT USSCQ PROJECTS
@@ -474,7 +476,12 @@ const MesProjets = () => {
               <CCardBody>
                 <CRow>
                   <CCardHeader component="h4">
-                    <CIcon icon={cilListRich} /> Versions du projets
+                    <FontAwesomeIcon
+                      icon={faCodeFork}
+                      size="xs"
+                      style={{ marginRight: "0.5rem" }}
+                    />
+                    Versions du projets
                   </CCardHeader>
                   <CContainer>
                     <br />
@@ -501,7 +508,12 @@ const MesProjets = () => {
               <CCardBody>
                 <CRow>
                   <CCardHeader component="h4">
-                    <CIcon icon={cilListRich} /> Versions du projets
+                    <FontAwesomeIcon
+                      icon={faCodeFork}
+                      size="xs"
+                      style={{ marginRight: "0.5rem" }}
+                    />
+                    Versions du projets
                   </CCardHeader>
 
                   <br></br>
