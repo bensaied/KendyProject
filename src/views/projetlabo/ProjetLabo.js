@@ -1143,7 +1143,7 @@ const ProjetLabo = () => {
                 currentTypeState.currentType === "AdminLabo" ||
                 currentTypeState.currentType === "Formateur" ? (
                   <CCardHeader component="h4">
-                    <CIcon icon={cilGlobeAlt} /> Réseaux des versions du projet
+                    <CIcon icon={cilGlobeAlt} size="lg" /> Réseaux des versions
                   </CCardHeader>
                 ) : null}
                 {/* <h4 id="traffic" className="card-title mb-0">

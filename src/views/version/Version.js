@@ -27,9 +27,15 @@ import {
 // import { CChartLine } from '@coreui/react-chartjs'
 // import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from "@coreui/icons-react";
-import { cilPen, cilPlus, cilClipboard,cilLibrary } from "@coreui/icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCodeFork } from '@fortawesome/free-solid-svg-icons';
+import {
+  cilPen,
+  cilPlus,
+  cilClipboard,
+  cilLibrary,
+  cilGlobeAlt,
+} from "@coreui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
 
 // import avatar1 from 'src/assets/images/avatars/1.jpg'
 // import avatar2 from 'src/assets/images/avatars/2.jpg'
@@ -77,15 +83,20 @@ const Version = () => {
         <CCardBody>
           <CRow>
             {currentTypeState.currentType === "SuperAdminLabo" ||
-            currentTypeState.currentType === "AdminLabo"||
+            currentTypeState.currentType === "AdminLabo" ||
             currentTypeState.currentType === "Formateur" ? (
-              <CCardHeader component="h2" style={{ display: 'flex', alignItems: 'center' }}>
-              <FontAwesomeIcon icon={faCodeFork}  size="xs" style={{ marginRight: '0.5rem' }} />
-            SecFile</CCardHeader>
-            ) : (
-             null
-            )} 
-
+              <CCardHeader
+                component="h2"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <FontAwesomeIcon
+                  icon={faCodeFork}
+                  size="xs"
+                  style={{ marginRight: "0.5rem" }}
+                />
+                SecFile
+              </CCardHeader>
+            ) : null}
 
             {/* <h4 id="traffic" className="card-title mb-0">
                                                 Cartes des projets
@@ -97,7 +108,8 @@ const Version = () => {
                 <br></br>
                 <CAccordionItem itemKey={1}>
                   <CAccordionHeader component="h4">
-                  <CIcon icon={cilClipboard} />&nbsp; Fiche du version
+                    <CIcon icon={cilClipboard} />
+                    &nbsp; Fiche du version
                   </CAccordionHeader>
 
                   <CAccordionBody>
@@ -204,7 +216,8 @@ const Version = () => {
                 {currentTypeState.currentType === "AdminLabo" ||
                 currentTypeState.currentType === "Formateur" ? (
                   <CAccordionHeader component="h6">
-                   <CIcon icon={cilClipboard} />&nbsp;  Fiche du version
+                    <CIcon icon={cilClipboard} />
+                    &nbsp; Fiche du version
                   </CAccordionHeader>
                 ) : null}
                 <CAccordionBody>
@@ -318,7 +331,8 @@ const Version = () => {
               <CRow>
                 {currentTypeState.currentType === "SuperAdminLabo" ||
                 currentTypeState.currentType === "AdminLabo" ? (
-                  <CCardHeader component="h5"><CIcon icon={cilLibrary}/> Cartes des réseaux du version
+                  <CCardHeader component="h5">
+                    <CIcon icon={cilGlobeAlt} size="lg" /> Réseaux du SecFile
                   </CCardHeader>
                 ) : null}
 
@@ -360,7 +374,9 @@ const Version = () => {
                 {currentTypeState.currentType === "SuperAdminLabo" ||
                 currentTypeState.currentType === "AdminLabo" ||
                 currentTypeState.currentType === "Formateur" ? (
-                  <CCardHeader component="h5"><CIcon icon={cilLibrary}/> Cartes des réseaux du version</CCardHeader>
+                  <CCardHeader component="h5">
+                    <CIcon icon={cilGlobeAlt} size="lg" /> Réseaux du SecFile
+                  </CCardHeader>
                 ) : null}
                 <br></br>
                 <CCol sm="{10}" className="d-none d-md-block">
