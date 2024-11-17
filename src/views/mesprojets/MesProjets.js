@@ -20,7 +20,7 @@ import {
   CAccordionBody,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilPlus, cilLibrary, cilListRich } from "@coreui/icons";
+import { cilPlus, cilLibrary, cilListRich, cilMonitor } from "@coreui/icons";
 //IMPORT QUERIES
 import { useQuery } from "@apollo/client";
 //IMPORT USSCQ PROJECTS
@@ -106,7 +106,7 @@ const MesProjets = () => {
               <CCardBody>
                 <CRow>
                   <CCardHeader component="h4">
-                    <CIcon icon={cilLibrary} /> Cartes des dossiers
+                    <CIcon icon={cilMonitor} size="lg" /> Espace dossiers
                   </CCardHeader>
                   <CContainer>
                     <br />
@@ -146,10 +146,11 @@ const MesProjets = () => {
         <>
           {updatedProjectsList && updatedProjectsList.projectQt.length === 0 ? (
             <CCard className="mb-4">
+              S
               <CCardBody>
                 <CRow>
                   <CCardHeader component="h4">
-                    <CIcon icon={cilLibrary} /> Cartes des dossiers
+                    <CIcon icon={cilMonitor} size="lg" /> Espace dossiers
                   </CCardHeader>
                   <CContainer>
                     <br />
@@ -689,7 +690,7 @@ const MesProjets = () => {
               <CCardBody>
                 <CRow>
                   <CCardHeader component="h4">
-                    <CIcon icon={cilLibrary} /> Cartes des dossiers
+                    <CIcon icon={cilMonitor} size="lg" /> Espace dossiers
                   </CCardHeader>
 
                   <br />
@@ -819,7 +820,7 @@ const MesProjets = () => {
               <CCardBody>
                 <CRow>
                   <CCardHeader component="h4">
-                    <CIcon icon={cilLibrary} /> Cartes des dossiers
+                    <CIcon icon={cilMonitor} size="lg" /> Espace dossiers
                   </CCardHeader>
 
                   <br />
