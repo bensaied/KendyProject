@@ -282,7 +282,7 @@ const ProjetLabo = () => {
   const formattedDate = date.toISOString().substring(0, 10);
   return (
     <>
-      {/********************************  MODAL POUR Modifier Le Projet SuperAdminLABO********************************/}
+      {/********************************  MODAL POUR Modifier Le Projet SuperAdminLABO & AdminLabo********************************/}
       {/*********************************************************  FICHE DU PROJET SUPERADMINLABO *************************************************************/}
       <CModal
         // style={{ maxWidth: "800px" }}
@@ -355,7 +355,7 @@ const ProjetLabo = () => {
                                 isClearable
                                 isSearchable
                                 name="Administrateur"
-                                options={options1}
+                                options={admins}
                               />
                             </CCol>
 
@@ -385,12 +385,12 @@ const ProjetLabo = () => {
                               <CreatableSelect
                                 isDisabled={!superadmin}
                                 defaultValue={{
-                                  value: "Symetrique",
-                                  label: "Symetrique",
+                                  value: project.encryptionTypeProject[0].label,
+                                  label: project.encryptionTypeProject[0].label,
                                 }}
                                 required
                                 name="Chiffrement"
-                                options={options2}
+                                options={project.encryptionTypeProject}
                                 placeholder={""}
                                 isClearable
                                 onChange={(opt, meta) => console.log(opt, meta)}
@@ -403,79 +403,33 @@ const ProjetLabo = () => {
                               <CreatableSelect
                                 isDisabled={!superadmin}
                                 defaultValue={{
-                                  value: "Hardware",
-                                  label: "Hardware",
+                                  value: project.integrationProject[0].label,
+                                  label: project.integrationProject[0].label,
                                 }}
                                 required
                                 name="Integration"
-                                options={options3}
+                                options={project.integrationProject}
                                 placeholder={""}
                                 isClearable
                                 onChange={(opt, meta) => console.log(opt, meta)}
                               />
                             </CCol>
 
-                            {/*
-                                                                        <CCol xs={12}> 
-                                                                           Livrables 
-                                                                           <br></br> 
-                                                                          <CFormSelect size="lg" multiple aria-label="Multiple select example">
-                                                                            <option>Open this select menu</option>
-                                                                            <option value="1">One</option>
-                                                                            <option value="2">Two</option>
-                                                                            <option value="3">Three</option>
-                                                                            </CFormSelect>
-                                                                        </CCol>
-
-                                                                         <Select
-                                                                            labelId="demo-multiple-checkbox-label"
-                                                                            id="demo-multiple-checkbox"
-                                                                            multiple
-                                                                            name="allowedUsers"
-                                                                            onChange={handleChange}
-                                                                            label="Allowed Users"
-                                                                            renderValue={(selected) => selected.join(', ')}                                              
-                                                                            defaultValue={setmission.mission && setmission.mission.allowedUsers}                                   
-                                                                            //input={<OutlinedInput label="Allowed Users" />}
-                                                                            //MENUPROPS is a restricted menu with scrollbar
-                                                                            //MenuProps={MenuProps}
-                                                                            >
-                                                                            {auth.user && (users.users.filter(users => users.userType == "user")).map((user) => (
-                                                                                    <MenuItem key={user} value={user.name}>
-                                                                                    <Checkbox color="primary" checked={personName.indexOf(user.name) > -1} />
-                                                                                    <ListItemText primary={user.name} />
-                                                                                    </MenuItem>
-                                                                                ))}
-                                                                        </Select> */}
-
                             <CCol xs={12}>
                               Livrables rendus
                               <br></br>
-                              <CFormSwitch
-                                disabled={!superadmin}
-                                label="CD"
-                                id="formSwitchCheckDefault"
-                              />
-                              <CFormSwitch
-                                disabled={!superadmin}
-                                defaultChecked
-                                label="Boîte de chiffrement"
-                                id="formSwitchCheckDefault1"
-                              />
+                              {project.livrablesProject.map(
+                                (livrable, index) => (
+                                  <CFormSwitch
+                                    key={index}
+                                    defaultChecked
+                                    disabled={!superadmin}
+                                    label={livrable.label}
+                                    id={`formSwitchCheckDefault-${index}`}
+                                  />
+                                )
+                              )}
                             </CCol>
-                            {/* 
-                                                                        <CCol xs={12}> 
-                                                                          Documents rendus
-                                                                          <br></br> 
-                                                                          <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default">Bordereau</CInputGroupText>
-                                                                            <CFormInput disabled defaultValue={"2"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                           <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default1">Boîte de chiffrement</CInputGroupText>
-                                                                            <CFormInput disabled defaultValue={"4"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                          </CCol> */}
 
                             <CCol md={12}>
                               <CFormSelect
@@ -485,19 +439,18 @@ const ProjetLabo = () => {
                                 multiple
                                 aria-label="Multiple select example"
                               >
-                                <option>Cne Haythem TRABELSI</option>
-                                <option value="1">Lt Ghassen BEN ALI</option>
-                                <option value="2">
-                                  Lt Oussama BEN SAAYEED
-                                </option>
-                                <option value="3">Slt Karim OUELHEZI</option>
+                                {admins.map((laboUser, index) => (
+                                  <option value={index}>
+                                    {laboUser.label}
+                                  </option>
+                                ))}
                               </CFormSelect>
                             </CCol>
 
                             <CCol xs={12}>
                               <CFormTextarea
                                 disabled={!superadmin}
-                                defaultValue={"Peer to Peer encryption"}
+                                defaultValue={project.descriptionProject}
                                 label="Description"
                               ></CFormTextarea>
                             </CCol>
@@ -505,7 +458,9 @@ const ProjetLabo = () => {
                             <CCol xs={12}>
                               <CFormCheck
                                 disabled={!superadmin}
-                                defaultChecked={1}
+                                defaultChecked={
+                                  project.partageProject === "true"
+                                }
                                 type="checkbox"
                                 id="gridCheck"
                                 label="Partager ce projet"
@@ -573,7 +528,7 @@ const ProjetLabo = () => {
                             <CCol md={12}>
                               <CFormInput
                                 disabled
-                                defaultValue={"Maktarus"}
+                                defaultValue={project.nameProject}
                                 required
                                 type="text"
                                 id="inputNom"
@@ -589,52 +544,60 @@ const ProjetLabo = () => {
                                 classNamePrefix="select"
                                 required
                                 defaultValue={{
-                                  value: "Cne Haythem TRABELSI",
-                                  label: "Cne Haythem TRABELSI",
+                                  value:
+                                    project.adminProject[0].grade +
+                                    " " +
+                                    project.adminProject[0].firstname +
+                                    " " +
+                                    project.adminProject[0].name,
+                                  label:
+                                    project.adminProject[0].grade +
+                                    " " +
+                                    project.adminProject[0].firstname +
+                                    " " +
+                                    project.adminProject[0].name,
                                 }}
                                 isDisabled
                                 // isLoading
                                 isClearable
                                 isSearchable
                                 name="Administrateur"
-                                options={options1}
+                                options={admins}
                               />
                             </CCol>
 
                             <CCol xs={12}>
                               Type de référence
                               <br></br>
-                              <div>
-                                <input
-                                  type="radio"
-                                  // disabled
-                                  defaultChecked
-                                  value="Image"
-                                  name="ref"
-                                />{" "}
-                                Image <br></br>
-                                <input
-                                  type="radio"
-                                  // disabled
-                                  value="Text"
-                                  name="ref"
-                                />{" "}
-                                Texte <br></br>
-                              </div>
+                              <CreatableSelect
+                                className="basic-single"
+                                classNamePrefix="select"
+                                required
+                                defaultValue={{
+                                  value: project.referenceTypeProject[0].label,
+                                  label: project.referenceTypeProject[0].label,
+                                }}
+                                isDisabled={!admin}
+                                // isLoading
+                                isClearable
+                                isSearchable
+                                name="Type de référence"
+                                options={project.referenceTypeProject}
+                              />
                             </CCol>
 
                             <CCol xs={12}>
                               Type de chiffrement
                               <br></br>
                               <CreatableSelect
-                                // isDisabled
+                                isDisabled={!admin}
                                 defaultValue={{
-                                  value: "Symetrique",
-                                  label: "Symetrique",
+                                  value: project.encryptionTypeProject[0].label,
+                                  label: project.encryptionTypeProject[0].label,
                                 }}
                                 required
                                 name="Chiffrement"
-                                options={options2}
+                                options={project.encryptionTypeProject}
                                 placeholder={""}
                                 isClearable
                                 onChange={(opt, meta) => console.log(opt, meta)}
@@ -645,111 +608,66 @@ const ProjetLabo = () => {
                               Integration
                               <br></br>
                               <CreatableSelect
-                                // isDisabled
+                                isDisabled={!admin}
                                 defaultValue={{
-                                  value: "Hardware",
-                                  label: "Hardware",
+                                  value: project.integrationProject[0].label,
+                                  label: project.integrationProject[0].label,
                                 }}
                                 required
                                 name="Integration"
-                                options={options3}
+                                options={project.integrationProject}
                                 placeholder={""}
                                 isClearable
                                 onChange={(opt, meta) => console.log(opt, meta)}
                               />
                             </CCol>
 
-                            {/*
-                                                                        <CCol xs={12}> 
-                                                                           Livrables 
-                                                                           <br></br> 
-                                                                          <CFormSelect size="lg" multiple aria-label="Multiple select example">
-                                                                            <option>Open this select menu</option>
-                                                                            <option value="1">One</option>
-                                                                            <option value="2">Two</option>
-                                                                            <option value="3">Three</option>
-                                                                            </CFormSelect>
-                                                                        </CCol>
-
-                                                                         <Select
-                                                                            labelId="demo-multiple-checkbox-label"
-                                                                            id="demo-multiple-checkbox"
-                                                                            multiple
-                                                                            name="allowedUsers"
-                                                                            onChange={handleChange}
-                                                                            label="Allowed Users"
-                                                                            renderValue={(selected) => selected.join(', ')}                                              
-                                                                            defaultValue={setmission.mission && setmission.mission.allowedUsers}                                   
-                                                                            //input={<OutlinedInput label="Allowed Users" />}
-                                                                            //MENUPROPS is a restricted menu with scrollbar
-                                                                            //MenuProps={MenuProps}
-                                                                            >
-                                                                            {auth.user && (users.users.filter(users => users.userType == "user")).map((user) => (
-                                                                                    <MenuItem key={user} value={user.name}>
-                                                                                    <Checkbox color="primary" checked={personName.indexOf(user.name) > -1} />
-                                                                                    <ListItemText primary={user.name} />
-                                                                                    </MenuItem>
-                                                                                ))}
-                                                                        </Select> */}
-
                             <CCol xs={12}>
                               Livrables rendus
                               <br></br>
-                              <CFormSwitch
-                                // disabled={!admin}
-                                label="CD"
-                                id="formSwitchCheckDefault"
-                              />
-                              <CFormSwitch
-                                // disabled={!admin}
-                                defaultChecked
-                                label="Boîte de chiffrement"
-                                id="formSwitchCheckDefault1"
-                              />
+                              {project.livrablesProject.map(
+                                (livrable, index) => (
+                                  <CFormSwitch
+                                    key={index}
+                                    defaultChecked
+                                    disabled={!admin}
+                                    label={livrable.label}
+                                    id={`formSwitchCheckDefault-${index}`}
+                                  />
+                                )
+                              )}
                             </CCol>
-
-                            {/* <CCol xs={12}> 
-                                                                          Documents rendus
-                                                                          <br></br> 
-                                                                          <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default">Bordereau</CInputGroupText>
-                                                                            <CFormInput disabled={!admin} defaultValue={"2"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                           <CInputGroup className="mb-3">
-                                                                            <CInputGroupText id="inputGroup-sizing-default1">Boîte de chiffrement</CInputGroupText>
-                                                                            <CFormInput disabled={!admin} defaultValue={"4"} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"/>                                      
-                                                                           </CInputGroup>
-                                                                          </CCol> */}
 
                             <CCol md={12}>
                               <CFormSelect
-                                // disabled={!admin}
+                                disabled={!admin}
                                 size="lg"
                                 label="Formateurs"
                                 multiple
                                 aria-label="Multiple select example"
                               >
-                                <option>Cne Haythem TRABELSI</option>
-                                <option value="1">Lt Ghassen BEN ALI</option>
-                                <option value="2">
-                                  Lt Oussama BEN SAAYEED
-                                </option>
-                                <option value="3">Slt Karim OUELHEZI</option>
+                                {admins.map((laboUser, index) => (
+                                  <option value={index}>
+                                    {laboUser.label}
+                                  </option>
+                                ))}
                               </CFormSelect>
                             </CCol>
 
                             <CCol xs={12}>
                               <CFormTextarea
-                                // disabled={!admin}
-                                defaultValue={"Peer to Peer encryption"}
+                                disabled={!admin}
+                                defaultValue={project.descriptionProject}
                                 label="Description"
                               ></CFormTextarea>
                             </CCol>
 
                             <CCol xs={12}>
                               <CFormCheck
-                                // disabled
-                                defaultChecked={1}
+                                disabled={!admin}
+                                defaultChecked={
+                                  project.partageProject === "true"
+                                }
                                 type="checkbox"
                                 id="gridCheck"
                                 label="Partager ce projet"
@@ -782,7 +700,7 @@ const ProjetLabo = () => {
       </CModal>
       {/********************************************************* FIN FICHE DU PROJET ADMINLABO ********************************************************/}
 
-      {/******************************** FIN MODAL POUR Modifier Le Projet SuperAdminLABO ********************************/}
+      {/******************************** FIN MODAL POUR Modifier Le Projet SuperAdminLABO & AdminLabo ********************************/}
 
       {/******************************************************  Test d'affichage  ********************************************************/}
       {currentTypeState.currentType === "Visiteur" ||
