@@ -58,7 +58,7 @@ This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
 
 ## 💝 Support
 
-For support, email saayeed@outlook.fr and don't forget to leave a star ⭐️.
+For support, email ben.saied@proton.me and don't forget to leave a star ⭐️.
 
 ## 📝 Authors
 
