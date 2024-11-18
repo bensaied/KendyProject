@@ -362,23 +362,21 @@ const ProjetLabo = () => {
                             <CCol xs={12}>
                               Type de référence
                               <br></br>
-                              <div>
-                                <input
-                                  type="radio"
-                                  disabled={!superadmin}
-                                  defaultChecked
-                                  value="Image"
-                                  name="gender"
-                                />{" "}
-                                Image <br></br>
-                                <input
-                                  type="radio"
-                                  disabled={!superadmin}
-                                  value="Text"
-                                  name="gender"
-                                />{" "}
-                                Texte <br></br>
-                              </div>
+                              <CreatableSelect
+                                className="basic-single"
+                                classNamePrefix="select"
+                                required
+                                defaultValue={{
+                                  value: project.referenceTypeProject[0].label,
+                                  label: project.referenceTypeProject[0].label,
+                                }}
+                                isDisabled={!superadmin}
+                                // isLoading
+                                isClearable
+                                isSearchable
+                                name="Type de référence"
+                                options={project.referenceTypeProject}
+                              />
                             </CCol>
 
                             <CCol xs={12}>
@@ -612,14 +610,14 @@ const ProjetLabo = () => {
                                   // disabled
                                   defaultChecked
                                   value="Image"
-                                  name="gender"
+                                  name="ref"
                                 />{" "}
                                 Image <br></br>
                                 <input
                                   type="radio"
                                   // disabled
                                   value="Text"
-                                  name="gender"
+                                  name="ref"
                                 />{" "}
                                 Texte <br></br>
                               </div>
