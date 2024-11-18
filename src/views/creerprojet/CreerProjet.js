@@ -296,7 +296,6 @@ const CreerProjet = () => {
   const [creatableSelectValue, setCreatableSelectValue] = useState("");
   const handleCreatableSelectChange = (newValue) => {
     setCreatableSelectValue(newValue);
-    console.log(handleCreatableSelectChange);
   };
 
   /*************functions labo*************** */
@@ -311,7 +310,7 @@ const CreerProjet = () => {
       selectedValue = selected[0].value;
     }
     setreferenceTypeProject(selected); // Set the selected object
-    setreferenceTypeProjectV([selected.value]); // Set the selected value as an array with one element
+    setreferenceTypeProjectV(selectedValue ? [selected.value] : []); // Set the selected value as an array with one element
   }
 
   function ChangeLivrables(selected) {
@@ -321,9 +320,9 @@ const CreerProjet = () => {
   }
 
   function ChangeEncryptionTypeProject(selected) {
-    const selectedValues = selected.map((option) => option.value);
+    const selectedValues = selected;
     setencryptionTypeProject(selected); // Set the selected objects
-    setencryptionTypeProjectV(selectedValues); // Set the selected values
+    setencryptionTypeProject(selectedValues); // Set the selected values
   }
 
   function ChangeIntegrationProject(selected) {
@@ -336,7 +335,7 @@ const CreerProjet = () => {
       selectedValue = selected[0].value;
     }
     setintegrationProject(selected); // Set the selected object
-    setintegrationProjectV([selected.value]); // Set the selected value as an array with one element
+    setintegrationProjectV(selectedValue ? [selected.value] : []); // Set the selected value as an array with one element
   }
 
   const options = [
@@ -459,7 +458,6 @@ const CreerProjet = () => {
                           isClearable
                           value={referenceTypeProject}
                           onChange={ChangeReference}
-                          isMulti
                           options={ref}
                         />
                       </CCol>
@@ -479,7 +477,6 @@ const CreerProjet = () => {
                         Type de chiffrement
                         <br></br>
                         <CreatableSelect
-                          isMulti
                           isClearable
                           options={options2}
                           value={encryptionTypeProject}
@@ -490,7 +487,6 @@ const CreerProjet = () => {
                         Integration
                         <br></br>
                         <CreatableSelect
-                          isMulti
                           isClearable
                           options={options3}
                           value={integrationProject}

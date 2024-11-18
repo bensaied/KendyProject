@@ -54,14 +54,14 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import {
-  cilPen,
+  // cilPen,
   cilPenAlt,
   cilInfo,
   cilPrint,
   cilPlus,
-  cilClipboard,
+  // cilClipboard,
   cilWallet,
-  cilLibrary,
+  // cilLibrary,
   cilGlobeAlt,
 } from "@coreui/icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -267,6 +267,15 @@ const ProjetLabo = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.projectLabo;
+  console.log(
+    "projectLaboAdmin:",
+    project.adminProject[0].grade +
+      " " +
+      project.adminProject[0].firstname +
+      " " +
+      project.adminProject[0].name
+  );
+
   // PROJECT CREATED AT
   const timestamp = parseInt(project.createdAt);
   const date = new Date(timestamp);
@@ -312,7 +321,7 @@ const ProjetLabo = () => {
                             <CCol md={12}>
                               <CFormInput
                                 disabled={!superadmin}
-                                defaultValue={"Maktarus"}
+                                defaultValue={project.nameProject}
                                 required
                                 type="text"
                                 id="inputNom"
@@ -328,8 +337,18 @@ const ProjetLabo = () => {
                                 classNamePrefix="select"
                                 required
                                 defaultValue={{
-                                  value: "Cne Haythem TRABELSI",
-                                  label: "Cne Haythem TRABELSI",
+                                  value:
+                                    project.adminProject[0].grade +
+                                    " " +
+                                    project.adminProject[0].firstname +
+                                    " " +
+                                    project.adminProject[0].name,
+                                  label:
+                                    project.adminProject[0].grade +
+                                    " " +
+                                    project.adminProject[0].firstname +
+                                    " " +
+                                    project.adminProject[0].name,
                                 }}
                                 isDisabled={!superadmin}
                                 // isLoading
