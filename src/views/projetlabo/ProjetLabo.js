@@ -416,6 +416,21 @@ const ProjetLabo = () => {
                             </CCol>
 
                             <CCol xs={12}>
+                              Livrables
+                              <br></br>
+                              <CreatableSelect
+                                isDisabled={!superadmin}
+                                isMulti
+                                defaultValue={project.livrablesProject.map(
+                                  (livrable) => ({
+                                    value: livrable.value,
+                                    label: livrable.label,
+                                  })
+                                )}
+                                // onChange={handleBenificiaireChange}
+                              />
+                            </CCol>
+                            <CCol xs={12}>
                               Livrables rendus
                               <br></br>
                               {project.livrablesProject.map(
