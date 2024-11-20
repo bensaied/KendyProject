@@ -671,7 +671,22 @@ const ProjetLabo = () => {
                                 onChange={(opt, meta) => console.log(opt, meta)}
                               />
                             </CCol>
-
+                            <CCol xs={12}>
+                              Livrables
+                              <br></br>
+                              <CreatableSelect
+                                isDisabled={!admin}
+                                isMulti
+                                value={livrables}
+                                defaultValue={project.livrablesProject.map(
+                                  (livrable) => ({
+                                    value: livrable.value,
+                                    label: livrable.label,
+                                  })
+                                )}
+                                onChange={handleLivrableChange}
+                              />
+                            </CCol>
                             <CCol xs={12}>
                               Livrables rendus
                               <br></br>
