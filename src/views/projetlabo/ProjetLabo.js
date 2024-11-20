@@ -311,6 +311,13 @@ const ProjetLabo = () => {
     setLivrables(updatedLivrables);
   };
 
+  // Reset livrables state when the modal is closed
+  const handleCloseModal = () => {
+    setLivrables([]); // Clear the livrables state
+    setVisible0(false); // Close the modal for SuperAdminLabo
+    setVisible00(false); // Close the modal for AdminLabo
+  };
+
   // PROJECT CREATED AT
   const timestamp = parseInt(project.createdAt);
   const date = new Date(timestamp);
@@ -323,7 +330,7 @@ const ProjetLabo = () => {
         // style={{ maxWidth: "800px" }}
         size="lg"
         visible={visible0}
-        onHide={() => setVisible0(false)}
+        onHide={handleCloseModal}
       >
         <div
           style={{ border: "1px #ccc", padding: "13px" }}
@@ -454,6 +461,7 @@ const ProjetLabo = () => {
                               Livrables
                               <br></br>
                               <CreatableSelect
+                                isClearable
                                 isDisabled={!superadmin}
                                 isMulti
                                 value={livrables}
@@ -545,7 +553,7 @@ const ProjetLabo = () => {
         // style={{ maxWidth: "800px" }}
         size="lg"
         visible={visible00}
-        onHide={() => setVisible00(false)}
+        onHide={handleCloseModal}
       >
         <div
           style={{ border: "1px #ccc", padding: "13px" }}
@@ -675,6 +683,7 @@ const ProjetLabo = () => {
                               Livrables
                               <br></br>
                               <CreatableSelect
+                                isClearable
                                 isDisabled={!admin}
                                 isMulti
                                 value={livrables}
