@@ -75,7 +75,6 @@ const ProjetLabo = () => {
 
   // Open and Close DATE LABEL
   const [open, setOpen] = useState(false);
-  const refOne = useRef(null);
 
   // USERLOGIN&INFO
   const userLogin = useSelector((state) => state.userLogin);
@@ -87,7 +86,8 @@ const ProjetLabo = () => {
 
   //Button modifier le projet SuperADMINLABO
   const [superadmin, setSuperAdmin] = useState(false);
-
+  // Initialize the livrables state with an empty array
+  const [livrables, setLivrables] = useState([]);
   //Button modifier le projet ADMINLABO
   const [admin, setAdmin] = useState(false);
   const [defaultAdmin, setDefaultAdmin] = useState(null);
@@ -113,6 +113,7 @@ const ProjetLabo = () => {
   ]);
 
   //COMPONENT REF
+  const refOne = useRef(null);
   const componentRef = useRef();
   const componentRef0 = useRef();
   // STATES FOR MODALS VISIBILITY
@@ -268,19 +269,28 @@ const ProjetLabo = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.projectLabo;
-  // Track selected livrables
-  const livrables = data?.projectLabo
-    ? data.projectLabo.livrablesProject.map((livrable) => ({
-        value: livrable.value,
-        label: livrable.label,
-        checked: true,
-      }))
-    : [];
+
+  // This function will handle data changes when data is available
+  const initializeLivrables = (data) => {
+    if (data?.projectLabo) {
+      const updatedLivrables = data.projectLabo.livrablesProject.map(
+        (livrable) => ({
+          value: livrable.value,
+          label: livrable.label,
+          checked: true, // Initial checked state
+        })
+      );
+      setLivrables(updatedLivrables);
+    }
+  };
+  // If `data` changes, initialize the livrables state (only when data is available)
+  if (data?.projectLabo && livrables.length === 0) {
+    initializeLivrables(data);
+  }
+
   // Handle changes in the CreatableSelect
   const handleLivrableChange = (selectedOptions) => {
-    // Map selected options into the state structure with "checked"
     const updatedLivrables = (selectedOptions || []).map((option) => {
-      // Check if this option already exists to preserve its "checked" state
       const existingLivrable = livrables.find(
         (liv) => liv.value === option.value
       );
@@ -290,6 +300,7 @@ const ProjetLabo = () => {
       };
     });
 
+    // Update the livrables state with the new selected values
     setLivrables(updatedLivrables);
   };
 
@@ -298,6 +309,13 @@ const ProjetLabo = () => {
     const updatedLivrables = [...livrables];
     updatedLivrables[index].checked = !updatedLivrables[index].checked;
     setLivrables(updatedLivrables);
+  };
+
+  // Reset livrables state when the modal is closed
+  const handleCloseModal = () => {
+    setLivrables([]); // Clear the livrables state
+    setVisible0(false); // Close the modal for SuperAdminLabo
+    setVisible00(false); // Close the modal for AdminLabo
   };
 
   // PROJECT CREATED AT
@@ -312,7 +330,7 @@ const ProjetLabo = () => {
         // style={{ maxWidth: "800px" }}
         size="lg"
         visible={visible0}
-        onHide={() => setVisible0(false)}
+        onHide={handleCloseModal}
       >
         <div
           style={{ border: "1px #ccc", padding: "13px" }}
@@ -443,6 +461,7 @@ const ProjetLabo = () => {
                               Livrables
                               <br></br>
                               <CreatableSelect
+                                isClearable
                                 isDisabled={!superadmin}
                                 isMulti
                                 value={livrables}
@@ -534,7 +553,7 @@ const ProjetLabo = () => {
         // style={{ maxWidth: "800px" }}
         size="lg"
         visible={visible00}
-        onHide={() => setVisible00(false)}
+        onHide={handleCloseModal}
       >
         <div
           style={{ border: "1px #ccc", padding: "13px" }}
@@ -660,7 +679,23 @@ const ProjetLabo = () => {
                                 onChange={(opt, meta) => console.log(opt, meta)}
                               />
                             </CCol>
-
+                            <CCol xs={12}>
+                              Livrables
+                              <br></br>
+                              <CreatableSelect
+                                isClearable
+                                isDisabled={!admin}
+                                isMulti
+                                value={livrables}
+                                defaultValue={project.livrablesProject.map(
+                                  (livrable) => ({
+                                    value: livrable.value,
+                                    label: livrable.label,
+                                  })
+                                )}
+                                onChange={handleLivrableChange}
+                              />
+                            </CCol>
                             <CCol xs={12}>
                               Livrables rendus
                               <br></br>

@@ -200,7 +200,10 @@ const AppSidebar = () => {
         component: CNavItem,
         name: project.nameProject,
         to: `/projets/projetlabo/${project.id}`, // Adjust the link as needed
-        // Add other necessary props here
+        onClick: () => {
+          // Navigate to the new project and refresh the page
+          window.location.href = `/projets/projetlabo/${project.id}`;
+        },
       })),
     },
     {
