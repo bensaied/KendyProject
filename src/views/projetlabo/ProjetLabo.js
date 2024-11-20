@@ -268,14 +268,14 @@ const ProjetLabo = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.projectLabo;
-  // State to track selected livrables
-  const [livrables, setLivrables] = useState(
-    project.livrablesProject.map((livrable) => ({
-      value: livrable.value,
-      label: livrable.label,
-      checked: true,
-    }))
-  );
+  // Track selected livrables
+  const livrables = data?.projectLabo
+    ? data.projectLabo.livrablesProject.map((livrable) => ({
+        value: livrable.value,
+        label: livrable.label,
+        checked: true,
+      }))
+    : [];
   // Handle changes in the CreatableSelect
   const handleLivrableChange = (selectedOptions) => {
     // Map selected options into the state structure with "checked"
