@@ -237,6 +237,7 @@ const ProjetLabo = () => {
 
   // Display USERS IN THE ADMIN DROP MENU
   const [selectedAdmin, setSelectedAdmin] = useState(null);
+
   useEffect(() => {
     if (userInfo && userInfo.direction && userList && userList.users) {
       const filteredOptions = userList.users
@@ -267,14 +268,37 @@ const ProjetLabo = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.projectLabo;
-  console.log(
-    "projectLaboAdmin:",
-    project.adminProject[0].grade +
-      " " +
-      project.adminProject[0].firstname +
-      " " +
-      project.adminProject[0].name
-  );
+  // Track selected livrables
+  const livrables = data?.projectLabo
+    ? data.projectLabo.livrablesProject.map((livrable) => ({
+        value: livrable.value,
+        label: livrable.label,
+        checked: true,
+      }))
+    : [];
+  // Handle changes in the CreatableSelect
+  const handleLivrableChange = (selectedOptions) => {
+    // Map selected options into the state structure with "checked"
+    const updatedLivrables = (selectedOptions || []).map((option) => {
+      // Check if this option already exists to preserve its "checked" state
+      const existingLivrable = livrables.find(
+        (liv) => liv.value === option.value
+      );
+      return {
+        ...option,
+        checked: existingLivrable ? existingLivrable.checked : true,
+      };
+    });
+
+    setLivrables(updatedLivrables);
+  };
+
+  // Handle checkbox toggle
+  const toggleCheckbox = (index) => {
+    const updatedLivrables = [...livrables];
+    updatedLivrables[index].checked = !updatedLivrables[index].checked;
+    setLivrables(updatedLivrables);
+  };
 
   // PROJECT CREATED AT
   const timestamp = parseInt(project.createdAt);
@@ -421,29 +445,29 @@ const ProjetLabo = () => {
                               <CreatableSelect
                                 isDisabled={!superadmin}
                                 isMulti
+                                value={livrables}
                                 defaultValue={project.livrablesProject.map(
                                   (livrable) => ({
                                     value: livrable.value,
                                     label: livrable.label,
                                   })
                                 )}
-                                // onChange={handleBenificiaireChange}
+                                onChange={handleLivrableChange}
                               />
                             </CCol>
                             <CCol xs={12}>
                               Livrables rendus
                               <br></br>
-                              {project.livrablesProject.map(
-                                (livrable, index) => (
-                                  <CFormSwitch
-                                    key={index}
-                                    defaultChecked
-                                    disabled={!superadmin}
-                                    label={livrable.label}
-                                    id={`formSwitchCheckDefault-${index}`}
-                                  />
-                                )
-                              )}
+                              {livrables.map((livrable, index) => (
+                                <CFormSwitch
+                                  key={index}
+                                  checked={livrable.checked}
+                                  disabled={!superadmin}
+                                  label={livrable.label}
+                                  id={`formSwitchCheckDefault-${index}`}
+                                  onChange={() => toggleCheckbox(index)}
+                                />
+                              ))}
                             </CCol>
 
                             <CCol md={12}>
