@@ -142,36 +142,46 @@ module.exports = gql`
 
 
   ############################################################ ProjectLABO
+
+  input ObjectInput {
+    label: String!
+    value: String!
+  }
+ input FormateurInput {
+    firstname: String!
+    name: String!
+    grade: String!
+  }
+input ModifyProjectLaboInput {
+    id: ID!
+    nameProject: String!
+    adminProject: [AdminInput]
+    referenceTypeProject: [ObjectInput]!
+    livrablesProject: [ObjectInput]!
+    encryptionTypeProject: [ObjectInput]!
+    integrationProject: [ObjectInput]!
+    descriptionProject: String!
+    partageProject: String!
+    # versionProject: [Version]!
+    # reseauProject: [Reseau]!
+    # missionProject: [Mission!]!
+    statusProject: String!
+    docsRetourProject: [String]!
+    formateurProject: [FormateurInput]
+    createdAt: String!
+    updatedAt: String!
+}
+  input CreateVersionInput {
+    projectId: ID!
+    nameVersion: String!
+    descriptionVersion: String!
+  }
   type Version {
     id: ID!
     versionId: String!
     nameVersion: String!
     descriptionVersion: String!
   }
-  input CreateVersionInput {
-    projectId: ID!
-    nameVersion: String!
-    descriptionVersion: String!
-  }
-input ModifyProjectLaboInput {
-    id: ID!
-    nameProject: String!
-    adminProject: [User!]!
-    referenceTypeProject: [Object]!
-    livrablesProject: [Object]!
-    encryptionTypeProject: [Object]!
-    integrationProject: [Object]!
-    descriptionProject: String!
-    partageProject: String!
-    versionProject: [Version]!
-    reseauProject: [Reseau]!
-    missionProject: [Mission!]!
-    statusProject: String!
-    docsRetourProject: [String]!
-    formateurProject: [User!]!
-    createdAt: String!
-    updatedAt: String!
-}
   type Reseau {
     id: ID!
     namereseau: String!
@@ -183,7 +193,6 @@ input ModifyProjectLaboInput {
     durationmission: String!
     benificiairereseau: String!
   }
-
   type Mission {
     id: ID!
     namemission: String!
@@ -194,12 +203,10 @@ input ModifyProjectLaboInput {
     formateur: [User!]!
     typeuser: String!
   }
-
   type Object {
     label: String!
     value: String!
   }
-
   type ProjectLabo {
     id: ID!
     nameProject: String!
@@ -219,7 +226,6 @@ input ModifyProjectLaboInput {
     createdAt: String!
     updatedAt: String!
   }
-
   type User {
     id: ID!
     firstname: String!
@@ -238,9 +244,10 @@ input ModifyProjectLaboInput {
     message: String
     resourceRef: String
   }
+
+  ############################################################################ Mutation
   type Mutation {
-   
-    # # # ProjectUSSCQ
+       # # #    # # #    # # #    # # #    # # #    # # #  ProjectUSSCQ
     # Modify ProjectUSSCQ
     modifyProject(input: ModifyProjectInput!): ProjetUSSCQ!
 
@@ -265,15 +272,14 @@ input ModifyProjectLaboInput {
     # Delete Activity ( Response ) Project USSCQ
     deleteResponse(projectId: ID!, responseId: ID!): Response!
 
-    # # # ProjectLABO
+    # # #    # # #    # # #    # # #    # # #    # # #  ProjectLABO
     # Create Version Project LABO
     createVersion(input: CreateVersionInput!): Version!
     # Modify Project LABO
-    modifyProjectLabo(input: ModifyProjectLaboInput!): ProjectLABO!
-
-
+    modifyProjectLabo(input: ModifyProjectLaboInput!): ProjectLabo!
   }
 
+  ############################################################################ Query
   type Query {
     getProjects: [ProjetUSSCQ]
     project(id: ID!): ProjetUSSCQ
