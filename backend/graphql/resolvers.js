@@ -674,6 +674,7 @@ module.exports = {
         throw new Error(error.message);
       }
     },
+
     //*********************************************** LABO PROJECT MUTATIONS ***********************************************//
     //******************* ADD Version to an existing PROJECT BY (PROJECT Labo ID) *******************//
     createVersion: async (parent, { input }, context) => {
@@ -725,6 +726,101 @@ module.exports = {
 
       // Return the created version
       return newVersion;
+    },
+    //******************* MODIFY LABO PROJECT BY (PROJECT LABO infos) *******************//
+    modifyProjectLabo: async (parent, { input }, context) => {
+      const {
+        id,
+        nameProject,
+        adminProject,
+        referenceTypeProject,
+        livrablesProject,
+        encryptionTypeProject,
+        integrationProject,
+        descriptionProject,
+        partageProject,
+        // versionProject,
+        // reseauProject,
+        // missionProject,
+        statusProject,
+        docsRetourProject,
+        formateurProject,
+        createdAt,
+        updatedAt,
+      } = input;
+      try {
+        const project = await ProjectLabo.findById(id).populate("adminProject"); // Retrieve the project based on the provided ID
+
+        if (!project) {
+          throw new Error("Project not found");
+        }
+        project.nameProject = nameProject.toUpperCase();
+        (project.adminProject = adminProject),
+          (project.referenceTypeProject = referenceTypeProject),
+          (project.livrablesProject = livrablesProject),
+          (project.encryptionTypeProject = encryptionTypeProject),
+          (project.integrationProject = integrationProject),
+          (project.descriptionProject = descriptionProject),
+          (project.versionProject = versionProject),
+          (project.reseauProject = reseauProject),
+          (project.missionProject = missionProject),
+          (project.statusProject = statusProject),
+          (project.docsRetourProject = docsRetourProject),
+          (project.formateurProject = formateurProject),
+          (project.partageProject = partageProject),
+          (project.createdAt = createdAt);
+        project.updatedAt = new Date();
+
+        // //Admin USSCQ PROJECT MODIFICATION
+        // if (
+        //   admin[0].grade + admin[0].firstname + admin[0].name !=
+        //   project.admin[0].grade +
+        //     project.admin[0].firstname +
+        //     project.admin[0].name
+        // ) {
+        //   //Find the PrevAdmin and Retrieve the id from his projectQt list & Delete AdminQt from usertype in the case of Adminstrating one project
+        //   const PrevAdmin = await User.findOne({
+        //     name: project.admin[0].name,
+        //     firstname: project.admin[0].firstname,
+        //   }).exec();
+        //   if (PrevAdmin.projectQt.length == 1) {
+        //     PrevAdmin.userType = PrevAdmin.userType.filter(
+        //       (role) => role !== "AdminQt"
+        //     );
+        //   }
+        //   PrevAdmin.projectQt = PrevAdmin.projectQt.filter(
+        //     (id) => !id.equals(project.id)
+        //   );
+        //   await PrevAdmin.save();
+
+        //   // Find and update the NewAdmin & add the Administrator userType if it does not exists
+        //   const NewAdmin = await User.findOne({
+        //     name: admin[0].name,
+        //     firstname: admin[0].firstname,
+        //   }).exec();
+        //   if (NewAdmin) {
+        //     // Change the Admin of the USSCQ Project
+        //     project.admin = NewAdmin;
+        //     // Check if the ObjectId already exists in the array
+        //     const idExists = NewAdmin.projectQt.some((id) =>
+        //       id.equals(project.id)
+        //     );
+        //     if (!idExists) {
+        //       NewAdmin.projectQt.push(project.id); // Push the ObjectId only if it doesn't exist
+        //     }
+        //     if (!NewAdmin.userType.includes("AdminQt")) {
+        //       NewAdmin.userType.push("AdminQt");
+        //     }
+        //     await NewAdmin.save();
+        //   }
+        // }
+        // await project.save();
+
+        // Return the modified PROJECT
+        // return project;
+      } catch (error) {
+        throw new Error("Failed to fetch PROJECT");
+      }
     },
   },
 };
