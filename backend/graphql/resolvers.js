@@ -745,7 +745,7 @@ module.exports = {
         statusProject,
         docsRetourProject,
         formateurProject,
-        createdAt,
+        // createdAt,
         updatedAt,
       } = input;
       try {
@@ -755,22 +755,27 @@ module.exports = {
           throw new Error("Project not found");
         }
         project.nameProject = nameProject.toUpperCase();
-        (project.adminProject = adminProject),
-          (project.referenceTypeProject = referenceTypeProject),
+
+        // (project.adminProject = adminProject),
+        (project.referenceTypeProject = referenceTypeProject),
           (project.livrablesProject = livrablesProject),
           (project.encryptionTypeProject = encryptionTypeProject),
           (project.integrationProject = integrationProject),
           (project.descriptionProject = descriptionProject),
-          (project.versionProject = versionProject),
-          (project.reseauProject = reseauProject),
-          (project.missionProject = missionProject),
+          // (project.versionProject = versionProject),
+          // (project.reseauProject = reseauProject),
+          // (project.missionProject = missionProject),
           (project.statusProject = statusProject),
           (project.docsRetourProject = docsRetourProject),
           (project.formateurProject = formateurProject),
           (project.partageProject = partageProject),
-          (project.createdAt = createdAt);
-        project.updatedAt = new Date();
+          (project.updatedAt = new Date());
+        console.log("project", project);
 
+        await project.save();
+
+        //Return the modified PROJECT
+        return project;
         // //Admin USSCQ PROJECT MODIFICATION
         // if (
         //   admin[0].grade + admin[0].firstname + admin[0].name !=
@@ -814,10 +819,6 @@ module.exports = {
         //     await NewAdmin.save();
         //   }
         // }
-        // await project.save();
-
-        // Return the modified PROJECT
-        // return project;
       } catch (error) {
         throw new Error("Failed to fetch PROJECT");
       }
