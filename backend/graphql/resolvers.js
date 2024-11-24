@@ -743,7 +743,6 @@ module.exports = {
         // reseauProject,
         // missionProject,
         statusProject,
-        docsRetourProject,
         formateurProject,
         // createdAt,
         updatedAt,
@@ -766,7 +765,7 @@ module.exports = {
           // (project.reseauProject = reseauProject),
           // (project.missionProject = missionProject),
           // (project.statusProject = statusProject),
-          (project.docsRetourProject = docsRetourProject),
+
           (project.formateurProject = formateurProject),
           (project.partageProject = partageProject),
           (project.updatedAt = new Date());
