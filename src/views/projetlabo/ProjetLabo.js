@@ -13,7 +13,10 @@ import { GET_VERSION } from "../../graphql/queries/projectslabo";
 
 //IMPORT MUTATIONS PROJETLABO
 import { useMutation } from "@apollo/client";
-import { CREATE_VERSION_MUTATION } from "../../graphql/mutations/projectslabo";
+import {
+  CREATE_VERSION_MUTATION,
+  MODIFY_PROJECT_LABO_MUTATION,
+} from "../../graphql/mutations/projectslabo";
 import { listUsers } from "../actions/userActions";
 import { faCodeFork } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -129,6 +132,9 @@ const ProjetLabo = () => {
   //SET THE LIST OF USSCQ USERS
   const [admins, setAdminsList] = useState([]);
 
+  // States for modifying PROJECT LABO
+  const [newName, setNewName] = useState();
+  const [referenceTypeProject, setReferenceTypeProject] = useState();
   // USE PROJECT ID AS A PARAM
   const { id } = useParams(); // Access the 'id' parameter
 
@@ -173,11 +179,14 @@ const ProjetLabo = () => {
   /****************************************************  MUTATIONS PROJECTLABO **************************************************************/
 
   // // 1 - CREATE ACTIVITY
-
+  //   CREATE VERSION MUTATION
   const [createVersion, { loading1, error1 }] = useMutation(
     CREATE_VERSION_MUTATION
   );
-
+  // MODIFY PROJECT LABO
+  const [modifyProjectLabo, { loading2, error2 }] = useMutation(
+    MODIFY_PROJECT_LABO_MUTATION
+  );
   // Function to handle creating an activite
   const handleCreateVersion = async () => {
     try {
@@ -310,6 +319,36 @@ const ProjetLabo = () => {
     updatedLivrables[index].checked = !updatedLivrables[index].checked;
     setLivrables(updatedLivrables);
   };
+  // FUNCTION OF MODIFYING PROJECT LABO
+
+  function handleRefTypeProject(newValue) {
+    // newValue is an array of selected options
+    const newValues = newValue.map((option) => option.value);
+    setReferenceTypeProject((prevModifiedProperties) => ({
+      reftype: newValues,
+    }));
+  }
+  const handleModifyProject = async () => {
+    try {
+      const input = {
+        id: project.id,
+        nameProject: newName,
+        // adminProject:,
+        referenceTypeProject: referenceTypeProject,
+        // livrablesProject:,
+        // encryptionTypeProject:,
+        // integrationProject:,
+        // descriptionProject:,
+        // partageProject:,
+        // docsRetourProject:,
+        // formateurProject:,
+      };
+      console.log("referenceTypeProject", referenceTypeProject);
+    } catch (error) {
+      // Handle error, e.g., display an error message or log the error
+      console.error("Error modifying project:", error);
+    }
+  };
 
   // Reset livrables state when the modal is closed
   const handleCloseModal = () => {
@@ -368,6 +407,7 @@ const ProjetLabo = () => {
                                 type="text"
                                 id="inputNom"
                                 label="Nom"
+                                onChange={(e) => setNewName(e.target.value)}
                               />
                             </CCol>
 
@@ -418,6 +458,7 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Type de référence"
                                 options={project.referenceTypeProject}
+                                onChange={handleRefTypeProject}
                               />
                             </CCol>
 
@@ -529,7 +570,8 @@ const ProjetLabo = () => {
                               <CButton
                                 disabled={!superadmin}
                                 color="primary"
-                                type="submit"
+                                // type="submit"
+                                onClick={handleModifyProject}
                               >
                                 Effectuer
                               </CButton>
