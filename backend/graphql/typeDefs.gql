@@ -165,10 +165,10 @@ input ModifyProjectLaboInput {
     # versionProject: [Version]!
     # reseauProject: [Reseau]!
     # missionProject: [Mission!]!
-    statusProject: String!
+    # statusProject: String!
     docsRetourProject: [String]!
     formateurProject: [FormateurInput]
-    createdAt: String!
+    # createdAt: String!
     updatedAt: String!
 }
   input CreateVersionInput {

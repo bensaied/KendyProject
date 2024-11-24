@@ -1055,9 +1055,6 @@ const ProjetQt = () => {
   useEffect(() => {
     dispatch(listUsers());
     dispatch(userInfoRefresh(userInfo.login));
-    console.log("refreshInfos: ", refreshInfo);
-
-    console.log("userInfo: ", userInfo.login);
   }, [dispatch]);
 
   // Display USERS IN THE ADMIN DROP MENU

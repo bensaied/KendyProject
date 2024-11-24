@@ -7,3 +7,43 @@ export const CREATE_VERSION_MUTATION = gql`
     }
   }
 `;
+export const MODIFY_PROJECT_LABO_MUTATION = gql`
+  mutation ModifyProjectLabo($input: ModifyProjectLaboInput!) {
+    modifyProjectLabo(input: $input) {
+      id
+      nameProject
+      adminProject {
+        firstname
+        name
+        grade
+      }
+      referenceTypeProject {
+        label
+        value
+      }
+      livrablesProject {
+        label
+        value
+      }
+      createdAt
+      updatedAt
+      formateurProject {
+        firstname
+        name
+        grade
+      }
+      docsRetourProject
+      partageProject
+      descriptionProject
+      integrationProject {
+        label
+        value
+      }
+      encryptionTypeProject {
+        label
+        value
+      }
+      statusProject
+    }
+  }
+`;
