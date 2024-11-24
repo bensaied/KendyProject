@@ -147,6 +147,11 @@ module.exports = gql`
     label: String!
     value: String!
   }
+    input ObjectLivrableInput {
+    label: String!
+    value: String!
+    checked: Boolean!
+  }
  input FormateurInput {
     firstname: String!
     name: String!
@@ -157,7 +162,7 @@ input ModifyProjectLaboInput {
     nameProject: String!
     adminProject: [AdminInput]
     referenceTypeProject: [ObjectInput]!
-    livrablesProject: [ObjectInput]!
+    livrablesProject: [ObjectLivrableInput]!
     encryptionTypeProject: [ObjectInput]!
     integrationProject: [ObjectInput]!
     descriptionProject: String!
@@ -166,7 +171,7 @@ input ModifyProjectLaboInput {
     # reseauProject: [Reseau]!
     # missionProject: [Mission!]!
     # statusProject: String!
-    docsRetourProject: [String]!
+    # docsRetourProject: [String]!
     formateurProject: [FormateurInput]
     # createdAt: String!
     updatedAt: String!
@@ -207,12 +212,17 @@ input ModifyProjectLaboInput {
     label: String!
     value: String!
   }
+  type ObjectLivrable {
+    label: String!
+    value: String!
+    checked: Boolean!
+  }
   type ProjectLabo {
     id: ID!
     nameProject: String!
     adminProject: [User!]!
     referenceTypeProject: [Object]!
-    livrablesProject: [Object]!
+    livrablesProject: [ObjectLivrable]!
     encryptionTypeProject: [Object]!
     integrationProject: [Object]!
     descriptionProject: String!
@@ -221,7 +231,7 @@ input ModifyProjectLaboInput {
     reseauProject: [Reseau]!
     missionProject: [Mission!]!
     statusProject: String!
-    docsRetourProject: [String]!
+    # docsRetourProject: [String]!
     formateurProject: [User!]!
     createdAt: String!
     updatedAt: String!

@@ -314,11 +314,14 @@ const CreerProjet = () => {
   }
 
   function ChangeLivrables(selected) {
+    const updatedSelected = selected.map((option) => ({
+      ...option,
+      checked: true,
+    }));
     const selectedValues = selected.map((option) => option.value);
-    setlivrablesProject(selected); // Set the selected objects
-    setlivrablesProjectV(selectedValues); // Set the selected values
+    setlivrablesProject(updatedSelected);
+    setlivrablesProjectV(selectedValues);
   }
-
   function ChangeEncryptionTypeProject(selected) {
     const selectedValues = selected;
     setencryptionTypeProject(selected); // Set the selected objects

@@ -136,6 +136,9 @@ const ProjetLabo = () => {
   // States for modifying PROJECT LABO
   const [newName, setNewName] = useState();
   const [referenceTypeProject, setReferenceTypeProject] = useState();
+  const [encryptionTypeProject, setEncryptionTypeProject] = useState();
+  const [integrationProject, setIntegrationProject] = useState();
+
   // USE PROJECT ID AS A PARAM
   const { id } = useParams(); // Access the 'id' parameter
 
@@ -329,15 +332,15 @@ const ProjetLabo = () => {
         nameProject: newName,
         // adminProject:,
         referenceTypeProject: referenceTypeProject,
-        // livrablesProject:,
-        // encryptionTypeProject:,
-        // integrationProject:,
+        livrablesProject: livrables,
+        encryptionTypeProject: encryptionTypeProject,
+        integrationProject: integrationProject,
         // descriptionProject:,
         // partageProject:,
         // docsRetourProject:,
         // formateurProject:,
       };
-      console.log("referenceTypeProject", referenceTypeProject);
+      console.log("livrables", livrables);
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying project:", error);
@@ -471,7 +474,7 @@ const ProjetLabo = () => {
                                 options={project.encryptionTypeProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(opt, meta) => console.log(opt, meta)}
+                                onChange={(e) => setEncryptionTypeProject(e)}
                               />
                             </CCol>
 
@@ -489,7 +492,7 @@ const ProjetLabo = () => {
                                 options={project.integrationProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(opt, meta) => console.log(opt, meta)}
+                                onChange={(e) => setIntegrationProject(e)}
                               />
                             </CCol>
 
