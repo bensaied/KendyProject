@@ -72,6 +72,7 @@ import {
 import { addDays } from "date-fns";
 
 import { useParams } from "react-router";
+import { setRef } from "@mui/material";
 
 const ProjetLabo = () => {
   const dispatch = useDispatch();
@@ -321,13 +322,6 @@ const ProjetLabo = () => {
   };
   // FUNCTION OF MODIFYING PROJECT LABO
 
-  function handleRefTypeProject(newValue) {
-    // newValue is an array of selected options
-    const newValues = newValue.map((option) => option.value);
-    setReferenceTypeProject((prevModifiedProperties) => ({
-      reftype: newValues,
-    }));
-  }
   const handleModifyProject = async () => {
     try {
       const input = {
@@ -458,7 +452,8 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Type de référence"
                                 options={project.referenceTypeProject}
-                                onChange={handleRefTypeProject}
+                                // onChange={handleRefTypeProject}
+                                onChange={(e) => setReferenceTypeProject(e)}
                               />
                             </CCol>
 
