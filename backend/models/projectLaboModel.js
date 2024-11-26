@@ -25,9 +25,9 @@ const projectLaboSchema = mongoose.Schema(
     livrablesTypeProject: {
       type: Array,
     },
-    docsRetourProject: {
-      type: Array,
-    },
+    // docsRetourProject: {
+    //   type: Array,
+    // },
     integrationProject: {
       type: Array,
     },

@@ -32,7 +32,6 @@ export const MODIFY_PROJECT_LABO_MUTATION = gql`
         name
         grade
       }
-      docsRetourProject
       partageProject
       descriptionProject
       integrationProject {

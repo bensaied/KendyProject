@@ -42,7 +42,6 @@ export const GET_PROJECT_LABO = gql`
       }
       createdAt
       descriptionProject
-      docsRetourProject
       encryptionTypeProject {
         label
         value

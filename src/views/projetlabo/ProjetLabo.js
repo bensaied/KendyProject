@@ -72,6 +72,7 @@ import {
 import { addDays } from "date-fns";
 
 import { useParams } from "react-router";
+import { setRef } from "@mui/material";
 
 const ProjetLabo = () => {
   const dispatch = useDispatch();
@@ -135,6 +136,11 @@ const ProjetLabo = () => {
   // States for modifying PROJECT LABO
   const [newName, setNewName] = useState();
   const [referenceTypeProject, setReferenceTypeProject] = useState();
+  const [encryptionTypeProject, setEncryptionTypeProject] = useState();
+  const [integrationProject, setIntegrationProject] = useState();
+  const [newDescription, setNewDescription] = useState();
+  const [newPartage, setNewPartage] = useState();
+
   // USE PROJECT ID AS A PARAM
   const { id } = useParams(); // Access the 'id' parameter
 
@@ -320,14 +326,13 @@ const ProjetLabo = () => {
     setLivrables(updatedLivrables);
   };
   // FUNCTION OF MODIFYING PROJECT LABO
+  function handlePartageChange(e) {
+    const newPartageValue = e.target.checked ? "true" : "false";
 
-  function handleRefTypeProject(newValue) {
-    // newValue is an array of selected options
-    const newValues = newValue.map((option) => option.value);
-    setReferenceTypeProject((prevModifiedProperties) => ({
-      reftype: newValues,
-    }));
+    // Update the local state
+    setNewPartage(newPartageValue);
   }
+
   const handleModifyProject = async () => {
     try {
       const input = {
@@ -335,15 +340,14 @@ const ProjetLabo = () => {
         nameProject: newName,
         // adminProject:,
         referenceTypeProject: referenceTypeProject,
-        // livrablesProject:,
-        // encryptionTypeProject:,
-        // integrationProject:,
-        // descriptionProject:,
-        // partageProject:,
-        // docsRetourProject:,
+        livrablesProject: livrables,
+        encryptionTypeProject: encryptionTypeProject,
+        integrationProject: integrationProject,
+        descriptionProject: newDescription,
+        partageProject: newPartage,
         // formateurProject:,
       };
-      console.log("referenceTypeProject", referenceTypeProject);
+      console.log("formateurProject");
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying project:", error);
@@ -458,7 +462,8 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Type de référence"
                                 options={project.referenceTypeProject}
-                                onChange={handleRefTypeProject}
+                                // onChange={handleRefTypeProject}
+                                onChange={(e) => setReferenceTypeProject(e)}
                               />
                             </CCol>
 
@@ -476,7 +481,7 @@ const ProjetLabo = () => {
                                 options={project.encryptionTypeProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(opt, meta) => console.log(opt, meta)}
+                                onChange={(e) => setEncryptionTypeProject(e)}
                               />
                             </CCol>
 
@@ -494,7 +499,7 @@ const ProjetLabo = () => {
                                 options={project.integrationProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(opt, meta) => console.log(opt, meta)}
+                                onChange={(e) => setIntegrationProject(e)}
                               />
                             </CCol>
 
@@ -551,6 +556,9 @@ const ProjetLabo = () => {
                                 disabled={!superadmin}
                                 defaultValue={project.descriptionProject}
                                 label="Description"
+                                onChange={(e) =>
+                                  setNewDescription(e.target.value)
+                                }
                               ></CFormTextarea>
                             </CCol>
 
@@ -563,6 +571,7 @@ const ProjetLabo = () => {
                                 type="checkbox"
                                 id="gridCheck"
                                 label="Partager ce projet"
+                                onChange={handlePartageChange}
                               />
                             </CCol>
 
