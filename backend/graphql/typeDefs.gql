@@ -147,7 +147,7 @@ module.exports = gql`
     label: String!
     value: String!
   }
-    input ObjectLivrableInput {
+  input ObjectLivrableInput {
     label: String!
     value: String!
     checked: Boolean!
@@ -171,7 +171,6 @@ input ModifyProjectLaboInput {
     # reseauProject: [Reseau]!
     # missionProject: [Mission!]!
     # statusProject: String!
-    # docsRetourProject: [String]!
     formateurProject: [FormateurInput]
     # createdAt: String!
     updatedAt: String!
@@ -231,7 +230,6 @@ input ModifyProjectLaboInput {
     reseauProject: [Reseau]!
     missionProject: [Mission!]!
     statusProject: String!
-    # docsRetourProject: [String]!
     formateurProject: [User!]!
     createdAt: String!
     updatedAt: String!
