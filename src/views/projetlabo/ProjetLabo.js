@@ -104,17 +104,17 @@ const ProjetLabo = () => {
   const [versId, setversId] = useState("");
 
   // Project States for modify
-  const [projectModified, setProjectModified] = useState("");
-  const [selectedAdminProject, setSelectedAdminProject] = useState(null);
-  const [partage, setPartage] = useState("");
-  const [modifiedProperties, setModifiedProperties] = useState({});
-  const [periodeProject, setPeriodeProject] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+  // const [projectModified, setProjectModified] = useState("");
+  // const [selectedAdminProject, setSelectedAdminProject] = useState(null);
+  // const [partage, setPartage] = useState("");
+  // const [modifiedProperties, setModifiedProperties] = useState({});
+  // const [periodeProject, setPeriodeProject] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: addDays(new Date(), 7),
+  //     key: "selection",
+  //   },
+  // ]);
 
   //COMPONENT REF
   const refOne = useRef(null);
@@ -140,6 +140,7 @@ const ProjetLabo = () => {
   const [integrationProject, setIntegrationProject] = useState();
   const [newDescription, setNewDescription] = useState();
   const [newPartage, setNewPartage] = useState();
+  const [newAdmin, setNewAdmin] = useState();
 
   // USE PROJECT ID AS A PARAM
   const { id } = useParams(); // Access the 'id' parameter
@@ -338,7 +339,7 @@ const ProjetLabo = () => {
       const input = {
         id: project.id,
         nameProject: newName,
-        // adminProject:,
+        adminProject: newAdmin,
         referenceTypeProject: referenceTypeProject,
         livrablesProject: livrables,
         encryptionTypeProject: encryptionTypeProject,
@@ -347,7 +348,7 @@ const ProjetLabo = () => {
         partageProject: newPartage,
         // formateurProject:,
       };
-      console.log("formateurProject");
+      console.log("newAdmin", newAdmin);
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying project:", error);
@@ -442,6 +443,7 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Administrateur"
                                 options={admins}
+                                onChange={(e) => setNewAdmin(e)}
                               />
                             </CCol>
 
