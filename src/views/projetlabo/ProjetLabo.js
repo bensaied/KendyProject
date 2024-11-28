@@ -141,6 +141,7 @@ const ProjetLabo = () => {
   const [newDescription, setNewDescription] = useState();
   const [newPartage, setNewPartage] = useState();
   const [newAdmin, setNewAdmin] = useState();
+  const [newFormateurs, setNewFormateurs] = useState();
 
   // USE PROJECT ID AS A PARAM
   const { id } = useParams(); // Access the 'id' parameter
@@ -346,7 +347,7 @@ const ProjetLabo = () => {
         integrationProject: integrationProject,
         descriptionProject: newDescription,
         partageProject: newPartage,
-        // formateurProject:,
+        formateurProject: newFormateurs,
       };
       console.log("newAdmin", newAdmin);
     } catch (error) {
