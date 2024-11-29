@@ -141,7 +141,7 @@ const ProjetLabo = () => {
   const [newDescription, setNewDescription] = useState();
   const [newPartage, setNewPartage] = useState();
   const [newAdmin, setNewAdmin] = useState();
-  const [newFormateurs, setNewFormateurs] = useState();
+  const [newFormateurs, setNewFormateurs] = useState([]);
 
   // USE PROJECT ID AS A PARAM
   const { id } = useParams(); // Access the 'id' parameter
@@ -335,6 +335,12 @@ const ProjetLabo = () => {
     setNewPartage(newPartageValue);
   }
 
+  const handleSelectionChange = (event) => {
+    const selectedOptions = Array.from(event.target.selectedOptions).map(
+      (option) => option.label
+    );
+    setNewFormateurs(selectedOptions);
+  };
   const handleModifyProject = async () => {
     try {
       const input = {
@@ -349,7 +355,7 @@ const ProjetLabo = () => {
         partageProject: newPartage,
         formateurProject: newFormateurs,
       };
-      console.log("newAdmin", newAdmin);
+      console.log("newFormateurs", newFormateurs);
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying project:", error);
@@ -545,6 +551,7 @@ const ProjetLabo = () => {
                                 label="Formateurs"
                                 multiple
                                 aria-label="Multiple select example"
+                                onChange={handleSelectionChange}
                               >
                                 {admins.map((laboUser, index) => (
                                   <option value={index}>
