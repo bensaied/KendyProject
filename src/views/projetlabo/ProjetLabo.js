@@ -9,7 +9,7 @@ import { Button } from "react-bootstrap";
 //IMPORT QUERIES PROJETLABO
 import { useQuery } from "@apollo/client";
 import { GET_PROJECT_LABO } from "../../graphql/queries/projectslabo";
-import { GET_VERSION } from "../../graphql/queries/projectslabo";
+// import { GET_VERSION } from "../../graphql/queries/projectslabo";
 
 //IMPORT MUTATIONS PROJETLABO
 import { useMutation } from "@apollo/client";
@@ -132,7 +132,6 @@ const ProjetLabo = () => {
 
   //SET THE LIST OF USSCQ USERS
   const [admins, setAdminsList] = useState([]);
-
   // States for modifying PROJECT LABO
   const [newName, setNewName] = useState();
   const [referenceTypeProject, setReferenceTypeProject] = useState();
@@ -308,11 +307,24 @@ const ProjetLabo = () => {
   // Handle changes in the CreatableSelect
   const handleLivrableChange = (selectedOptions) => {
     const updatedLivrables = (selectedOptions || []).map((option) => {
+      const sanitizedOption = {
+        label: option.label,
+        value: option.value,
+      };
+
+      Object.keys(option).forEach((key) => {
+        if (key !== "label" && key !== "value") {
+          delete option[key];
+        }
+      });
+
       const existingLivrable = livrables.find(
-        (liv) => liv.value === option.value
+        (liv) => liv.value === sanitizedOption.value
       );
+      console.log("existingLivrable", existingLivrable);
+
       return {
-        ...option,
+        ...sanitizedOption,
         checked: existingLivrable ? existingLivrable.checked : true,
       };
     });
@@ -341,21 +353,36 @@ const ProjetLabo = () => {
     );
     setNewFormateurs(selectedOptions);
   };
+  //   const handleChange = (e) => {
+  //   const sanitizedValue = { label: e.label, value: e.value };
+  //   setSelectedOption(sanitizedValue); // Manage only label and value
+  // };
   const handleModifyProject = async () => {
     try {
       const input = {
         id: project.id,
-        nameProject: newName,
+        nameProject: newName ? newName : project.nameProject,
         adminProject: newAdmin,
-        referenceTypeProject: referenceTypeProject,
-        livrablesProject: livrables,
-        encryptionTypeProject: encryptionTypeProject,
-        integrationProject: integrationProject,
-        descriptionProject: newDescription,
-        partageProject: newPartage,
+        referenceTypeProject: referenceTypeProject
+          ? referenceTypeProject
+          : project.referenceTypeProject,
+        livrablesProject: livrables ? livrables : project.livrablesProject,
+        encryptionTypeProject: encryptionTypeProject
+          ? encryptionTypeProject
+          : project.encryptionTypeProject,
+        integrationProject: integrationProject
+          ? integrationProject
+          : project.integrationProject,
+        descriptionProject: newDescription
+          ? newDescription
+          : project.descriptionProject,
+        partageProject: newPartage ? newPartage : project.partageProject,
         formateurProject: newFormateurs,
       };
-      console.log("newFormateurs", newFormateurs);
+      console.log("livrables", livrables);
+      const { data } = await modifyProjectLabo({
+        variables: { input },
+      });
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying project:", error);
@@ -471,8 +498,20 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Type de référence"
                                 options={project.referenceTypeProject}
-                                // onChange={handleRefTypeProject}
-                                onChange={(e) => setReferenceTypeProject(e)}
+                                onChange={(e) => {
+                                  if (e) {
+                                    const sanitizedValue = {
+                                      label: e.label || "",
+                                      value: e.value || "",
+                                    };
+                                    setReferenceTypeProject(sanitizedValue);
+                                  } else {
+                                    setReferenceTypeProject({
+                                      label: "",
+                                      value: "",
+                                    });
+                                  }
+                                }}
                               />
                             </CCol>
 
@@ -490,7 +529,20 @@ const ProjetLabo = () => {
                                 options={project.encryptionTypeProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(e) => setEncryptionTypeProject(e)}
+                                onChange={(e) => {
+                                  if (e) {
+                                    const sanitizedValue = {
+                                      label: e.label || "",
+                                      value: e.value || "",
+                                    };
+                                    setEncryptionTypeProject(sanitizedValue);
+                                  } else {
+                                    setEncryptionTypeProject({
+                                      label: "",
+                                      value: "",
+                                    });
+                                  }
+                                }}
                               />
                             </CCol>
 
@@ -508,7 +560,20 @@ const ProjetLabo = () => {
                                 options={project.integrationProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(e) => setIntegrationProject(e)}
+                                onChange={(e) => {
+                                  if (e) {
+                                    const sanitizedValue = {
+                                      label: e.label || "",
+                                      value: e.value || "",
+                                    };
+                                    setIntegrationProject(sanitizedValue);
+                                  } else {
+                                    setIntegrationProject({
+                                      label: "",
+                                      value: "",
+                                    });
+                                  }
+                                }}
                               />
                             </CCol>
 

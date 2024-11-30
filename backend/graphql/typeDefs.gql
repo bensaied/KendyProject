@@ -152,11 +152,11 @@ module.exports = gql`
     value: String!
     checked: Boolean!
   }
- input FormateurInput {
-    firstname: String!
-    name: String!
-    grade: String!
-  }
+#  input FormateurInput {
+#     firstname: String!
+#     name: String!
+#     grade: String!
+#   }
 input ModifyProjectLaboInput {
     id: ID!
     nameProject: String!
@@ -171,9 +171,9 @@ input ModifyProjectLaboInput {
     # reseauProject: [Reseau]!
     # missionProject: [Mission!]!
     # statusProject: String!
-    formateurProject: [FormateurInput]
+    formateurProject: [String]!
     # createdAt: String!
-    updatedAt: String!
+    updatedAt: String
 }
   input CreateVersionInput {
     projectId: ID!
@@ -230,7 +230,7 @@ input ModifyProjectLaboInput {
     reseauProject: [Reseau]!
     missionProject: [Mission!]!
     statusProject: String!
-    formateurProject: [User!]!
+    formateurProject: [String]!
     createdAt: String!
     updatedAt: String!
   }

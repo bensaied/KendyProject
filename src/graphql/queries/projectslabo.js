@@ -46,18 +46,7 @@ export const GET_PROJECT_LABO = gql`
         label
         value
       }
-      formateurProject {
-        direction
-        firstConnect
-        firstname
-        id
-        login
-        grade
-        name
-        password
-        userType
-      }
-
+      formateurProject
       integrationProject {
         label
         value
@@ -65,6 +54,7 @@ export const GET_PROJECT_LABO = gql`
       livrablesProject {
         label
         value
+        checked
       }
       missionProject {
         destination

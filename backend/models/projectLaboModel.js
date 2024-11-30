@@ -11,7 +11,7 @@ const projectLaboSchema = mongoose.Schema(
 
     adminProject: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
-    formateurProject: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    formateurProject: [{ type: String }],
 
     encryptionTypeProject: {
       type: Array,
@@ -20,9 +20,6 @@ const projectLaboSchema = mongoose.Schema(
       type: Array,
     },
     livrablesProject: {
-      type: Array,
-    },
-    livrablesTypeProject: {
       type: Array,
     },
     // docsRetourProject: {

@@ -769,7 +769,6 @@ module.exports = {
           (project.formateurProject = formateurProject),
           (project.partageProject = partageProject),
           (project.updatedAt = new Date());
-        console.log("project", project);
 
         await project.save();
 

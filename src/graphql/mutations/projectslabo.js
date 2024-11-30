@@ -24,14 +24,11 @@ export const MODIFY_PROJECT_LABO_MUTATION = gql`
       livrablesProject {
         label
         value
+        checked
       }
       createdAt
       updatedAt
-      formateurProject {
-        firstname
-        name
-        grade
-      }
+
       partageProject
       descriptionProject
       integrationProject {
@@ -43,6 +40,7 @@ export const MODIFY_PROJECT_LABO_MUTATION = gql`
         value
       }
       statusProject
+      formateurProject
     }
   }
 `;
