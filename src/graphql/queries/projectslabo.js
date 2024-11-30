@@ -54,6 +54,7 @@ export const GET_PROJECT_LABO = gql`
       livrablesProject {
         label
         value
+        checked
       }
       missionProject {
         destination

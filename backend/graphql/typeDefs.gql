@@ -173,7 +173,7 @@ input ModifyProjectLaboInput {
     # statusProject: String!
     formateurProject: [String]!
     # createdAt: String!
-    updatedAt: String!
+    updatedAt: String
 }
   input CreateVersionInput {
     projectId: ID!
