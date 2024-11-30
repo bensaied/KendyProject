@@ -9,7 +9,7 @@ import { Button } from "react-bootstrap";
 //IMPORT QUERIES PROJETLABO
 import { useQuery } from "@apollo/client";
 import { GET_PROJECT_LABO } from "../../graphql/queries/projectslabo";
-import { GET_VERSION } from "../../graphql/queries/projectslabo";
+// import { GET_VERSION } from "../../graphql/queries/projectslabo";
 
 //IMPORT MUTATIONS PROJETLABO
 import { useMutation } from "@apollo/client";
@@ -355,7 +355,10 @@ const ProjetLabo = () => {
         partageProject: newPartage,
         formateurProject: newFormateurs,
       };
-      console.log("newFormateurs", newFormateurs);
+      // console.log("newFormateurs", newFormateurs);
+      const { data } = await modifyProjectLabo({
+        variables: { input },
+      });
     } catch (error) {
       // Handle error, e.g., display an error message or log the error
       console.error("Error modifying project:", error);
@@ -589,7 +592,7 @@ const ProjetLabo = () => {
                               <CButton
                                 disabled={!superadmin}
                                 color="primary"
-                                // type="submit"
+                                type="submit"
                                 onClick={handleModifyProject}
                               >
                                 Effectuer

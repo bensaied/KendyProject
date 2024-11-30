@@ -27,11 +27,7 @@ export const MODIFY_PROJECT_LABO_MUTATION = gql`
       }
       createdAt
       updatedAt
-      formateurProject {
-        firstname
-        name
-        grade
-      }
+      formateurProject
       partageProject
       descriptionProject
       integrationProject {
