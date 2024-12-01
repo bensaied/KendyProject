@@ -307,22 +307,19 @@ const ProjetLabo = () => {
   // Handle changes in the CreatableSelect
   const handleLivrableChange = (selectedOptions) => {
     const updatedLivrables = (selectedOptions || []).map((option) => {
+      // Create a sanitized version of the option without modifying the original
       const sanitizedOption = {
         label: option.label,
         value: option.value,
       };
 
-      Object.keys(option).forEach((key) => {
-        if (key !== "label" && key !== "value") {
-          delete option[key];
-        }
-      });
-
+      // Find if the option already exists in livrables
       const existingLivrable = livrables.find(
         (liv) => liv.value === sanitizedOption.value
       );
       console.log("existingLivrable", existingLivrable);
 
+      // Return the new object with the checked status preserved
       return {
         ...sanitizedOption,
         checked: existingLivrable ? existingLivrable.checked : true,
