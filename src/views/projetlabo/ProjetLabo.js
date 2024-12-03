@@ -293,7 +293,7 @@ const ProjetLabo = () => {
         (livrable) => ({
           value: livrable.value,
           label: livrable.label,
-          checked: true, // Initial checked state
+          checked: livrable.checked,
         })
       );
       setLivrables(updatedLivrables);
@@ -332,8 +332,10 @@ const ProjetLabo = () => {
 
   // Handle checkbox toggle
   const toggleCheckbox = (index) => {
-    const updatedLivrables = [...livrables];
-    updatedLivrables[index].checked = !updatedLivrables[index].checked;
+    const updatedLivrables = livrables.map((livrable, i) =>
+      i === index ? { ...livrable, checked: !livrable.checked } : livrable
+    );
+
     setLivrables(updatedLivrables);
   };
   // FUNCTION OF MODIFYING PROJECT LABO
@@ -586,6 +588,7 @@ const ProjetLabo = () => {
                                   (livrable) => ({
                                     value: livrable.value,
                                     label: livrable.label,
+                                    checked: livrable.checked,
                                   })
                                 )}
                                 onChange={handleLivrableChange}
@@ -651,7 +654,7 @@ const ProjetLabo = () => {
                               <CButton
                                 disabled={!superadmin}
                                 color="primary"
-                                // type="submit"
+                                type="submit"
                                 onClick={handleModifyProject}
                               >
                                 Effectuer
@@ -949,6 +952,7 @@ const ProjetLabo = () => {
                         setSuperAdmin(true);
                         // Function to open the modal for the SuperAdmin
                         setVisible0(!visible0);
+                        setLivrables(project.livrablesProject);
                       } else if (currentTypeState.currentType === "AdminLabo") {
                         setAdmin(true);
                         // Function to open the modal for the Admin
