@@ -769,7 +769,6 @@ module.exports = {
           (project.formateurProject = formateurProject),
           (project.partageProject = partageProject),
           (project.updatedAt = new Date());
-
         await project.save();
 
         //Return the modified PROJECT
