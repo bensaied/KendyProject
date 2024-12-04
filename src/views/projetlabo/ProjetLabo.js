@@ -378,7 +378,7 @@ const ProjetLabo = () => {
         partageProject: newPartage ? newPartage : project.partageProject,
         formateurProject: newFormateurs,
       };
-      console.log("livrables", livrables);
+      console.log("newName", newName);
       const { data } = await modifyProjectLabo({
         variables: { input },
       });
@@ -476,7 +476,9 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Administrateur"
                                 options={admins}
-                                onChange={(e) => setNewAdmin(e)}
+                                onChange={(selectedOption) =>
+                                  setNewAdmin(selectedOption)
+                                }
                               />
                             </CCol>
 
@@ -654,7 +656,7 @@ const ProjetLabo = () => {
                               <CButton
                                 disabled={!superadmin}
                                 color="primary"
-                                type="submit"
+                                // type="submit"
                                 onClick={handleModifyProject}
                               >
                                 Effectuer
