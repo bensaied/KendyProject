@@ -152,7 +152,7 @@ module.exports = gql`
     value: String!
     checked: Boolean!
   }
-#  input FormateurInput {
+#  input AdminLaboInput {
 #     firstname: String!
 #     name: String!
 #     grade: String!
@@ -160,7 +160,7 @@ module.exports = gql`
 input ModifyProjectLaboInput {
     id: ID!
     nameProject: String!
-    adminProject: [AdminInput]
+    adminProject: ObjectInput!
     referenceTypeProject: [ObjectInput]!
     livrablesProject: [ObjectLivrableInput]!
     encryptionTypeProject: [ObjectInput]!
