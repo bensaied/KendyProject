@@ -769,7 +769,55 @@ module.exports = {
           (project.formateurProject = formateurProject),
           (project.partageProject = partageProject),
           (project.updatedAt = new Date());
-        console.log("newAdmin :", adminProject);
+
+        if (
+          adminProject.value !=
+          project.adminProject[0].grade +
+            " " +
+            project.adminProject[0].name +
+            " " +
+            project.adminProject[0].firstname
+        ) {
+          console.log("new admin");
+          //Find the PrevAdmin and Retrieve the id from his projectLabo list & Delete AdminLabo from usertype in the case of Adminstrating one project
+          const PrevAdmin = await User.findOne({
+            name: project.adminProject[0].name,
+            firstname: project.adminProject[0].firstname,
+          }).exec();
+
+          if (PrevAdmin.projectLabo.length == 1) {
+            PrevAdmin.userType = PrevAdmin.userType.filter(
+              (role) => role !== "AdminLabo"
+            );
+          }
+          PrevAdmin.projectLabo = PrevAdmin.projectLabo.filter(
+            (id) => !id.equals(project.id)
+          );
+          await PrevAdmin.save();
+
+          // Find and update the NewAdmin & add the Administrator userType if it does not exists
+          // const NewAdmin = await User.findOne({
+          //   name: admin[0].name,
+          //   firstname: admin[0].firstname,
+          // }).exec();
+
+          //  Add the newAdmin to the Project
+          // if (NewAdmin) {
+          //   // Change the Admin of the USSCQ Project
+          //   project.admin = NewAdmin;
+          //   // Check if the ObjectId already exists in the array
+          //   const idExists = NewAdmin.projectQt.some((id) =>
+          //     id.equals(project.id)
+          //   );
+          //   if (!idExists) {
+          //     NewAdmin.projectQt.push(project.id); // Push the ObjectId only if it doesn't exist
+          //   }
+          //   if (!NewAdmin.userType.includes("AdminQt")) {
+          //     NewAdmin.userType.push("AdminQt");
+          //   }
+          //   await NewAdmin.save();
+          // }
+        } else console.log("same admin");
 
         await project.save();
 
