@@ -656,7 +656,7 @@ const ProjetLabo = () => {
                               <CButton
                                 disabled={!superadmin}
                                 color="primary"
-                                // type="submit"
+                                type="submit"
                                 onClick={handleModifyProject}
                               >
                                 Effectuer

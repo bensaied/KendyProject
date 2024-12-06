@@ -796,28 +796,36 @@ module.exports = {
           await PrevAdmin.save();
 
           // Find and update the NewAdmin & add the Administrator userType if it does not exists
-          // const NewAdmin = await User.findOne({
-          //   name: admin[0].name,
-          //   firstname: admin[0].firstname,
-          // }).exec();
+          const newAdminValue = adminProject.value;
+          const newAdminValueParts = newAdminValue.split(" ");
 
-          //  Add the newAdmin to the Project
-          // if (NewAdmin) {
-          //   // Change the Admin of the USSCQ Project
-          //   project.admin = NewAdmin;
-          //   // Check if the ObjectId already exists in the array
-          //   const idExists = NewAdmin.projectQt.some((id) =>
-          //     id.equals(project.id)
-          //   );
-          //   if (!idExists) {
-          //     NewAdmin.projectQt.push(project.id); // Push the ObjectId only if it doesn't exist
-          //   }
-          //   if (!NewAdmin.userType.includes("AdminQt")) {
-          //     NewAdmin.userType.push("AdminQt");
-          //   }
-          //   await NewAdmin.save();
-          // }
-        } else console.log("same admin");
+          // Construct a flexible query to check if any of the input parts match any field
+          const searchQuery = {
+            $and: newAdminValueParts.map((part) => ({
+              $or: [
+                { grade: { $regex: part, $options: "i" } }, // Case-insensitive regex match for grade
+                { firstname: { $regex: part, $options: "i" } }, // Case-insensitive regex match for firstname
+                { name: { $regex: part, $options: "i" } }, // Case-insensitive regex match for name
+              ],
+            })),
+          };
+          const NewAdmin = await User.findOne(searchQuery).exec();
+          if (NewAdmin) {
+            // Change the Admin of the USSCQ Project
+            project.adminProject = NewAdmin;
+            // Check if the ObjectId already exists in the array
+            const idExists = NewAdmin.projectLabo.some((id) =>
+              id.equals(project.id)
+            );
+            if (!idExists) {
+              NewAdmin.projectLabo.push(project.id); // Push the ObjectId only if it doesn't exist
+            }
+            if (!NewAdmin.userType.includes("AdminLabo")) {
+              NewAdmin.userType.push("AdminLabo");
+            }
+            await NewAdmin.save();
+          }
+        }
 
         await project.save();
 
