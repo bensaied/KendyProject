@@ -21,6 +21,7 @@ const CreateProjectLabo = asyncHandler(async (req, res) => {
     // reseauProject,
     // missionProject,
   } = req.body;
+
   if (
     !nameProject ||
     !adminProject ||
@@ -104,6 +105,7 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
     description,
     partage,
   } = req.body;
+  console.log(req.body);
 
   // Some modifications of the USSCQ PROJECT inputs
   benificaire = benificaire.map((name) => name.toUpperCase());
