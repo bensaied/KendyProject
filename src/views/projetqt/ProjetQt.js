@@ -1114,7 +1114,6 @@ const ProjetQt = () => {
 
   // SELECTED PROJECT DATA
   const project = data?.project;
-
   // Consolidated update function
   function handleInputChange(e, property) {
     const value = e.target ? e.target.value : e.value;
