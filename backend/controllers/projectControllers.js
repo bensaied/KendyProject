@@ -21,6 +21,7 @@ const CreateProjectLabo = asyncHandler(async (req, res) => {
     // reseauProject,
     // missionProject,
   } = req.body;
+
   if (
     !nameProject ||
     !adminProject ||

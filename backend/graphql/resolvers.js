@@ -202,10 +202,21 @@ module.exports = {
           await PrevAdmin.save();
 
           // Find and update the NewAdmin & add the Administrator userType if it does not exists
-          const NewAdmin = await User.findOne({
-            name: admin[0].name,
-            firstname: admin[0].firstname,
-          }).exec();
+          const newAdminValue =
+            admin[0].grade + " " + admin[0].name + " " + admin[0].firstname;
+          const newAdminValueParts = newAdminValue.split(" ");
+          // Construct a flexible query to check if any of the input parts match any field
+          const searchQuery = {
+            $and: newAdminValueParts.map((part) => ({
+              $or: [
+                { grade: { $regex: part, $options: "i" } }, // Case-insensitive regex match for grade
+                { firstname: { $regex: part, $options: "i" } }, // Case-insensitive regex match for firstname
+                { name: { $regex: part, $options: "i" } }, // Case-insensitive regex match for name
+              ],
+            })),
+          };
+          const NewAdmin = await User.findOne(searchQuery).exec();
+
           if (NewAdmin) {
             // Change the Admin of the USSCQ Project
             project.admin = NewAdmin;

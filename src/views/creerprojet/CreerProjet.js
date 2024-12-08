@@ -240,12 +240,8 @@ const CreerProjet = () => {
   //Integration
   function ChangeIntegration(selected) {
     let selectedValue = "";
-    if (
-      Array.isArray(selected) &&
-      selected.length > 0 &&
-      typeof selected[0] === "object"
-    ) {
-      selectedValue = selected[0].value;
+    if (typeof selected === "object" && selected !== null) {
+      selectedValue = selected.value || ""; // Get the value if it exists
     }
     setIntegration(selected); // Set the selected object
     setIntegrationValues(selectedValue ? [selected.value] : []); // Set the selected value as an array with one element
@@ -254,12 +250,8 @@ const CreerProjet = () => {
   //EncryptionType
   function ChangeEncryptionType(selected) {
     let selectedValue = "";
-    if (
-      Array.isArray(selected) &&
-      selected.length > 0 &&
-      typeof selected[0] === "object"
-    ) {
-      selectedValue = selected[0].value;
+    if (typeof selected === "object" && selected !== null) {
+      selectedValue = selected.value || ""; // Get the value if it exists
     }
     setEncryptionType(selected); // Set the selected objects
     setEncryptionTypeValues(selectedValue ? [selected.value] : []); // Set the selected values
@@ -268,12 +260,8 @@ const CreerProjet = () => {
   //LengthKey
   function ChangeLengthKey(selected) {
     let selectedValue = "";
-    if (
-      Array.isArray(selected) &&
-      selected.length > 0 &&
-      typeof selected[0] === "object"
-    ) {
-      selectedValue = selected[0].value;
+    if (typeof selected === "object" && selected !== null) {
+      selectedValue = selected.value || ""; // Get the value if it exists
     }
     setLengthKey(selected); // Set the selected objects
     setLengthKeyValues(selectedValue ? [selected.value] : []); // Set the selected values
@@ -282,12 +270,8 @@ const CreerProjet = () => {
   //Liaison
   function ChangeLiaison(selected) {
     let selectedValue = "";
-    if (
-      Array.isArray(selected) &&
-      selected.length > 0 &&
-      typeof selected[0] === "object"
-    ) {
-      selectedValue = selected[0].value;
+    if (typeof selected === "object" && selected !== null) {
+      selectedValue = selected.value || ""; // Get the value if it exists
     }
     setLiaison(selected); // Set the selected objects
     setLiaisonValues(selectedValue ? [selected.value] : []); // Set the selected values
