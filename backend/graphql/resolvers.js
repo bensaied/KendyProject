@@ -759,132 +759,94 @@ module.exports = {
         updatedAt,
       } = input;
       try {
-        const project = await ProjectLabo.findById(id).populate("adminProject"); // Retrieve the project based on the provided ID
-
+        const project = await ProjectLabo.findById(id);
         if (!project) {
           throw new Error("Project not found");
         }
         project.nameProject = nameProject.toUpperCase();
+        project.referenceTypeProject = referenceTypeProject;
+        project.livrablesProject = livrablesProject;
+        project.encryptionTypeProject = encryptionTypeProject;
+        project.integrationProject = integrationProject;
+        project.descriptionProject = descriptionProject;
+        project.formateurProject = formateurProject;
+        project.partageProject = partageProject;
+        project.updatedAt = new Date();
 
-        // (project.adminProject = adminProject),
-        (project.referenceTypeProject = referenceTypeProject),
-          (project.livrablesProject = livrablesProject),
-          (project.encryptionTypeProject = encryptionTypeProject),
-          (project.integrationProject = integrationProject),
-          (project.descriptionProject = descriptionProject),
-          // (project.versionProject = versionProject),
-          // (project.reseauProject = reseauProject),
-          // (project.missionProject = missionProject),
-          // (project.statusProject = statusProject),
-
-          (project.formateurProject = formateurProject),
-          (project.partageProject = partageProject),
-          (project.updatedAt = new Date());
-
-        if (
-          adminProject.value !=
-          project.adminProject[0].grade +
-            " " +
-            project.adminProject[0].name +
-            " " +
-            project.adminProject[0].firstname
-        ) {
-          console.log("new admin");
-          //Find the PrevAdmin and Retrieve the id from his projectLabo list & Delete AdminLabo from usertype in the case of Adminstrating one project
-          const PrevAdmin = await User.findOne({
-            name: project.adminProject[0].name,
-            firstname: project.adminProject[0].firstname,
-          }).exec();
-
-          if (PrevAdmin.projectLabo.length == 1) {
-            PrevAdmin.userType = PrevAdmin.userType.filter(
-              (role) => role !== "AdminLabo"
-            );
-          }
-          PrevAdmin.projectLabo = PrevAdmin.projectLabo.filter(
-            (id) => !id.equals(project.id)
-          );
-          await PrevAdmin.save();
-
-          // Find and update the NewAdmin & add the Administrator userType if it does not exists
-          const newAdminValue = adminProject.value;
-          const newAdminValueParts = newAdminValue.split(" ");
-
-          // Construct a flexible query to check if any of the input parts match any field
-          const searchQuery = {
-            $and: newAdminValueParts.map((part) => ({
-              $or: [
-                { grade: { $regex: part, $options: "i" } }, // Case-insensitive regex match for grade
-                { firstname: { $regex: part, $options: "i" } }, // Case-insensitive regex match for firstname
-                { name: { $regex: part, $options: "i" } }, // Case-insensitive regex match for name
-              ],
-            })),
-          };
-          const NewAdmin = await User.findOne(searchQuery).exec();
-          if (NewAdmin) {
-            // Change the Admin of the USSCQ Project
-            project.adminProject = NewAdmin;
-            // Check if the ObjectId already exists in the array
-            const idExists = NewAdmin.projectLabo.some((id) =>
-              id.equals(project.id)
-            );
-            if (!idExists) {
-              NewAdmin.projectLabo.push(project.id); // Push the ObjectId only if it doesn't exist
-            }
-            if (!NewAdmin.userType.includes("AdminLabo")) {
-              NewAdmin.userType.push("AdminLabo");
-            }
-            await NewAdmin.save();
-          }
-        }
+        // (project.versionProject = versionProject),
+        // (project.reseauProject = reseauProject),
+        // (project.missionProject = missionProject),
+        // (project.statusProject = statusProject),
 
         await project.save();
 
+        if (adminProject) {
+          let project1 = await ProjectLabo.findById(id).populate(
+            "adminProject"
+          );
+
+          if (
+            adminProject.value !=
+            project1.adminProject[0].grade +
+              " " +
+              project1.adminProject[0].name +
+              " " +
+              project1.adminProject[0].firstname
+          ) {
+            //Find the PrevAdmin and Retrieve the id from his projectLabo list & Delete AdminLabo from usertype in the case of Adminstrating one project
+            const PrevAdmin = await User.findOne({
+              name: project1.adminProject[0].name,
+              firstname: project1.adminProject[0].firstname,
+            }).exec();
+
+            if (PrevAdmin.projectLabo.length == 1) {
+              PrevAdmin.userType = PrevAdmin.userType.filter(
+                (role) => role !== "AdminLabo"
+              );
+            }
+            PrevAdmin.projectLabo = PrevAdmin.projectLabo.filter(
+              (id) => !id.equals(project.id)
+            );
+            await PrevAdmin.save();
+
+            // Find and update the NewAdmin & add the Administrator userType if it does not exists
+            const newAdminValue = adminProject.value;
+            const newAdminValueParts = newAdminValue.split(" ");
+
+            // Construct a flexible query to check if any of the input parts match any field
+            const searchQuery = {
+              $and: newAdminValueParts.map((part) => ({
+                $or: [
+                  { grade: { $regex: part, $options: "i" } }, // Case-insensitive regex match for grade
+                  { firstname: { $regex: part, $options: "i" } }, // Case-insensitive regex match for firstname
+                  { name: { $regex: part, $options: "i" } }, // Case-insensitive regex match for name
+                ],
+              })),
+            };
+            const NewAdmin = await User.findOne(searchQuery).exec();
+            if (NewAdmin) {
+              // Change the Admin of the LABO Project
+              console.log("NewAdmin: ", NewAdmin);
+              console.log("input: ", input);
+              project1.adminProject = NewAdmin;
+              await project1.save();
+              // Check if the ObjectId already exists in the array
+              const idExists = NewAdmin.projectLabo.some((id) =>
+                id.equals(project.id)
+              );
+              if (!idExists) {
+                NewAdmin.projectLabo.push(project.id); // Push the ObjectId only if it doesn't exist
+              }
+              if (!NewAdmin.userType.includes("AdminLabo")) {
+                NewAdmin.userType.push("AdminLabo");
+              }
+              await NewAdmin.save();
+            }
+          }
+        }
+
         //Return the modified PROJECT
         return project;
-        // //Admin USSCQ PROJECT MODIFICATION
-        // if (
-        //   admin[0].grade + admin[0].firstname + admin[0].name !=
-        //   project.admin[0].grade +
-        //     project.admin[0].firstname +
-        //     project.admin[0].name
-        // ) {
-        //   //Find the PrevAdmin and Retrieve the id from his projectQt list & Delete AdminQt from usertype in the case of Adminstrating one project
-        //   const PrevAdmin = await User.findOne({
-        //     name: project.admin[0].name,
-        //     firstname: project.admin[0].firstname,
-        //   }).exec();
-        //   if (PrevAdmin.projectQt.length == 1) {
-        //     PrevAdmin.userType = PrevAdmin.userType.filter(
-        //       (role) => role !== "AdminQt"
-        //     );
-        //   }
-        //   PrevAdmin.projectQt = PrevAdmin.projectQt.filter(
-        //     (id) => !id.equals(project.id)
-        //   );
-        //   await PrevAdmin.save();
-
-        //   // Find and update the NewAdmin & add the Administrator userType if it does not exists
-        //   const NewAdmin = await User.findOne({
-        //     name: admin[0].name,
-        //     firstname: admin[0].firstname,
-        //   }).exec();
-        //   if (NewAdmin) {
-        //     // Change the Admin of the USSCQ Project
-        //     project.admin = NewAdmin;
-        //     // Check if the ObjectId already exists in the array
-        //     const idExists = NewAdmin.projectQt.some((id) =>
-        //       id.equals(project.id)
-        //     );
-        //     if (!idExists) {
-        //       NewAdmin.projectQt.push(project.id); // Push the ObjectId only if it doesn't exist
-        //     }
-        //     if (!NewAdmin.userType.includes("AdminQt")) {
-        //       NewAdmin.userType.push("AdminQt");
-        //     }
-        //     await NewAdmin.save();
-        //   }
-        // }
       } catch (error) {
         throw new Error("Failed to fetch PROJECT");
       }

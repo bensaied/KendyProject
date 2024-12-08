@@ -160,7 +160,7 @@ module.exports = gql`
 input ModifyProjectLaboInput {
     id: ID!
     nameProject: String!
-    adminProject: ObjectInput!
+    adminProject: ObjectInput
     referenceTypeProject: [ObjectInput]!
     livrablesProject: [ObjectLivrableInput]!
     encryptionTypeProject: [ObjectInput]!
