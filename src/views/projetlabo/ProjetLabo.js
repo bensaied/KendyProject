@@ -769,7 +769,36 @@ const ProjetLabo = () => {
                                 }}
                               />
                             </CCol>
-
+                            <CCol xs={12}>
+                              Type de chiffrement
+                              <br></br>
+                              <CreatableSelect
+                                isDisabled={!admin}
+                                defaultValue={{
+                                  value: project.encryptionTypeProject[0].label,
+                                  label: project.encryptionTypeProject[0].label,
+                                }}
+                                required
+                                name="Chiffrement"
+                                options={project.encryptionTypeProject}
+                                placeholder={""}
+                                isClearable
+                                onChange={(e) => {
+                                  if (e) {
+                                    const sanitizedValue = {
+                                      label: e.label || "",
+                                      value: e.value || "",
+                                    };
+                                    setEncryptionTypeProject(sanitizedValue);
+                                  } else {
+                                    setEncryptionTypeProject({
+                                      label: "",
+                                      value: "",
+                                    });
+                                  }
+                                }}
+                              />
+                            </CCol>
                             <CCol xs={12}>
                               Integration
                               <br></br>
