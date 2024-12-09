@@ -163,26 +163,6 @@ const ProjetLabo = () => {
     { label: "Hardware", value: "Hardware" },
   ];
 
-  // TABLE LABO
-  const tableProjetQt = [
-    {
-      projet: {
-        name: "MAKTARUS",
-        grade: "Cne",
-        registered: "Mar 13, 2019",
-      },
-      ref: { name: "5378" },
-      statut: { name: "Actif" },
-      integration: { name: "Hardware" },
-      chiffrement: { type: "Asymetrique" },
-      livrable: { name: "Boîte de chiffrement" },
-      formateur: {
-        name: "Cne Haythem TRABELSI, LT Ghassen BEN ALI, LT Karim OUELHEZI",
-      },
-      description: { name: "Peer to Peer encryption." },
-    },
-  ];
-
   /****************************************************  MUTATIONS PROJECTLABO **************************************************************/
 
   // // 1 - CREATE ACTIVITY
@@ -1109,7 +1089,52 @@ const ProjetLabo = () => {
                                 {project.encryptionTypeProject[0].value}
                               </CTableDataCell>
                               <CTableDataCell className="text-center">
-                                {project.livrablesProject[0].value}
+                                {project.livrablesProject.map((liv, index) => (
+                                  <div
+                                    key={index}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      marginBottom: "8px",
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        marginRight: "10px",
+                                        // fontWeight: "bold",
+                                      }}
+                                    >
+                                      {liv.value}:
+                                    </span>
+                                    {liv.checked ? (
+                                      <span
+                                        style={{
+                                          color: "green",
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        &#10004;
+                                        <span style={{ marginLeft: "5px" }}>
+                                          Rendu
+                                        </span>
+                                      </span>
+                                    ) : (
+                                      <span
+                                        style={{
+                                          color: "red",
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        &#10008; {/* Unicode for an "X" */}
+                                        <span style={{ marginLeft: "5px" }}>
+                                          Non
+                                        </span>
+                                      </span>
+                                    )}
+                                  </div>
+                                ))}
                               </CTableDataCell>
                               <CTableDataCell className="text-center">
                                 {project.descriptionProject}
