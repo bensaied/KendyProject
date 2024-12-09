@@ -719,6 +719,7 @@ const ProjetLabo = () => {
                                 type="text"
                                 id="inputNom"
                                 label="Nom"
+                                onChange={(e) => setNewName(e.target.value)}
                               />
                             </CCol>
 
@@ -749,6 +750,9 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Administrateur"
                                 options={admins}
+                                onChange={(selectedOption) =>
+                                  setNewAdmin(selectedOption)
+                                }
                               />
                             </CCol>
 
@@ -769,24 +773,20 @@ const ProjetLabo = () => {
                                 isSearchable
                                 name="Type de référence"
                                 options={project.referenceTypeProject}
-                              />
-                            </CCol>
-
-                            <CCol xs={12}>
-                              Type de chiffrement
-                              <br></br>
-                              <CreatableSelect
-                                isDisabled={!admin}
-                                defaultValue={{
-                                  value: project.encryptionTypeProject[0].label,
-                                  label: project.encryptionTypeProject[0].label,
+                                onChange={(e) => {
+                                  if (e) {
+                                    const sanitizedValue = {
+                                      label: e.label || "",
+                                      value: e.value || "",
+                                    };
+                                    setReferenceTypeProject(sanitizedValue);
+                                  } else {
+                                    setReferenceTypeProject({
+                                      label: "",
+                                      value: "",
+                                    });
+                                  }
                                 }}
-                                required
-                                name="Chiffrement"
-                                options={project.encryptionTypeProject}
-                                placeholder={""}
-                                isClearable
-                                onChange={(opt, meta) => console.log(opt, meta)}
                               />
                             </CCol>
 
@@ -804,9 +804,23 @@ const ProjetLabo = () => {
                                 options={project.integrationProject}
                                 placeholder={""}
                                 isClearable
-                                onChange={(opt, meta) => console.log(opt, meta)}
+                                onChange={(e) => {
+                                  if (e) {
+                                    const sanitizedValue = {
+                                      label: e.label || "",
+                                      value: e.value || "",
+                                    };
+                                    setIntegrationProject(sanitizedValue);
+                                  } else {
+                                    setIntegrationProject({
+                                      label: "",
+                                      value: "",
+                                    });
+                                  }
+                                }}
                               />
                             </CCol>
+
                             <CCol xs={12}>
                               Livrables
                               <br></br>
@@ -819,6 +833,7 @@ const ProjetLabo = () => {
                                   (livrable) => ({
                                     value: livrable.value,
                                     label: livrable.label,
+                                    checked: livrable.checked,
                                   })
                                 )}
                                 onChange={handleLivrableChange}
@@ -827,17 +842,16 @@ const ProjetLabo = () => {
                             <CCol xs={12}>
                               Livrables rendus
                               <br></br>
-                              {project.livrablesProject.map(
-                                (livrable, index) => (
-                                  <CFormSwitch
-                                    key={index}
-                                    defaultChecked
-                                    disabled={!admin}
-                                    label={livrable.label}
-                                    id={`formSwitchCheckDefault-${index}`}
-                                  />
-                                )
-                              )}
+                              {livrables.map((livrable, index) => (
+                                <CFormSwitch
+                                  key={index}
+                                  checked={livrable.checked}
+                                  disabled={!admin}
+                                  label={livrable.label}
+                                  id={`formSwitchCheckDefault-${index}`}
+                                  onChange={() => toggleCheckbox(index)}
+                                />
+                              ))}
                             </CCol>
 
                             <CCol md={12}>
@@ -847,6 +861,7 @@ const ProjetLabo = () => {
                                 label="Formateurs"
                                 multiple
                                 aria-label="Multiple select example"
+                                onChange={handleSelectionChange}
                               >
                                 {admins.map((laboUser, index) => (
                                   <option value={index}>
@@ -855,12 +870,14 @@ const ProjetLabo = () => {
                                 ))}
                               </CFormSelect>
                             </CCol>
-
                             <CCol xs={12}>
                               <CFormTextarea
                                 disabled={!admin}
                                 defaultValue={project.descriptionProject}
                                 label="Description"
+                                onChange={(e) =>
+                                  setNewDescription(e.target.value)
+                                }
                               ></CFormTextarea>
                             </CCol>
 
@@ -873,19 +890,19 @@ const ProjetLabo = () => {
                                 type="checkbox"
                                 id="gridCheck"
                                 label="Partager ce projet"
+                                onChange={handlePartageChange}
                               />
                             </CCol>
 
                             <CCol xs={12}>
-                              {currentTypeState.currentType === "AdminLabo" && (
-                                <CButton
-                                  disabled={!admin}
-                                  color="primary"
-                                  type="submit"
-                                >
-                                  Effectuer
-                                </CButton>
-                              )}
+                              <CButton
+                                disabled={!admin}
+                                color="primary"
+                                type="submit"
+                                onClick={handleModifyProject}
+                              >
+                                Effectuer
+                              </CButton>
                             </CCol>
                           </CForm>
                         </div>
