@@ -358,7 +358,7 @@ const ProjetLabo = () => {
         partageProject: newPartage ? newPartage : project.partageProject,
         formateurProject: newFormateurs,
       };
-      console.log("newName", newName);
+      console.log("newFormateurs", newFormateurs);
       const { data } = await modifyProjectLabo({
         variables: { input },
       });

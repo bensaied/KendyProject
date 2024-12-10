@@ -763,13 +763,14 @@ module.exports = {
         if (!project) {
           throw new Error("Project not found");
         }
+
         project.nameProject = nameProject.toUpperCase();
         project.referenceTypeProject = referenceTypeProject;
         project.livrablesProject = livrablesProject;
         project.encryptionTypeProject = encryptionTypeProject;
         project.integrationProject = integrationProject;
         project.descriptionProject = descriptionProject;
-        project.formateurProject = formateurProject;
+        // project.formateurProject = formateurProject;
         project.partageProject = partageProject;
         project.updatedAt = new Date();
 
@@ -779,6 +780,33 @@ module.exports = {
         // (project.statusProject = statusProject),
 
         await project.save();
+
+        if (formateurProject.length != 0) {
+          const formateurIds = await Promise.all(
+            formateurProject.map(async (formateur) => {
+              let formateurProjectParts = formateur.split(" ");
+              let searchQuery = {
+                $and: formateurProjectParts.map((part) => ({
+                  $or: [
+                    { grade: { $regex: part, $options: "i" } }, // Case-insensitive regex match for grade
+                    { firstname: { $regex: part, $options: "i" } }, // Case-insensitive regex match for firstname
+                    { name: { $regex: part, $options: "i" } }, // Case-insensitive regex match for name
+                  ],
+                })),
+              };
+
+              const formateurUserFound = await User.findOne(searchQuery).exec();
+              // Return the user's ID if found
+              return formateurUserFound ? formateurUserFound.id : null;
+            })
+          );
+
+          // Filter out any null IDs (in case some formateurs are not found)
+          const validFormateurIds = formateurIds.filter((id) => id !== null);
+          // Assign all valid formateur IDs to the project
+          project.formateurProject = validFormateurIds;
+          await project.save();
+        }
 
         if (adminProject) {
           let project1 = await ProjectLabo.findById(id).populate(
@@ -826,8 +854,6 @@ module.exports = {
             const NewAdmin = await User.findOne(searchQuery).exec();
             if (NewAdmin) {
               // Change the Admin of the LABO Project
-              console.log("NewAdmin: ", NewAdmin);
-              console.log("input: ", input);
               project1.adminProject = NewAdmin;
               await project1.save();
               // Check if the ObjectId already exists in the array
