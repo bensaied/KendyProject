@@ -46,7 +46,7 @@ const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Login ou mot de passe invalide.");
+    throw new Error("Nom d'utilisateur ou mot de passe invalide.");
   }
 });
 /******************************************************************* REFRESH USER INFO API *******************************************************************/
@@ -75,7 +75,7 @@ const refreshUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Login ou mot de passe invalide.");
+    throw new Error("Nom d'utilisateur ou mot de passe invalide.");
   }
 });
 /******************************************************************* UPDATE OWN PROFILE API *******************************************************************/
