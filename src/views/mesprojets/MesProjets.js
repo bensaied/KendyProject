@@ -284,7 +284,7 @@ const MesProjets = () => {
                             <>
                               {project.statusProject === "Défaut" ? (
                                 <CCol sm="auto" key={project.id}>
-                                  <CCard className="text-center mb-3 border-dark">
+                                  <CCard className="text-center mb-3 border-top-secondary border-top-4">
                                     <CCardHeader color="grey">
                                       Statut: {project.statusProject}
                                     </CCardHeader>
@@ -320,7 +320,7 @@ const MesProjets = () => {
                                 </CCol>
                               ) : (
                                 <CCol sm="auto" key={project.id}>
-                                  <CCard className="text-center mb-3 border-success">
+                                  <CCard className="text-center mb-3 border-top-success border-top-4">
                                     <CCardHeader color="grey">
                                       Statut: {project.statusProject}
                                     </CCardHeader>

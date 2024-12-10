@@ -756,7 +756,7 @@ module.exports = {
         statusProject,
         formateurProject,
         // createdAt,
-        updatedAt,
+        // updatedAt,
       } = input;
       try {
         const project = await ProjectLabo.findById(id);
@@ -769,7 +769,6 @@ module.exports = {
         project.encryptionTypeProject = encryptionTypeProject;
         project.integrationProject = integrationProject;
         project.descriptionProject = descriptionProject;
-        // project.formateurProject = formateurProject;
         project.partageProject = partageProject;
         project.updatedAt = new Date();
 
@@ -804,6 +803,7 @@ module.exports = {
           const validFormateurIds = formateurIds.filter((id) => id !== null);
           // Assign all valid formateur IDs to the project
           project.formateurProject = validFormateurIds;
+          project.statusProject = "Actif";
           await project.save();
         }
 
