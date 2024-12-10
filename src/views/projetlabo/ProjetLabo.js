@@ -72,7 +72,7 @@ import {
 import { addDays } from "date-fns";
 
 import { useParams } from "react-router";
-import { setRef } from "@mui/material";
+// import { setRef } from "@mui/material";
 
 const ProjetLabo = () => {
   const dispatch = useDispatch();
@@ -1049,7 +1049,7 @@ const ProjetLabo = () => {
                                 Statut
                               </CTableHeaderCell>
                               <CTableHeaderCell className="text-center">
-                                Formateur
+                                Formateurs
                               </CTableHeaderCell>
                               <CTableHeaderCell className="text-center">
                                 Integration
@@ -1101,16 +1101,34 @@ const ProjetLabo = () => {
                               <CTableDataCell className="text-center">
                                 {project.statusProject}
                               </CTableDataCell>
-                              <CTableDataCell className="text-center">
-                                {/* {         project.formateurProject.map(formateur).join(", ")=>{
 
-                             formateur[0].grade +
-                          " " +
-                          formateur[0].firstname +
-                          " " +
-                          formateur[0].name
-                           }    } */}
+                              <CTableDataCell className="text-center">
+                                {data?.projectLabo?.formateurProject?.length ===
+                                0 ? (
+                                  <div>
+                                    <i>Aucun</i>
+                                  </div>
+                                ) : (
+                                  data?.projectLabo?.formateurProject?.map(
+                                    (id, index) => {
+                                      const matchedUser = userList?.users?.find(
+                                        (user) => user._id === id
+                                      );
+                                      if (matchedUser) {
+                                        return (
+                                          <div key={index}>
+                                            {matchedUser.grade}{" "}
+                                            {matchedUser.name}{" "}
+                                            {matchedUser.firstname}
+                                          </div>
+                                        );
+                                      }
+                                      return null;
+                                    }
+                                  )
+                                )}
                               </CTableDataCell>
+
                               <CTableDataCell className="text-center">
                                 {project.integrationProject[0].value}
                               </CTableDataCell>
