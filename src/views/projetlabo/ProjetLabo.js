@@ -242,7 +242,7 @@ const ProjetLabo = () => {
         .map((user) => {
           const label = `${user.grade} ${user.name} ${user.firstname}`;
           const id = user._id;
-          return { label: label, id: id };
+          return { label: label, value: label, id: id };
         });
       setAdminsList(filteredOptions);
 
@@ -359,7 +359,7 @@ const ProjetLabo = () => {
         partageProject: newPartage ? newPartage : project.partageProject,
         formateurProject: newFormateurs,
       };
-      console.log("newFormateurs", newFormateurs);
+      console.log("newAdmin", newAdmin);
       const { data } = await modifyProjectLabo({
         variables: { input },
       });

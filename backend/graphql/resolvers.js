@@ -763,7 +763,6 @@ module.exports = {
         if (!project) {
           throw new Error("Project not found");
         }
-
         project.nameProject = nameProject.toUpperCase();
         project.referenceTypeProject = referenceTypeProject;
         project.livrablesProject = livrablesProject;
