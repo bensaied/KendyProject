@@ -241,7 +241,8 @@ const ProjetLabo = () => {
         .filter((user) => userInfo.direction === user.direction)
         .map((user) => {
           const label = `${user.grade} ${user.name} ${user.firstname}`;
-          return { label, value: label };
+          const id = user._id;
+          return { label: label, id: id };
         });
       setAdminsList(filteredOptions);
 
@@ -601,7 +602,15 @@ const ProjetLabo = () => {
                                 onChange={handleSelectionChange}
                               >
                                 {admins.map((laboUser, index) => (
-                                  <option value={index}>
+                                  <option
+                                    value={index}
+                                    selected={data?.projectLabo?.formateurProject?.some(
+                                      (id) => {
+                                        const isSelected = id === laboUser.id;
+                                        return isSelected;
+                                      }
+                                    )}
+                                  >
                                     {laboUser.label}
                                   </option>
                                 ))}
