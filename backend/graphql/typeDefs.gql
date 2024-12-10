@@ -147,6 +147,11 @@ module.exports = gql`
     label: String!
     value: String!
   }
+  input AdminLaboInput {
+    label: String!
+    value: String!
+    id: String!
+  }
   input ObjectLivrableInput {
     label: String!
     value: String!
@@ -160,7 +165,7 @@ module.exports = gql`
 input ModifyProjectLaboInput {
     id: ID!
     nameProject: String!
-    adminProject: ObjectInput
+    adminProject: AdminLaboInput
     referenceTypeProject: [ObjectInput]!
     livrablesProject: [ObjectLivrableInput]!
     encryptionTypeProject: [ObjectInput]!
