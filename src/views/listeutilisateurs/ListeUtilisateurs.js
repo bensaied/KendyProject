@@ -214,16 +214,20 @@ const ListeUtilisateurs = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     {(currentTypeState.currentType === "SuperAdminLabo" ||
-                      currentTypeState.currentType === "SuperAdminQt") && (
-                      <>
-                        <CButton
-                          color="light"
-                          onClick={() => deleteHandler(user._id)}
-                        >
-                          <CIcon title="Supprimer" icon={cilTrash} />
-                        </CButton>
-                      </>
-                    )}
+                      currentTypeState.currentType === "SuperAdminQt") &&
+                      user.userType.every(
+                        (type) =>
+                          !["SuperAdminLabo", "SuperAdminQt"].includes(type)
+                      ) && (
+                        <>
+                          <CButton
+                            color="light"
+                            onClick={() => deleteHandler(user._id)}
+                          >
+                            <CIcon title="Supprimer" icon={cilTrash} />
+                          </CButton>
+                        </>
+                      )}
 
                     {/* Delete Modal (POPUP WINDOW) */}
                     <CModal visible={visible} onClose={() => setVisible(false)}>
@@ -276,20 +280,24 @@ const ListeUtilisateurs = () => {
                       </CModalFooter>
                     </CModal>
                     {(currentTypeState.currentType === "SuperAdminLabo" ||
-                      currentTypeState.currentType === "SuperAdminQt") && (
-                      <>
-                        <CButton
-                          href={`/${user._id}`}
-                          color="light"
-                          shape="rounded-pill"
-                        >
-                          <CIcon
-                            title="Modifier utilisateur"
-                            icon={cilPenAlt}
-                          />
-                        </CButton>
-                      </>
-                    )}
+                      currentTypeState.currentType === "SuperAdminQt") &&
+                      user.userType.every(
+                        (type) =>
+                          !["SuperAdminLabo", "SuperAdminQt"].includes(type)
+                      ) && (
+                        <>
+                          <CButton
+                            href={`/${user._id}`}
+                            color="light"
+                            shape="rounded-pill"
+                          >
+                            <CIcon
+                              title="Modifier utilisateur"
+                              icon={cilPenAlt}
+                            />
+                          </CButton>
+                        </>
+                      )}
                   </CTableDataCell>
                 </CTableRow>
               ))}
