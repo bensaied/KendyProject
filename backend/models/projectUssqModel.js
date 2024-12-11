@@ -1,6 +1,6 @@
 const { mongoose, ObjectId } = require("mongoose");
 
-const projectUssqSchema = mongoose.Schema(
+const projectUsscqSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -129,6 +129,6 @@ const projectUssqSchema = mongoose.Schema(
   }
 );
 
-const ProjectUssq = mongoose.model("ProjectUssq", projectUssqSchema);
+const ProjectUsscq = mongoose.model("ProjectUsscq", projectUsscqSchema);
 
-module.exports = ProjectUssq;
+module.exports = ProjectUsscq;
