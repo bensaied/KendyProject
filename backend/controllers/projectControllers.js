@@ -175,7 +175,7 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
 
     const createdProject = await project.save();
     // Add Project to ProjectQt
-    admin.projectQt.push(createdProject);
+    admin.projectQt.push({ id: createdProject, role: "AdminQt" });
     await admin.save();
     res.status(201).json(createdProject);
   }
