@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
+const ProjectQtSchema = new mongoose.Schema({
+  id: { type: mongoose.Schema.Types.ObjectId, ref: "ProjectUssq" },
+  role: { type: String },
+});
+const ProjectLaboSchema = new mongoose.Schema({
+  id: { type: mongoose.Schema.Types.ObjectId, ref: "ProjectLabo" },
+  role: { type: String },
+});
+
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -34,13 +43,8 @@ const userSchema = mongoose.Schema(
       default: "Visiteur",
     },
 
-    projectLabo: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ProjectLabo",
-      },
-    ],
-    projectQt: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProjectUssq" }],
+    projectLabo: [ProjectLaboSchema],
+    projectQt: [ProjectQtSchema],
 
     direction: {
       type: String,

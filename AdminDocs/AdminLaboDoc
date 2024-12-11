@@ -5,7 +5,7 @@
   "name": "TRABELSI",
   "firstname": "Haythem",
   "login": "admin.labo",
-  "password": "$2a$10$OU4qs73aNQTFWyO8qTQ/wOBe2f01AOrm.1NZ5tc4sGRFKdTby8Jma",
+  "password": "$2y$10$.n2CAXAHEjqxLO/.8OXnW.2bjSyImMCYKtWdk9uxx.K9r.cU1pS6a",
   "userType": [
     "Visiteur",
     "SuperAdminLabo",
@@ -14,15 +14,17 @@
   ],
   "direction": "Laboratoire",
   "grade": "Cne",
-  "firstConnect": false,
+  "firstConnect": true,
   "dateLogin": {
-    "$date": "2023-05-21T17:42:28.880Z"
+    "$date": "2024-12-11T20:33:30.404Z"
   },
   "createdAt": {
     "$date": "2023-03-02T14:08:08.754Z"
   },
   "updatedAt": {
-    "$date": "2023-05-21T17:42:28.885Z"
+    "$date": "2024-12-11T20:33:30.405Z"
   },
-  "__v": 1
+  "__v": 18,
+  "projectLabo": [],
+  "projectQt": []
 }
