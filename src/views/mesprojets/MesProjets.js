@@ -46,7 +46,6 @@ const MesProjets = () => {
   let updatedProjectsList = useSelector(
     (state) => state.refreshInfo.refreshInfo
   );
-  console.log(updatedProjectsList);
   // USERLOGIN&INFO
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
