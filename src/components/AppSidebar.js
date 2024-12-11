@@ -146,7 +146,7 @@ const AppSidebar = () => {
         .filter(
           (project) =>
             updatedProjectsList &&
-            updatedProjectsList.projectQt.includes(project.id)
+            updatedProjectsList.projectQt.some((item) => item.id === project.id)
         )
         .map((project) => ({
           component: CNavItem,

@@ -3056,7 +3056,7 @@ const ProjetQt = () => {
             (currentTypeState.currentType === "AdminQt" &&
               refreshInfo &&
               refreshInfo.projectQt &&
-              Object.values(refreshInfo.projectQt).includes(project.id)) ? (
+              refreshInfo.projectQt.some((item) => item.id === project.id)) ? (
               <CCardHeader
                 component="h1"
                 style={{
@@ -3117,7 +3117,7 @@ const ProjetQt = () => {
             (currentTypeState.currentType === "AdminQt" &&
               refreshInfo &&
               refreshInfo.projectQt &&
-              Object.values(refreshInfo.projectQt).includes(project.id)) ? (
+              refreshInfo.projectQt.some((item) => item.id === project.id)) ? (
               <CAccordion activeItemKey={0} flush>
                 <br></br>
                 <CAccordionItem itemKey={1}>
@@ -3138,8 +3138,8 @@ const ProjetQt = () => {
                     (currentTypeState.currentType === "AdminQt" &&
                       refreshInfo &&
                       refreshInfo.projectQt &&
-                      Object.values(refreshInfo.projectQt).includes(
-                        project.id
+                      refreshInfo.projectQt.some(
+                        (item) => item.id === project.id
                       )) ? (
                       <div
                         style={{ border: "1px #ccc", padding: "13px" }}
@@ -3276,7 +3276,9 @@ const ProjetQt = () => {
                 (currentTypeState.currentType === "AdminQt" &&
                   refreshInfo &&
                   refreshInfo.projectQt &&
-                  Object.values(refreshInfo.projectQt).includes(project.id)) ? (
+                  refreshInfo.projectQt.some(
+                    (item) => item.id === project.id
+                  )) ? (
                   <>
                     {/* {project.resource.length == 0 ? ( */}
                     <CCardHeader component="h6">
@@ -3297,8 +3299,8 @@ const ProjetQt = () => {
                     (currentTypeState.currentType === "AdminQt" &&
                       refreshInfo &&
                       refreshInfo.projectQt &&
-                      Object.values(refreshInfo.projectQt).includes(
-                        project.id
+                      refreshInfo.projectQt.some(
+                        (item) => item.id === project.id
                       ))) && (
                     <>
                       {/*********************************************************  Ressources DU PROJET QT VIDE **********************************************************************/}
@@ -3453,7 +3455,9 @@ const ProjetQt = () => {
               (currentTypeState.currentType === "AdminQt" &&
                 refreshInfo &&
                 refreshInfo.projectQt &&
-                Object.values(refreshInfo.projectQt).includes(project.id)) ? (
+                refreshInfo.projectQt.some(
+                  (item) => item.id === project.id
+                )) ? (
                 <CAccordion activeItemKey={0} flush>
                   <br></br>
                   <CAccordionItem itemKey={1}>

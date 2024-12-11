@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const ProjectQtSchema = new mongoose.Schema({
-  id: { type: mongoose.Schema.Types.ObjectId, ref: "ProjectUssq" },
+  id: { type: mongoose.Schema.Types.ObjectId, ref: "ProjectUsscq" },
   role: { type: String },
 });
 const ProjectLaboSchema = new mongoose.Schema({
