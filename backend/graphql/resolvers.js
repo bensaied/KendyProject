@@ -196,9 +196,11 @@ module.exports = {
               (role) => role !== "AdminQt"
             );
           }
+          // Remove the specific project and its associated role from projectQt
           PrevAdmin.projectQt = PrevAdmin.projectQt.filter(
-            (id) => !id.equals(project.id)
+            (projectQtItem) => !projectQtItem.id.equals(project.id)
           );
+
           await PrevAdmin.save();
 
           // Find and update the NewAdmin & add the Administrator userType if it does not exists
@@ -218,18 +220,24 @@ module.exports = {
           const NewAdmin = await User.findOne(searchQuery).exec();
 
           if (NewAdmin) {
-            // Change the Admin of the USSCQ Project
+            // Change the Admin of the Project
             project.admin = NewAdmin;
-            // Check if the ObjectId already exists in the array
-            const idExists = NewAdmin.projectQt.some((id) =>
-              id.equals(project.id)
+
+            // Check if the project with the given id already exists in the array
+            const idExists = NewAdmin.projectQt.some((projectQtItem) =>
+              projectQtItem.id.equals(project.id)
             );
+
+            // Push the ObjectId and role only if it doesn't exist
             if (!idExists) {
-              NewAdmin.projectQt.push(project.id); // Push the ObjectId only if it doesn't exist
+              NewAdmin.projectQt.push({ id: project.id, role: "AdminQt" });
             }
+
+            // Add "AdminQt" to userType if not already present
             if (!NewAdmin.userType.includes("AdminQt")) {
               NewAdmin.userType.push("AdminQt");
             }
+
             await NewAdmin.save();
           }
         }

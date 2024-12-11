@@ -139,16 +139,19 @@ const ListeUtilisateurs = () => {
 
           <CTableBody>
             {users
-              ?.filter((userSignedIn) => userInfo._id != userSignedIn._id)
-              .filter((user) => {
-                if (
-                  user.userType.includes("SuperAdminLabo") ||
-                  user.userType.includes("SuperAdminQt")
-                ) {
-                  return false; // Exclude users with SuperAdminLabo or SuperAdminQt in their userType
-                }
-                return true;
-              })
+              // Exclude the signedIn user from users list
+              // ?.filter((userSignedIn) => userInfo._id != userSignedIn._id)
+              ?.filter((userSignedIn) => userInfo._id != true)
+              // Excluding SuperAdminLabo and SupderAdminQt from users list
+              // .filter((user) => {
+              //   if (
+              //     user.userType.includes("SuperAdminLabo") ||
+              //     user.userType.includes("SuperAdminQt")
+              //   ) {
+              //     return false; // Exclude users with SuperAdminLabo or SuperAdminQt in their userType
+              //   }
+              //   return true;
+              // })
               .sort((user1, user2) => {
                 // Custom sorting function based on direction
                 if (
@@ -211,16 +214,20 @@ const ListeUtilisateurs = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     {(currentTypeState.currentType === "SuperAdminLabo" ||
-                      currentTypeState.currentType === "SuperAdminQt") && (
-                      <>
-                        <CButton
-                          color="light"
-                          onClick={() => deleteHandler(user._id)}
-                        >
-                          <CIcon title="Supprimer" icon={cilTrash} />
-                        </CButton>
-                      </>
-                    )}
+                      currentTypeState.currentType === "SuperAdminQt") &&
+                      user.userType.every(
+                        (type) =>
+                          !["SuperAdminLabo", "SuperAdminQt"].includes(type)
+                      ) && (
+                        <>
+                          <CButton
+                            color="light"
+                            onClick={() => deleteHandler(user._id)}
+                          >
+                            <CIcon title="Supprimer" icon={cilTrash} />
+                          </CButton>
+                        </>
+                      )}
 
                     {/* Delete Modal (POPUP WINDOW) */}
                     <CModal visible={visible} onClose={() => setVisible(false)}>
@@ -273,20 +280,24 @@ const ListeUtilisateurs = () => {
                       </CModalFooter>
                     </CModal>
                     {(currentTypeState.currentType === "SuperAdminLabo" ||
-                      currentTypeState.currentType === "SuperAdminQt") && (
-                      <>
-                        <CButton
-                          href={`/${user._id}`}
-                          color="light"
-                          shape="rounded-pill"
-                        >
-                          <CIcon
-                            title="Modifier utilisateur"
-                            icon={cilPenAlt}
-                          />
-                        </CButton>
-                      </>
-                    )}
+                      currentTypeState.currentType === "SuperAdminQt") &&
+                      user.userType.every(
+                        (type) =>
+                          !["SuperAdminLabo", "SuperAdminQt"].includes(type)
+                      ) && (
+                        <>
+                          <CButton
+                            href={`/${user._id}`}
+                            color="light"
+                            shape="rounded-pill"
+                          >
+                            <CIcon
+                              title="Modifier utilisateur"
+                              icon={cilPenAlt}
+                            />
+                          </CButton>
+                        </>
+                      )}
                   </CTableDataCell>
                 </CTableRow>
               ))}
