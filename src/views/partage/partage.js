@@ -279,9 +279,9 @@ const Partage = () => {
                         .filter((project) => project.partage === "true")
                         .map((project) => (
                           <CCol sm="auto" key={project.id}>
-                            <CCard className="text-center mb-3 border-success">
+                            <CCard className="text-center mb-3 border-top-success border-top-4">
                               <CCardHeader color="grey">
-                                Statut: Active
+                                Statut: Actif
                               </CCardHeader>
                               <CCardBody>
                                 <CCardTitle>{project.name}</CCardTitle>
