@@ -139,16 +139,19 @@ const ListeUtilisateurs = () => {
 
           <CTableBody>
             {users
-              ?.filter((userSignedIn) => userInfo._id != userSignedIn._id)
-              .filter((user) => {
-                if (
-                  user.userType.includes("SuperAdminLabo") ||
-                  user.userType.includes("SuperAdminQt")
-                ) {
-                  return false; // Exclude users with SuperAdminLabo or SuperAdminQt in their userType
-                }
-                return true;
-              })
+              // Exclude the signedIn user from users list
+              // ?.filter((userSignedIn) => userInfo._id != userSignedIn._id)
+              ?.filter((userSignedIn) => userInfo._id != true)
+              // Excluding SuperAdminLabo and SupderAdminQt from users list
+              // .filter((user) => {
+              //   if (
+              //     user.userType.includes("SuperAdminLabo") ||
+              //     user.userType.includes("SuperAdminQt")
+              //   ) {
+              //     return false; // Exclude users with SuperAdminLabo or SuperAdminQt in their userType
+              //   }
+              //   return true;
+              // })
               .sort((user1, user2) => {
                 // Custom sorting function based on direction
                 if (
