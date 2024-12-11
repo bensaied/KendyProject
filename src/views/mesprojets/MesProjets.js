@@ -46,7 +46,7 @@ const MesProjets = () => {
   let updatedProjectsList = useSelector(
     (state) => state.refreshInfo.refreshInfo
   );
-  // console.log(updatedProjectsList.projectLabo);
+  console.log(updatedProjectsList);
   // USERLOGIN&INFO
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -774,7 +774,7 @@ const MesProjets = () => {
                               {updatedProjectsList.projectQt.map(
                                 (projectQtId) => (
                                   <>
-                                    {project.id === projectQtId &&
+                                    {project.id === projectQtId.id &&
                                     currentTypeState.currentType ===
                                       "AdminQt" ? (
                                       <>
@@ -904,7 +904,7 @@ const MesProjets = () => {
                               {updatedProjectsList.projectQt.map(
                                 (projectQtId) => (
                                   <>
-                                    {project.id === projectQtId &&
+                                    {project.id === projectQtId.id &&
                                     currentTypeState.currentType ===
                                       "AdminQt" ? (
                                       <>

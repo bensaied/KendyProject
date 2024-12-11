@@ -1,5 +1,5 @@
 const ProjectLabo = require("../models/projectLaboModel");
-const ProjectUssq = require("../models/projectUssqModel");
+const ProjectUsscq = require("../models/projectUssqModel");
 const User = require("../models/userModel");
 
 const asyncHandler = require("express-async-handler");
@@ -148,7 +148,7 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
       }
     }
     const activite = [];
-    const projectExists = await ProjectUssq.findOne({
+    const projectExists = await ProjectUsscq.findOne({
       name,
     });
 
@@ -156,7 +156,7 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error("Projet déja existe.");
     }
-    const project = new ProjectUssq({
+    const project = new ProjectUsscq({
       name,
       admin,
       source,
@@ -175,7 +175,7 @@ const CreateProjectUssq = asyncHandler(async (req, res) => {
 
     const createdProject = await project.save();
     // Add Project to ProjectQt
-    admin.projectQt.push({ id: createdProject, role: "AdminQt" });
+    admin.projectQt.push({ id: createdProject._id, role: "AdminQt" });
     await admin.save();
     res.status(201).json(createdProject);
   }
