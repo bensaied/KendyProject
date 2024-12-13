@@ -375,42 +375,85 @@ const Partage = () => {
                         .map((project) => (
                           <>
                             <CCol sm="auto" key={project.id}>
-                              <CCard className="text-center mb-3 border-dark">
-                                <CCardHeader color="grey">
-                                  Statut: {project.statusProject}
-                                </CCardHeader>
-                                <CCardBody>
-                                  <CCardTitle>{project.nameProject}</CCardTitle>
-                                  <CCardText>
-                                    {project.descriptionProject}.
-                                  </CCardText>
-                                  <footer className="blockquote-footer">
-                                    Admin :{" "}
-                                    <cite title="Source Title">
-                                      {project.adminProject[0].grade +
-                                        " " +
-                                        project.adminProject[0].firstname +
-                                        " " +
-                                        project.adminProject[0].name}
-                                    </cite>
-                                  </footer>
-                                  <CButton
-                                    color="info"
-                                    size="sm"
-                                    className="me-md-2"
-                                    // href={`/projets/projetlabo/${project.id}`}
-                                    onClick={() => {
-                                      setVisibleLg1(!visibleLg1);
-                                    }}
-                                  >
-                                    Plus d'infos
-                                  </CButton>
-                                  {/* <CButton href="#">Modifier</CButton> */}
-                                </CCardBody>
-                                <CCardFooter className="text-medium-emphasis">
-                                  Créé: {project.createdAt}
-                                </CCardFooter>
-                              </CCard>
+                              {project.statusProject === "Défaut" ? (
+                                <CCard className="text-center mb-3 border-top-secondary border-top-4">
+                                  <CCardHeader color="grey">
+                                    Statut: {project.statusProject}
+                                  </CCardHeader>
+                                  <CCardBody>
+                                    <CCardTitle>
+                                      {project.nameProject}
+                                    </CCardTitle>
+                                    <CCardText>
+                                      {project.descriptionProject}.
+                                    </CCardText>
+                                    <footer className="blockquote-footer">
+                                      Admin :{" "}
+                                      <cite title="Source Title">
+                                        {project.adminProject[0].grade +
+                                          " " +
+                                          project.adminProject[0].firstname +
+                                          " " +
+                                          project.adminProject[0].name}
+                                      </cite>
+                                    </footer>
+                                    <CButton
+                                      color="info"
+                                      size="sm"
+                                      className="me-md-2"
+                                      // href={`/projets/projetlabo/${project.id}`}
+                                      onClick={() => {
+                                        setVisibleLg1(!visibleLg1);
+                                      }}
+                                    >
+                                      Plus d'infos
+                                    </CButton>
+                                    {/* <CButton href="#">Modifier</CButton> */}
+                                  </CCardBody>
+                                  <CCardFooter className="text-medium-emphasis">
+                                    Créé: {project.createdAt}
+                                  </CCardFooter>
+                                </CCard>
+                              ) : (
+                                <CCard className="text-center mb-3 border-top-success border-top-4">
+                                  <CCardHeader color="grey">
+                                    Statut: {project.statusProject}
+                                  </CCardHeader>
+                                  <CCardBody>
+                                    <CCardTitle>
+                                      {project.nameProject}
+                                    </CCardTitle>
+                                    <CCardText>
+                                      {project.descriptionProject}.
+                                    </CCardText>
+                                    <footer className="blockquote-footer">
+                                      Admin :{" "}
+                                      <cite title="Source Title">
+                                        {project.adminProject[0].grade +
+                                          " " +
+                                          project.adminProject[0].firstname +
+                                          " " +
+                                          project.adminProject[0].name}
+                                      </cite>
+                                    </footer>
+                                    <CButton
+                                      color="info"
+                                      size="sm"
+                                      className="me-md-2"
+                                      // href={`/projets/projetlabo/${project.id}`}
+                                      onClick={() => {
+                                        setVisibleLg1(!visibleLg1);
+                                      }}
+                                    >
+                                      Plus d'infos
+                                    </CButton>
+                                    {/* <CButton href="#">Modifier</CButton> */}
+                                  </CCardBody>
+                                  <CCardFooter className="text-medium-emphasis">
+                                    Créé: {project.createdAt}
+                                  </CCardFooter>
+                                </CCard>
+                              )}
                             </CCol>
                           </>
                         ))}
