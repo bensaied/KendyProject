@@ -804,11 +804,16 @@ module.exports = {
               const formateurUserFound = await User.findOne(searchQuery).exec();
 
               // Add LaboProject to the projectLAbo array in FormateurDoc
-              const idExists = formateurUserFound.projectLabo.some((id) =>
-                id.equals(project.id)
+              const idExists = formateurUserFound.projectLabo.some(
+                (projectLaboItem) =>
+                  projectLaboItem.id.toString() === project.id.toString() &&
+                  projectLaboItem.role === "Formateur"
               );
               if (!idExists) {
-                formateurUserFound.projectLabo.push(project.id); // Push the ObjectId only if it doesn't exist
+                formateurUserFound.projectLabo.push({
+                  id: project.id,
+                  role: "Formateur",
+                }); // Push the ObjectId only if it doesn't exist
               }
               if (!formateurUserFound.userType.includes("Formateur")) {
                 formateurUserFound.userType.push("Formateur");
@@ -852,7 +857,7 @@ module.exports = {
               );
             }
             PrevAdmin.projectLabo = PrevAdmin.projectLabo.filter(
-              (id) => !id.equals(project.id)
+              (projectLaboItem) => !projectLaboItem.id.equals(project.id)
             );
             await PrevAdmin.save();
 
@@ -876,11 +881,14 @@ module.exports = {
               project1.adminProject = NewAdmin;
               await project1.save();
               // Check if the ObjectId already exists in the array
-              const idExists = NewAdmin.projectLabo.some((id) =>
-                id.equals(project.id)
+              const idExists = NewAdmin.projectLabo.some((projectLaboItem) =>
+                projectLaboItem.equals(project.id)
               );
               if (!idExists) {
-                NewAdmin.projectLabo.push(project.id); // Push the ObjectId only if it doesn't exist
+                NewAdmin.projectLabo.push({
+                  id: project.id,
+                  role: "AdminLabo",
+                }); // Push the ObjectId with the AdminLabo role only if it doesn't exist
               }
               if (!NewAdmin.userType.includes("AdminLabo")) {
                 NewAdmin.userType.push("AdminLabo");

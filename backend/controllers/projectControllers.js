@@ -82,7 +82,10 @@ const CreateProjectLabo = asyncHandler(async (req, res) => {
 
     const createdProject = await projectLabo.save();
     // Add Project to ProjectLabo
-    adminProject.projectLabo.push(createdProject);
+    adminProject.projectLabo.push({
+      id: createdProject._id,
+      role: "AdminLabo",
+    });
     await adminProject.save();
 
     res.status(201).json(createdProject);
