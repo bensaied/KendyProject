@@ -804,11 +804,16 @@ module.exports = {
               const formateurUserFound = await User.findOne(searchQuery).exec();
 
               // Add LaboProject to the projectLAbo array in FormateurDoc
-              const idExists = formateurUserFound.projectLabo.some((id) =>
-                id.equals(project.id)
+              const idExists = formateurUserFound.projectLabo.some(
+                (projectLaboItem) =>
+                  projectLaboItem.id.toString() === project.id.toString() &&
+                  projectLaboItem.role === "Formateur"
               );
               if (!idExists) {
-                formateurUserFound.projectLabo.push(project.id); // Push the ObjectId only if it doesn't exist
+                formateurUserFound.projectLabo.push({
+                  id: project.id,
+                  role: "Formateur",
+                }); // Push the ObjectId only if it doesn't exist
               }
               if (!formateurUserFound.userType.includes("Formateur")) {
                 formateurUserFound.userType.push("Formateur");
