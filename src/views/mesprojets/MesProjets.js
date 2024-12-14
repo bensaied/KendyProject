@@ -599,7 +599,7 @@ const MesProjets = () => {
                             {updatedProjectsList.projectLabo.map(
                               (projectLaboId) => (
                                 <>
-                                  {project.id === projectLaboId &&
+                                  {project.id === projectLaboId.id &&
                                   currentTypeState.currentType ===
                                     "AdminLabo" ? (
                                     <>
