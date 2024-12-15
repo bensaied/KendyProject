@@ -803,6 +803,48 @@ module.exports = {
 
               const formateurUserFound = await User.findOne(searchQuery).exec();
 
+              if (project.formateurProject.length !== 0) {
+                for (const formateurId of project.formateurProject) {
+                  const Formateur = await User.findById(formateurId);
+                  // console.log("formProjLabo:", Formateur.projectLabo);
+                  // Remove the projectId from their projectLabo array
+                  Formateur.projectLabo = Formateur.projectLabo.filter(
+                    (projectItem) => {
+                      const idMatch = projectItem.id == project.id;
+                      const roleMatch = projectItem.role == "Formateur";
+
+                      // Debug: Log the comparison results
+                      console.log(
+                        `Comparing: projectItem.id (${projectItem.id}) with project.id (${project.id}), projectItem.role (${projectItem.role}) === "Formateur"`
+                      );
+
+                      return !(idMatch && roleMatch); // Exclude the matching item
+                    }
+                  );
+
+                  // console.log("FormateurProjLabo", Formateur.projectLabo);
+                  // Check if the remaining projects have roles other than 'Formateur'
+                  const hasOtherRoles =
+                    Formateur.projectLabo.length > 0 &&
+                    Formateur.projectLabo.some(
+                      (projectItem) => projectItem.role !== "Formateur"
+                    );
+
+                  // If no projects left or only projects with other roles, remove 'Formateur' from userType
+                  if (Formateur.projectLabo.length === 0 || hasOtherRoles) {
+                    console.log("HERE !! To DELETE");
+                    Formateur.userType = Formateur.userType.filter(
+                      (role) => role !== "Formateur"
+                    );
+                    console.log("FormateurName", Formateur.name);
+                    console.log("FormateurUserType", Formateur.userType);
+                  }
+
+                  // Save the updated formateur document
+                  await Formateur.save();
+                }
+              }
+
               // Add LaboProject to the projectLAbo array in FormateurDoc
               const idExists = formateurUserFound.projectLabo.some(
                 (projectLaboItem) =>
