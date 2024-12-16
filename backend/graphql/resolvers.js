@@ -806,44 +806,72 @@ module.exports = {
               if (project.formateurProject.length !== 0) {
                 for (const formateurId of project.formateurProject) {
                   const Formateur = await User.findById(formateurId);
+                  console.log("formateurUserFound", formateurUserFound);
+
+                  let isNewFormateur = false;
+
+                  for (const formateurDoc of formateurUserFound) {
+                    console.log("Checking Formateur Document:", formateurDoc);
+                    if (
+                      formateurDoc._id.toString() === formateurId.toString()
+                    ) {
+                      console.log("Matched Formateur Document:", formateurDoc);
+                      isNewFormateur = true;
+                      break; // No need to continue checking
+                    }
+                  }
+
+                  console.log("isNewFormateur:", isNewFormateur);
+
+                  if (isNewFormateur) {
+                    console.log(
+                      `Skipping logic for Formateur ${Formateur.name} (${Formateur._id}) as they are newly assigned.`
+                    );
+                    continue; // Skip logic for newly assigned Formateurs
+                  }
                   // console.log("formProjLabo:", Formateur.projectLabo);
                   // Remove the projectId from their projectLabo array
                   Formateur.projectLabo = Formateur.projectLabo.filter(
                     (projectItem) => {
-                      const idMatch = projectItem.id == project.id;
+                      const idMatch =
+                        projectItem.id.toString() == project.id.toString();
                       const roleMatch = projectItem.role == "Formateur";
 
                       // Debug: Log the comparison results
                       console.log(
-                        `Comparing: projectItem.id (${projectItem.id}) with project.id (${project.id}), projectItem.role (${projectItem.role}) === "Formateur"`
+                        `Comparing: projectItem.id (${projectItem.id}) with project.id (${project.id}), projectItem.role ${projectItem.role} === Formateur`
                       );
+                      console.log("Name", Formateur.name + Formateur.firstname);
 
                       return !(idMatch && roleMatch); // Exclude the matching item
                     }
                   );
-
-                  // console.log("FormateurProjLabo", Formateur.projectLabo);
+                  console.log("Formateur :", Formateur);
                   // Check if the remaining projects have roles other than 'Formateur'
-                  const hasOtherRoles =
-                    Formateur.projectLabo.length > 0 &&
-                    Formateur.projectLabo.some(
-                      (projectItem) => projectItem.role !== "Formateur"
-                    );
-
-                  // If no projects left or only projects with other roles, remove 'Formateur' from userType
-                  if (Formateur.projectLabo.length === 0 || hasOtherRoles) {
-                    console.log("HERE !! To DELETE");
-                    Formateur.userType = Formateur.userType.filter(
-                      (role) => role !== "Formateur"
-                    );
-                    console.log("FormateurName", Formateur.name);
-                    console.log("FormateurUserType", Formateur.userType);
-                  }
 
                   // Save the updated formateur document
                   await Formateur.save();
                 }
               }
+
+              // console.log("hasOtherRoles", hasOtherRoles);
+              // // Check if the remaining projects have roles other than 'Formateur'
+              // const hasOtherRoles =
+              //   Formateur.projectLabo.length > 0 &&
+              //   Formateur.projectLabo.some(
+              //     (projectItem) => projectItem.role !== "Formateur"
+              //   );
+
+              // console.log("hasOtherRoles :", hasOtherRoles);
+              // // If no projects left or only projects with other roles, remove 'Formateur' from userType
+              // if (Formateur.projectLabo.length === 0 || hasOtherRoles) {
+              //   console.log("HERE !! To DELETE");
+              //   Formateur.userType = Formateur.userType.filter(
+              //     (role) => role !== "Formateur"
+              //   );
+              //   console.log("FormateurName", Formateur.name);
+              //   console.log("FormateurUserType", Formateur.userType);
+              // }
 
               // Add LaboProject to the projectLAbo array in FormateurDoc
               const idExists = formateurUserFound.projectLabo.some(
