@@ -803,16 +803,23 @@ module.exports = {
               };
 
               const formateurUserFound = await User.findOne(searchQuery).exec();
-              // console.log("prevFormateurs", prevFormateurs);
-              // const users = await User.find({ _id: { $in: prevFormateurs } });
-              // console.log("Prev Formateur Doc:", users);
-              // console.log("New formateur Doc :", formateurUserFound);
-              // console.log("type :", typeof formateurUserFound);
 
               async function handleFormateursChanges() {
                 try {
+                  // Extract the _id fields from the objects
+                  const formateurIds = prevFormateurs.map(
+                    (formateur) => formateur._id
+                  );
+                  // Remove duplicates by converting to a Set, then back to an array
+                  const uniqueFormateurIds = [
+                    ...new Set(formateurIds.map((id) => id.toString())),
+                  ];
+                  const objectIds = uniqueFormateurIds.map((id) =>
+                    ObjectId(id)
+                  );
+
                   const prevForm = await User.find({
-                    _id: { $in: prevFormateurs },
+                    _id: { $in: objectIds },
                   });
                   // console.log("Prev Formateur Doc:", prevForm);
 
@@ -839,8 +846,19 @@ module.exports = {
                     return user;
                   });
 
-                  console.log("updatedprevForm :", updatedprevForm);
-                  await updatedprevForm.save();
+                  // Save each updated user document
+                  for (const user of updatedprevForm) {
+                    await User.findOneAndUpdate(
+                      { _id: user._id },
+                      {
+                        $set: {
+                          projectLabo: user.projectLabo,
+                          userType: user.userType,
+                        },
+                      },
+                      { new: true }
+                    );
+                  }
                 } catch (error) {
                   console.error("Error fetching users:", error);
                   throw error;
