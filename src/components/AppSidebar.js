@@ -216,7 +216,34 @@ const AppSidebar = () => {
         .filter(
           (project) =>
             updatedProjectsList &&
-            updatedProjectsList.projectLabo.includes(project.id)
+            updatedProjectsList.projectLabo.some(
+              (projectItem) =>
+                projectItem.id === project.id &&
+                projectItem.role === "AdminLabo"
+            )
+        )
+        .map((project) => ({
+          component: CNavItem,
+          name: project.nameProject,
+          to: `/projets/projetlabo/${project.id}`, // Adjust the link as needed
+          // Add other necessary props here
+        })),
+    },
+    {
+      component: CNavGroup,
+      name: "Projets",
+      to: "/projets",
+      icon: <CIcon icon={cilBookmark} customClassName="nav-icon" />,
+      condition: currentTypeState.currentType === "Formateur",
+      items: projectsLabo
+        .filter(
+          (project) =>
+            updatedProjectsList &&
+            updatedProjectsList.projectLabo.some(
+              (projectItem) =>
+                projectItem.id === project.id &&
+                projectItem.role === "Formateur"
+            )
         )
         .map((project) => ({
           component: CNavItem,
